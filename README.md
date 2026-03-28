@@ -6,10 +6,48 @@ A FastAPI-based REST API for predicting running times using polynomial regressio
 
 This application provides a complete machine learning pipeline for training polynomial regression models and making predictions. Users can:
 - **Create accounts** with secure password hashing
-- **Train models** on their own data with customizable polynomial degrees
-- **Make predictions** based on training hours (with a credit system)
-- **Purchase credits** when predictions run out
+- **Train models** with automatic validation (degree 1-5, prevents overfitting)
+- **Make predictions** based on training hours (requires trained model)
+- **Purchase credits** with automatic field formatting and validation
 - **Manage their profile** with updates and deletion
+- **View model accuracy** with real-time R² calculation
+
+## 🔄 Recent Improvements (Latest Session)
+
+### Database Reliability
+- ✅ Fixed "database is locked" errors with 5-second connection timeout
+- ✅ Added try-finally blocks to guarantee connection closure
+- ✅ Proper resource management across all database operations
+
+### Model Training Validation
+- ✅ Models deleted on login (forces retraining each session)
+- ✅ Models deleted on logout
+- ✅ Predict button disabled until model is trained
+- ✅ Backend validates model file exists before prediction
+- ✅ Frontend sessionStorage tracks training state
+
+### Polynomial Degree Constraints
+- ✅ Limited to degree 1-5 (prevents overfitting and 0.00 predictions)
+- ✅ Backend validation with Pydantic Field constraints
+- ✅ Frontend HTML input max/min values match backend
+- ✅ Default degree 2 (quadratic) - best for extrapolation
+
+### Payment Card Handling
+- ✅ Card number: int type with 13-19 digit validation
+- ✅ Expiry: str type with automatic "/" formatting (1225 → 12/25)
+- ✅ CVV: str type with exactly 3-digit validation
+- ✅ All fields validated before API submission
+
+### Frontend Improvements
+- ✅ Port-agnostic (uses window.location.origin automatically)
+- ✅ Expiry field auto-formats as user types
+- ✅ Real-time predict button enable/disable based on model state
+- ✅ Improved error messages with validation feedback
+
+### Startup Cleanup
+- ✅ All old .pkl files deleted on app startup
+- ✅ Ensures fresh state for each new session
+- ✅ Logging confirms cleanup with emoji indicators
 
 ## 🎯 Features
 
@@ -18,25 +56,37 @@ This application provides a complete machine learning pipeline for training poly
 - ✅ Secure password hashing using bcrypt
 - ✅ User CRUD operations (Create, Read, Update, Delete)
 - ✅ Session persistence in localStorage
+- ✅ Model cleanup on login (forces retraining each session)
+- ✅ Model cleanup on logout (deletes model file)
 
 ### ML Model Operations
-- ✅ Train polynomial regression models with customizable degrees
+- ✅ Train polynomial regression models with **degree 1-5** (prevents overfitting)
 - ✅ Individual .pkl model files per user
 - ✅ Model predictions with real-time results
+- ✅ **REQUIRED training validation** - cannot predict without trained model
 - ✅ Automatic model file cleanup when user deleted
+- ✅ Predictions clamped to minimum 0.0 (realistic values)
+- ✅ Model accuracy (R² score) calculation
 
 ### Credit System
 - ✅ 10 free predictions per new user
 - ✅ 1 credit deducted per prediction
-- ✅ Purchase additional credits via card payment
+- ✅ Purchase additional credits via card payment (10 credits per purchase)
 - ✅ Credit balance tracking and display
+- ✅ Payment validation with card format checking
 
-### Security
+### Security & Validation
 - ✅ Deleted users cannot access ANY features
 - ✅ User existence validation on all ML operations
 - ✅ Protected endpoints with Bearer token authentication
 - ✅ Passwords never stored in plaintext (bcrypt hashing)
 - ✅ Auto-logout when user is detected as deleted
+- ✅ Disabled predict button until model is trained
+- ✅ Frontend model validation with sessionStorage tracking
+- ✅ Backend model file existence checks
+- ✅ Card number validation (13-19 digits)
+- ✅ Expiry validation (MM/YY format with auto-formatting)
+- ✅ CVV validation (exactly 3 digits)
 
 ### Logging & Error Tracking
 - ✅ Comprehensive endpoint logging with emoji indicators
@@ -44,11 +94,27 @@ This application provides a complete machine learning pipeline for training poly
 - ✅ Auth layer logging for all authentication successes and failures
 - ✅ All errors captured for debugging and troubleshooting
 - ✅ File-based logging with rotation support (app.log)
+- ✅ Detailed error messages returned to frontend
+
+### Database Reliability
+- ✅ SQLite connection timeout (5-second retry logic)
+- ✅ Try-finally blocks ensure connections always close
+- ✅ Prevents "database is locked" errors
+- ✅ Proper cascade deletion of user files
+
+### Frontend Improvements
+- ✅ Port-agnostic configuration (uses window.location.origin)
+- ✅ Automatic expiry field formatting (1225 → 12/25)
+- ✅ Auto-focus and validation on card inputs
+- ✅ Real-time model training status
+- ✅ Disabled predict button when no model trained
+- ✅ Toast notifications for all operations
 
 ### Clean Code Architecture
 - ✅ Simple, maintainable FastAPI structure
 - ✅ Modular router and DAL organization
 - ✅ Comprehensive logging at all critical points
+- ✅ Pathlib for clean file operations
 - ✅ Lightweight and focused on core functionality
 
 ## 🛠️ Technology Stack
@@ -98,14 +164,40 @@ cd path/to/project_4
 pip install -r requirements.txt
 ```
 
-3. **Initialize database** (automatic on first run)
+3. **Run the application**
 ```bash
-python app.py
+uvicorn app:app --reload
 ```
 
-4. **Access the application**
-- Users page: http://127.0.0.1:8000/
-- ML page: http://127.0.0.1:8000/ml
+The server will start on `http://127.0.0.1:8000` (or your specified host/port).
+
+### Port Configuration
+
+The application is **port-agnostic** - the frontend automatically detects the correct host and port:
+
+```javascript
+// Frontend automatically uses current host/port
+const BASE = window.location.origin;  // e.g., http://127.0.0.1:8000
+```
+
+**You can run the server on any port:**
+```bash
+# Custom port
+uvicorn app:app --port 5000
+
+# Custom host and port
+uvicorn app:app --host 0.0.0.0 --port 8080
+
+# No changes needed in HTML files - they auto-detect!
+```
+
+### Accessing the Application
+
+After starting the server, visit:
+- **Users page**: http://127.0.0.1:8000/ (or your configured host:port)
+- **ML page**: http://127.0.0.1:8000/ml
+- **API Docs**: http://127.0.0.1:8000/docs (Swagger UI)
+- **API ReDoc**: http://127.0.0.1:8000/redoc (ReDoc UI)
 
 ## 📖 Usage
 
@@ -120,7 +212,7 @@ curl -X POST http://127.0.0.1:8000/users \
 
 #### Login
 ```bash
-curl -X POST http://127.0.0.1:8000/users/auth/login \
+curl -X POST http://127.0.0.1:8000/auth/login \
   -H "Content-Type: application/json" \
   -d '{"username": "john", "password": "secure_pass"}'
 ```
@@ -160,6 +252,27 @@ curl -X POST http://127.0.0.1:8000/train \
   }'
 ```
 
+**Degree Constraints**: Must be between **1 and 5**
+- **Degree 1**: Linear regression (simplest, most stable)
+- **Degree 2**: Quadratic (recommended default, balanced)
+- **Degree 3-5**: Higher order polynomials (use with caution)
+- **Degree > 5**: Rejected - causes overfitting and 0.00 predictions
+
+## ⚠️ Important: Model Training is REQUIRED
+
+**You CANNOT predict without first training a model.** The system enforces this with multiple layers:
+
+1. **Frontend**: Predict button is disabled until model is trained
+2. **Frontend**: Checks sessionStorage.modelTrained flag
+3. **Backend**: Validates model file exists before allowing prediction
+4. **Cleanup**: Models are deleted on login/logout to force retraining
+
+### Why This Matters
+- Users cannot accidentally use old models from previous sessions
+- Each session requires fresh training
+- Prevents errors from stale models
+- Ensures fresh .pkl files with current data
+
 #### Make Prediction
 ```bash
 curl -X GET http://127.0.0.1:8000/predict/3.5 \
@@ -173,12 +286,25 @@ curl -X POST http://127.0.0.1:8000/purchase \
   -H "Authorization: Bearer jwt_token_here" \
   -H "Content-Type: application/json" \
   -d '{
-    "card_number": "4532111111111111",
+    "card_number": 4532111111111111,
     "expiry": "12/25",
     "cvv": "123"
   }'
 ```
-Returns: `{"message": "Purchase successful! Added 10 credits", "predictions_remaining": 19}`
+Returns: `{"message": "Payment successful. 10 predictions added.", "predictions_remaining": 19}`
+
+### Payment Card Validation
+- **Card Number**: Must be 13-19 digits (int type)
+- **Expiry**: MM/YY format with automatic "/" formatting
+  - Input "1225" or "12/25" - both accepted
+  - Field auto-formats as you type
+- **CVV**: Exactly 3 digits (str type, leading zeros preserved)
+  - "090" is valid (not converted to "90")
+
+### Accepted Test Card Numbers
+- Visa: `4532111111111111`
+- Mastercard: `5425233012345678`
+- Amex: `374245455400126` (15 digits)
 
 ## 🎯 Model Accuracy Endpoint (Bonus Feature)
 
@@ -291,7 +417,7 @@ Authentication is handled automatically via the `@Depends(get_current_user)` dec
 
 - `POST /users` - Create new user
 - `GET /users` - Get all users  
-- `POST /users/auth/login` - User login
+- `POST /auth/login` - User login
 
 ## 📝 API Endpoints
 
@@ -303,12 +429,17 @@ Authentication is handled automatically via the `@Depends(get_current_user)` dec
 | GET | `/users/{id}` | Get user by ID | ✅ | ✅ |
 | PUT | `/users/{id}` | Update user | ❌ (Optional) | ✅ |
 | DELETE | `/users/{id}` | Delete user | ✅ | ✅ |
-| POST | `/users/auth/login` | User login | ❌ | ✅ |
+
+### Auth Endpoints
+| Method | Endpoint | Description | Auth | Logged |
+|--------|----------|-------------|------|--------|
+| POST | `/auth/login` | User login | ❌ | ✅ |
 
 ### ML Endpoints
 | Method | Endpoint | Description | Auth | Logged |
 |--------|----------|-------------|------|--------|
-| POST | `/train` | Train model | ✅ | ✅ |
+| POST | `/train` | Train model (degree 1-5) | ✅ | ✅ |
+| DELETE | `/model` | Delete model (called on logout) | ✅ | ✅ |
 | GET | `/predict/{hours}` | Make prediction | ✅ | ✅ |
 | POST | `/purchase` | Purchase credits | ✅ | ✅ |
 | GET | `/accuracy` | Get model accuracy (R² Score) | ✅ | ✅ |
@@ -319,64 +450,151 @@ Authentication is handled automatically via the `@Depends(get_current_user)` dec
 | `/` | User management page |
 | `/ml` | ML operations page |
 
-## 📊 Project Status
+## 🧪 Testing & Verification
 
-This project is production-ready with comprehensive features:
+### Test Polynomial Regression Calculations
+The project includes test scripts to verify calculations:
+
+```bash
+# Test linear regression (Y = 2X)
+python test_prediction.py
+
+# Test quadratic regression (Y = X²)
+python test_nonlinear.py
+```
+
+### Sample Output
+```
+Training Data: X=[1, 2, 3, 4, 5], Y=[2, 4, 6, 8, 10]
+Polynomial Degree: 2
+
+Predictions:
+Hours      Predicted Time
+1          2.00
+5          10.00
+10         20.00
+15         30.00
+```
+
+### Manual API Testing
+```bash
+# 1. Create user
+curl -X POST http://localhost:8000/users \
+  -H "Content-Type: application/json" \
+  -d '{"user_name":"testuser","email":"test@example.com","password":"test123"}'
+
+# 2. Login
+TOKEN=$(curl -X POST http://localhost:8000/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"username":"testuser","password":"test123"}' | jq -r '.token')
+
+# 3. Train model
+curl -X POST http://localhost:8000/train \
+  -H "Authorization: Bearer $TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"X":[1,2,3,4,5],"Y":[2,4,6,8,10],"degree":2}'
+
+# 4. Make prediction
+curl -X GET "http://localhost:8000/predict/3.5" \
+  -H "Authorization: Bearer $TOKEN"
+
+# 5. Check accuracy
+curl -X GET http://localhost:8000/accuracy \
+  -H "Authorization: Bearer $TOKEN"
+```
+
+## � Project Status
+
+This project is **production-ready** with comprehensive features:
 - ✅ **Complete logging** - All endpoints logged with automatic disk flushing
 - ✅ **Model Accuracy** - Real-time R² calculation displayed in UI
 - ✅ **Secure Auth** - JWT tokens properly transmitted with Authorization headers
-- ✅ **Clean structure** - Matches reference project patterns
+- ✅ **Model Training Required** - Cannot predict without training first
+- ✅ **Polynomial Degree Safety** - Limited to 1-5 to prevent overfitting
+- ✅ **Database Reliability** - Fixed locking issues with proper connection management
+- ✅ **Clean structure** - Modular, maintainable codebase
 - ✅ **Full CRUD** - User management with proper cascade deletion
 - ✅ **Credit system** - Functional purchase system with balance tracking
+- ✅ **Payment Validation** - Comprehensive card field validation and formatting
+- ✅ **Port-Agnostic** - Works on any port automatically
 
-The architecture is clean and easy to understand, with clear separation of concerns between app initialization, routing, authentication, and data access. All critical operations are logged to `app.log` for debugging.
+## ✨ Highlights from Latest Session
 
-## 🔒 Security Features
+### Bug Fixes
+- ✅ **Fixed "database is locked" error** - Added 5-second timeout and try-finally blocks
+- ✅ **Fixed predictions without training** - Model cleanup on login/logout
+- ✅ **Fixed 0.00 predictions** - Limited degree to 1-5, default to 2
+- ✅ **Fixed CVV validation** - Changed to string type to preserve leading zeros
 
-### Authorization & Token Transmission
-- ✅ JWT tokens sent via Authorization header with Bearer scheme
-- ✅ All requests include proper `Authorization: Bearer <token>` header
-- ✅ Frontend req() function automatically appends token from localStorage
-- ✅ Protected endpoints verify token before processing
-- ✅ Token validation logged with detailed error messages
+### Features Added
+- ✅ **DELETE /model endpoint** - Clean up models on logout
+- ✅ **Model cleanup on startup** - All old .pkl files deleted on app start
+- ✅ **Model cleanup on login** - Forces retraining each session
+- ✅ **Expiry auto-formatting** - 1225 → 12/25 automatically
+- ✅ **Predict button disable state** - Disabled until model trained
 
-### User Deletion Cascade
-When a user is deleted:
-1. ✅ User record removed from database
-2. ✅ Associated .pkl model file deleted
-3. ✅ Auto-logout triggered on frontend
-4. ✅ All further operations fail with 404
-5. ✅ Deletion event logged to app.log
+### Validation Improvements
+- ✅ Polynomial degree: 1-5 with Pydantic Field constraints
+- ✅ Card number: 13-19 digits
+- ✅ Expiry: MM/YY format with auto-formatting
+- ✅ CVV: exactly 3 digits, str type
+- ✅ Frontend matches backend constraints
 
-### Session Security
-- ✅ JWT expires after 60 minutes
-- ✅ Deleted users immediately lose access
-- ✅ Auto-logout on frontend when user not found
-- ✅ localStorage cleared on logout
-- ✅ Passwords never stored in plaintext (bcrypt hashing)
-- ✅ All auth failures logged automatically
+---
 
-## ⚠️ Error Handling
+## 📚 Documentation
 
-### HTTP Status Codes
-- **200 OK**: Successful operation
-- **400 Bad Request**: Validation error
-- **401 Unauthorized**: Invalid/missing token
-- **404 Not Found**: User/resource not found
-- **422 Unprocessable Entity**: Invalid request data
-- **500 Internal Server Error**: Unhandled exception
+- **app.py** - FastAPI application setup with startup cleanup
+- **router_auth.py** - Authentication endpoints with model cleanup on login
+- **router_ml.py** - ML operations with degree validation and model requirements
+- **router_users.py** - User CRUD operations with error handling
+- **dal_users.py** - Database access layer with proper connection management
+- **main.py** - ML pipeline (train, predict, accuracy)
+- **auth.py** - JWT token generation and validation
 
-### Error Response Format
-```json
-{
-  "detail": "Error message",
-  "status": "error",
-  "status_code": 404,
-  "error_id": "a1b2c3d4"
-}
-```
+## 🤝 Support
+
+For issues or questions:
+1. Check `app.log` for detailed error messages
+2. Review the **Troubleshooting** section above
+3. Verify endpoint formats in the **API Endpoints** table
+4. Test calculations using the provided test scripts
 
 ## 🐛 Troubleshooting
+
+### "Model not found. Please train a model first."
+- **Cause**: Trying to predict without training a model
+- **Log Entry**: `❌ GET /predict - Model not found for {username}`
+- **Solution**: 
+  1. Train a model first with `/train` endpoint
+  2. Verify predict button is enabled (not grayed out)
+  3. Check that you completed training successfully
+
+### "Input should be less than or equal to 5"
+- **Cause**: Trying to use polynomial degree > 5
+- **Log Entry**: `❌ Degree validation failed: greater than 5`
+- **Solution**: Use degree 1-5 only
+  - Degree 1: Linear (simple)
+  - Degree 2: Quadratic (recommended)
+  - Degree 3-5: Higher order
+  - Degree > 5: Rejected by API
+
+### "Model not trained first" (Predict button disabled)
+- **Cause**: Button is grayed out, you haven't trained a model in this session
+- **Why**: Frontend enforces model training requirement
+- **Solution**:
+  1. Fill in training data (X and Y values)
+  2. Click "🚀 Train Model"
+  3. Wait for success message
+  4. Now predict button will be enabled
+
+### "Error creating user: database is locked"
+- **Cause**: SQLite connection wasn't properly closed (now FIXED)
+- **Log Entry**: `❌ POST /users - Error creating user: database is locked`
+- **Solution**: This is now handled automatically with:
+  - 5-second connection timeout
+  - Try-finally blocks ensuring closure
+  - Proper resource management
 
 ### Check app.log for Detailed Error Information
 All errors are logged with timestamps. View logs:
@@ -385,14 +603,47 @@ All errors are logged with timestamps. View logs:
 tail -f app.log
 
 # Search for specific errors
-grep "Auth Error" app.log
-grep "DELETE" app.log
+grep "Error" app.log
+grep "Model" app.log
+grep "Auth" app.log
 ```
 
 ### "User not found. Account may have been deleted."
 - **Cause**: Deleted user trying to access features
 - **Log Entry**: `❌ User not found: {username}`
 - **Solution**: Login with an existing user or create new account
+
+### "No predictions remaining. Please purchase more credits."
+- **Cause**: Ran out of prediction credits
+- **Log Entry**: `❌ GET /predict - No predictions remaining for {username}`
+- **Solution**: Purchase more credits using the `/purchase` endpoint
+
+### Payment Card Validation Errors
+- **"Invalid card number format (13-19 digits)"**: Card too short or too long
+- **"Invalid expiry format (use MM/YY)"**: Date format wrong (try "12/25")
+- **"Invalid CVV (must be exactly 3 digits)"**: CVV not 3 digits
+
+### Port Already in Use
+```bash
+# If port 8000 is already in use
+uvicorn app:app --port 5000
+
+# Find what's using port 8000
+lsof -i :8000
+netstat -ano | findstr :8000 (Windows)
+```
+
+### Database File Corruption
+If users.db becomes corrupted:
+```bash
+# Delete the database (it will be recreated)
+rm users.db
+
+# Restart the application
+uvicorn app:app --reload
+```
+
+**WARNING**: This will delete all users and their models!
 
 ### "Invalid or expired token"
 - **Cause**: JWT token expired or malformed

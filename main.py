@@ -10,7 +10,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import PolynomialFeatures
 
 
-def train_and_save_model(training_hours, running_times, model_name, degree=3):
+def train_and_save_model(training_hours, running_times, model_name, degree=2):
     """
     Trains a polynomial regression model and saves it.
 
@@ -18,7 +18,7 @@ def train_and_save_model(training_hours, running_times, model_name, degree=3):
         training_hours (list): X values (training hours)
         running_times (list): Y values (running times)
         model_name (str): file name (e.g., "john.pkl")
-        degree (int): polynomial degree (default 3)
+        degree (int): polynomial degree (default 2)
 
     Returns:
         trained model
@@ -58,7 +58,7 @@ def predict_from_model(model_name, hours_value):
         hours_value (float): number of training hours
 
     Returns:
-        float: predicted running time
+        float: predicted running time (minimum 0.0)
 
     Raises:
         FileNotFoundError: if model file doesn't exist
@@ -66,8 +66,9 @@ def predict_from_model(model_name, hours_value):
     model = joblib.load(model_name)
     X_new = np.array([[hours_value]])
     prediction = model.predict(X_new)
-
-    return float(prediction[0])
+    
+    # Ensure prediction is not negative (running time cannot be negative)
+    return float(max(0.0, prediction[0]))
 
 
 def get_model_accuracy(model_name, training_hours, running_times):

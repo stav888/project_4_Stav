@@ -317,7 +317,7 @@ input::placeholder { color: var(--muted); }
           </div>
           <div class="form-group" style="margin-bottom:1.2rem;">
             <label>Polynomial Degree</label>
-            <input type="number" id="train-degree" value="3" min="1" max="10"/>
+            <input type="number" id="train-degree" value="2" min="1" max="5"/>
           </div>
           <button class="btn btn-gold btn-full" id="train-btn" onclick="trainModel()">🚀 Train Model</button>
           <div class="response-box" id="train-response"></div>
@@ -362,7 +362,7 @@ input::placeholder { color: var(--muted); }
           <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:1rem;">
             <div class="form-group" style="margin-bottom:0;">
               <label>Expiry (MM/YY)</label>
-              <input type="text" id="card-expiry" placeholder="12/27" maxlength="5"/>
+              <input type="text" id="card-expiry" placeholder="12/27" maxlength="5" oninput="formatExpiry(this)"/>
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label>CVV</label>
@@ -392,7 +392,7 @@ input::placeholder { color: var(--muted); }
 </main>
 
 <script>
-const BASE = 'http://127.0.0.1:8000';
+const BASE = window.location.origin;
 
 /* Particles */
 const pc = document.getElementById('particles');
@@ -461,6 +461,15 @@ function checkLogin() {
     document.getElementById('token-status').className     = 'token-badge token-active';
     document.getElementById('logout-btn').style.display   = 'inline-flex';
     
+    // Disable predict button if model not trained
+    const modelTrained = sessionStorage.getItem('modelTrained');
+    const predictBtn = document.getElementById('predict-btn');
+    if (predictBtn) {
+      predictBtn.disabled = !modelTrained;
+      predictBtn.title = modelTrained ? 'Click to predict' : 'Train a model first';
+      predictBtn.style.opacity = modelTrained ? '1' : '0.5';
+    }
+    
     // Verify user still exists (this will logout if user was deleted)
     fetchUserInfo();
   } else if (token && !userId) {
@@ -473,34 +482,84 @@ function checkLogin() {
 function logout() {
   const userId = getUserId();
   const username = localStorage.getItem('username') || 'unknown';
+  const token = getToken();
   
   // Log logout to console for debugging
   console.log(`🔓 LOGOUT EVENT: User ${username} (ID: ${userId}) logged out at ${new Date().toLocaleTimeString()}`);
   
-  localStorage.removeItem('jwt_token');
-  localStorage.removeItem('user_id');
-  localStorage.removeItem('username');
-  document.getElementById('login-gate').style.display   = 'block';
-  document.getElementById('ml-content').style.display   = 'none';
-  document.getElementById('token-status').textContent   = '⛔ Not logged in';
-  document.getElementById('token-status').className     = 'token-badge token-inactive';
-  document.getElementById('logout-btn').style.display   = 'none';
-  document.getElementById('gate-password').value = '';
-  document.getElementById('gate-response').className = 'response-box';
-  document.getElementById('predictions-remaining').innerHTML = '📊 Predictions remaining: <span style="color:var(--muted);">--</span>';
-  toast('Logged out', 'info');
+  // Delete model file from server before clearing token (wait for it to complete)
+  if (token) {
+    fetch(`${BASE}/model`, { 
+      method: 'DELETE',
+      headers: {'Authorization': `Bearer ${token}`} 
+    })
+    .then(res => {
+      if (res.ok) {
+        console.log('✅ Model file deleted on logout');
+      } else {
+        console.warn('⚠️ Could not delete model, status:', res.status);
+      }
+    })
+    .catch(e => console.warn('⚠️ Error deleting model:', e.message))
+    .finally(() => {
+      // Clear localStorage after model deletion attempt
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('user_id');
+      localStorage.removeItem('username');
+      sessionStorage.removeItem('modelTrained');
+      document.getElementById('login-gate').style.display   = 'block';
+      document.getElementById('ml-content').style.display   = 'none';
+      document.getElementById('token-status').textContent   = '⛔ Not logged in';
+      document.getElementById('token-status').className     = 'token-badge token-inactive';
+      document.getElementById('logout-btn').style.display   = 'none';
+      document.getElementById('gate-password').value = '';
+      document.getElementById('gate-response').className = 'response-box';
+      document.getElementById('predictions-remaining').innerHTML = '📊 Predictions remaining: <span style="color:var(--muted);">--</span>';
+      // Disable predict button
+      const predictBtn = document.getElementById('predict-btn');
+      if (predictBtn) {
+        predictBtn.disabled = true;
+        predictBtn.title = 'Train a model first';
+        predictBtn.style.opacity = '0.5';
+      }
+      toast('Logged out', 'info');
+    });
+  } else {
+    // No token, just clear UI
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('username');
+    sessionStorage.removeItem('modelTrained');
+    document.getElementById('login-gate').style.display   = 'block';
+    document.getElementById('ml-content').style.display   = 'none';
+    document.getElementById('token-status').textContent   = '⛔ Not logged in';
+    document.getElementById('token-status').className     = 'token-badge token-inactive';
+    document.getElementById('logout-btn').style.display   = 'none';
+    document.getElementById('gate-password').value = '';
+    document.getElementById('gate-response').className = 'response-box';
+    document.getElementById('predictions-remaining').innerHTML = '📊 Predictions remaining: <span style="color:var(--muted);">--</span>';
+    // Disable predict button
+    const predictBtn = document.getElementById('predict-btn');
+    if (predictBtn) {
+      predictBtn.disabled = true;
+      predictBtn.title = 'Train a model first';
+      predictBtn.style.opacity = '0.5';
+    }
+    toast('Logged out', 'info');
+  }
 }
 
 async function gateLogin() {
   const username = document.getElementById('gate-username').value;
   const body = { username: username, password: document.getElementById('gate-password').value };
   try {
-    const res  = await fetch(`${BASE}/users/auth/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const res  = await fetch(`${BASE}/auth/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     const data = await res.json();
     if (res.ok && data.token && data.id) {
       localStorage.setItem('jwt_token', data.token);
       localStorage.setItem('user_id', data.id);
       localStorage.setItem('username', username);
+      sessionStorage.removeItem('modelTrained'); // Reset model trained flag on new login
       console.log(`✅ LOGIN SUCCESS: User ${username} (ID: ${data.id}) logged in at ${new Date().toLocaleTimeString()}`);
       checkLogin();
       toast('Welcome back!', 'success');
@@ -514,7 +573,7 @@ async function trainModel() {
   if (!token) return toast('Not logged in', 'error');
   const X = document.getElementById('train-x').value.split(',').map(v=>parseFloat(v.trim())).filter(v=>!isNaN(v));
   const Y = document.getElementById('train-y').value.split(',').map(v=>parseFloat(v.trim())).filter(v=>!isNaN(v));
-  const degree = parseInt(document.getElementById('train-degree').value) || 3;
+  const degree = parseInt(document.getElementById('train-degree').value) || 2;
   if (!X.length || !Y.length) return toast('Please enter valid X and Y values', 'error');
   if (X.length !== Y.length)  return toast('X and Y must have the same number of values', 'error');
   const btn = document.getElementById('train-btn');
@@ -529,7 +588,17 @@ async function trainModel() {
       toast('❌ User account was deleted or session expired', 'error');
     } else {
       showResponse('train-response', data, res.ok ? 'success' : 'error');
-      if (res.ok) toast('Model trained successfully', 'success');
+      if (res.ok) {
+        sessionStorage.setItem('modelTrained', 'true'); // Mark model as trained
+        // Re-enable predict button
+        const predictBtn = document.getElementById('predict-btn');
+        if (predictBtn) {
+          predictBtn.disabled = false;
+          predictBtn.title = 'Click to predict';
+          predictBtn.style.opacity = '1';
+        }
+        toast('Model trained successfully', 'success');
+      }
       else toast(data.detail || 'Training failed', 'error');
     }
   } catch(e) { showResponse('train-response', '❌ ' + e.message, 'error'); toast(e.message, 'error'); }
@@ -539,6 +608,7 @@ async function trainModel() {
 async function predictRun() {
   const token = getToken();
   if (!token) return toast('Not logged in', 'error');
+  if (!sessionStorage.getItem('modelTrained')) return toast('❌ Please train a model first with X and Y values', 'error');
   const hours = document.getElementById('predict-hours').value;
   if (!hours) return toast('Please enter training hours', 'error');
   if (parseFloat(hours) < 0) return toast('Training hours cannot be negative', 'error');
@@ -565,6 +635,14 @@ async function predictRun() {
     }
   } catch(e) { showResponse('predict-response', '❌ ' + e.message, 'error'); toast(e.message, 'error'); }
   finally { btn.innerHTML = '🔮 Predict'; btn.disabled = false; }
+}
+
+function formatExpiry(input) {
+  let value = input.value.replace(/\D/g, '');
+  if (value.length >= 2) {
+    value = value.slice(0, 2) + '/' + value.slice(2, 4);
+  }
+  input.value = value;
 }
 
 async function purchasePredictions() {

@@ -2,10 +2,12 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 import os
 import logging
+from pathlib import Path
 
 import dal_users
 from router_users import router as users_router
 from router_ml import router as ml_router
+from router_auth import router as auth_router
 
 # Configure logging
 logging.basicConfig(
@@ -24,6 +26,7 @@ app = FastAPI(title="🏃‍♂️ Running Time Prediction API")
 def startup():
     dal_users.init_db()
     logger.info("🚀 Application started - Database initialized")
+    # No model deletion needed - models persist between sessions ✅
     # Flush all handlers immediately after startup
     for handler in logging.getLogger().handlers:
         handler.flush()
@@ -44,6 +47,7 @@ def ml_page():
 
 app.include_router(users_router)
 app.include_router(ml_router)
+app.include_router(auth_router)
 
 # To run the app:
 # uvicorn app:app --host 127.0.0.1 --port 8000 --reload

@@ -4,7 +4,7 @@ Handles model training and prediction with JWT authentication.
 """
 
 from fastapi import APIRouter, HTTPException, Depends
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 import logging
 from auth import get_current_user
@@ -23,7 +23,7 @@ class TrainRequest(BaseModel):
     """Request model for training."""
     X: List[float]
     Y: List[float]
-    degree: int = 3
+    degree: int = Field(default=2, ge=1, le=5, description="Polynomial degree (1-5)")
 
 
 class PredictResponse(BaseModel):
@@ -65,6 +65,25 @@ def train_model(request: TrainRequest, current_user = Depends(get_current_user))
     }
 
 
+@router.delete("/model")
+def delete_model(current_user = Depends(get_current_user)):
+    """Delete user's trained model (called on logout)."""
+    username = current_user['user_name']
+    model_filename = get_model_filename(username)
+    
+    if os.path.exists(model_filename):
+        try:
+            os.remove(model_filename)
+            logger.info(f"🗑️ DELETE /model - Model deleted for {username}")
+            return {"message": "Model deleted"}
+        except Exception as e:
+            logger.error(f"❌ DELETE /model - Error deleting model for {username}: {str(e)}")
+            raise HTTPException(status_code=500, detail=f"Error deleting model: {str(e)}")
+    else:
+        logger.info(f"ℹ️ DELETE /model - No model found for {username}")
+        return {"message": "No model to delete"}
+
+
 @router.get("/predict/{hours}")
 def predict_running_time(hours: float, current_user = Depends(get_current_user)):
     """Predict running time for given training hours."""
@@ -85,7 +104,12 @@ def predict_running_time(hours: float, current_user = Depends(get_current_user))
         logger.warning(f"❌ GET /predict/{hours} - No predictions remaining for {username}")
         raise HTTPException(status_code=403, detail="No predictions remaining. Please purchase more credits.")
     
-    prediction = predict_from_model(model_filename, hours)
+    try:
+        prediction = predict_from_model(model_filename, hours)
+    except Exception as e:
+        logger.error(f"❌ GET /predict/{hours} - Prediction error for {username}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Prediction error: {str(e)}")
+    
     dal_users.deduct_prediction(username)
     predictions_remaining = dal_users.get_predictions_remaining(username)
     logger.info(f"✅ GET /predict/{hours} - Prediction successful for {username}: {prediction:.2f}")
@@ -108,12 +132,13 @@ def purchase_predictions(request: PurchaseRequest, current_user = Depends(get_cu
     if not request.card_number or not request.expiry or not request.cvv:
         logger.warning(f"❌ POST /purchase - Invalid card details from {username}")
         raise HTTPException(status_code=400, detail="Invalid card details")
-    if len(request.card_number) < 13 or len(request.card_number) > 19:
-        raise HTTPException(status_code=400, detail="Invalid card number format")
+    card_number_str = str(request.card_number)
+    if len(card_number_str) < 13 or len(card_number_str) > 19:
+        raise HTTPException(status_code=400, detail="Invalid card number format (13-19 digits)")
     if not "/" in request.expiry or len(request.expiry) != 5:
         raise HTTPException(status_code=400, detail="Invalid expiry format (use MM/YY)")
-    if len(request.cvv) != 3:
-        raise HTTPException(status_code=400, detail="Invalid CVV (must be 3 digits)")
+    if len(request.cvv) != 3 or not request.cvv.isdigit():
+        raise HTTPException(status_code=400, detail="Invalid CVV (must be exactly 3 digits)")
     
     new_count = dal_users.add_predictions(username, 10)
     logger.info(f"✅ POST /purchase - 10 predictions added for {username} (total: {new_count})")

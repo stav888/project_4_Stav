@@ -1,133 +1,449 @@
-2026-03-27 20:00:19,326 - INFO - 🔐 POST /users/auth/login - Login attempt: 11
-2026-03-27 20:00:19,875 - INFO - ✅ POST /users/auth/login - Login successful: 11
-2026-03-27 20:01:07,393 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:01:07,551 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:01:15,299 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:01:21,288 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:01:21,352 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:01:22,020 - INFO - 🔐 POST /users/auth/login - Login attempt: 11
-2026-03-27 20:01:22,530 - INFO - ✅ POST /users/auth/login - Login successful: 11
-2026-03-27 20:01:25,911 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:01:25,916 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:01:25,916 - INFO - ✅ GET /users/12 - User found: 11
-2026-03-27 20:02:00,127 - INFO - 📝 POST /users - Creating user: 21
-2026-03-27 20:02:00,656 - INFO - ✅ POST /users - User created: 21
-2026-03-27 20:02:00,669 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:02:00,669 - INFO - ✅ GET /users - Retrieved 5 users
-2026-03-27 20:02:18,578 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:02:18,581 - INFO - ✅ GET /users - Retrieved 5 users
-2026-03-27 20:02:25,576 - INFO - 📖 GET /users/11 - Fetching user
-2026-03-27 20:02:25,578 - WARNING - ⚠️ GET /users/11 - User not found
-2026-03-27 20:02:32,981 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:02:32,984 - INFO - ✅ GET /users/12 - User found: 11
-2026-03-27 20:02:50,570 - INFO - ✏️ PUT /users/12 - Updating user
-2026-03-27 20:02:51,049 - INFO - ✅ PUT /users/12 - User updated
-2026-03-27 20:02:51,061 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:02:51,061 - INFO - ✅ GET /users - Retrieved 5 users
-2026-03-27 20:03:32,838 - INFO - 🔐 POST /users/auth/login - Login attempt: 11
-2026-03-27 20:03:32,840 - WARNING - ❌ POST /users/auth/login - Invalid credentials: 11
-2026-03-27 20:03:37,905 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:03:37,906 - INFO - ✅ GET /users - Retrieved 5 users
-2026-03-27 20:03:50,166 - INFO - 🔐 POST /users/auth/login - Login attempt: 12
-2026-03-27 20:03:50,636 - INFO - ✅ POST /users/auth/login - Login successful: 12
-2026-03-27 20:03:50,655 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:03:50,657 - INFO - ✅ GET /users/12 - User found: 12
-2026-03-27 20:04:00,080 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:04:00,083 - INFO - ✅ GET /users - Retrieved 5 users
-2026-03-27 20:05:13,941 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:05:13,943 - INFO - ✅ GET /users/12 - User found: 12
-2026-03-27 20:06:01,866 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:06:04,397 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:06:05,657 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:06:25,329 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:06:25,421 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:06:28,851 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:06:34,705 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:06:34,707 - INFO - ✅ GET /users - Retrieved 5 users
-2026-03-27 20:06:39,268 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:06:39,269 - INFO - ✅ GET /users/12 - User found: 12
-2026-03-27 20:08:46,092 - INFO - ✅ Auth Success - User authenticated: 12
-2026-03-27 20:08:46,092 - INFO - 🗑️ DELETE /users/14 - Deleting user by 12
-2026-03-27 20:08:46,102 - INFO -    ✓ Database record deleted
-2026-03-27 20:08:46,102 - INFO - ✅ DELETE /users/14 - User deleted
-2026-03-27 20:08:46,140 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:08:46,140 - INFO - ✅ GET /users - Retrieved 4 users
-2026-03-27 20:08:54,476 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:08:54,478 - INFO - ✅ GET /users/12 - User found: 12
-2026-03-27 20:09:00,279 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:09:00,281 - INFO - ✅ GET /users - Retrieved 4 users
-2026-03-27 20:10:11,509 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:10:11,512 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:10:11,512 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:10:17,308 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:10:17,308 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:10:17,335 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:11:03,398 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:11:03,482 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:11:24,480 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:11:24,508 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:11:28,970 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:11:34,057 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:11:37,382 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:11:37,733 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:12:51,312 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:12:55,054 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:12:55,314 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:06,607 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:10,180 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:14,275 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:18,105 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:21,995 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:22,769 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:25,920 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:28,569 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:29,842 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:34,012 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:37,836 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:40,721 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:41,320 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:45,619 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:13:45,797 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:14:20,080 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:14:23,408 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:14:23,423 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:14:23,423 - INFO - ✅ GET /users - Retrieved 4 users
-2026-03-27 20:14:44,262 - INFO - 🔐 POST /users/auth/login - Login attempt: 11
-2026-03-27 20:14:44,266 - WARNING - ❌ POST /users/auth/login - Invalid credentials: 11
-2026-03-27 20:14:49,527 - INFO - 🔐 POST /users/auth/login - Login attempt: 12
-2026-03-27 20:14:50,066 - INFO - ✅ POST /users/auth/login - Login successful: 12
-2026-03-27 20:14:50,083 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:14:50,085 - INFO - ✅ GET /users/12 - User found: 12
-2026-03-27 20:15:02,697 - INFO - ✅ Auth Success - User authenticated: 12
-2026-03-27 20:15:02,699 - INFO - 🗑️ DELETE /users/7 - Deleting user by 12
-2026-03-27 20:15:02,701 - WARNING - ⚠️ DELETE /users/7 - User not found
-2026-03-27 20:15:11,835 - INFO - ✅ Auth Success - User authenticated: 12
-2026-03-27 20:15:11,837 - INFO - 🗑️ DELETE /users/16 - Deleting user by 12
-2026-03-27 20:15:11,854 - INFO -    ✓ Database record deleted
-2026-03-27 20:15:11,856 - INFO - ✅ DELETE /users/16 - User deleted
-2026-03-27 20:15:11,885 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:15:11,885 - INFO - ✅ GET /users - Retrieved 3 users
-2026-03-27 20:15:17,388 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:15:17,392 - INFO - ✅ GET /users/12 - User found: 12
-2026-03-27 20:15:34,485 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:15:34,487 - INFO - ✅ GET /users - Retrieved 3 users
-2026-03-27 20:16:06,872 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:16:06,930 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:16:08,283 - INFO - 🚀 Application started - Database initialized
-2026-03-27 20:16:08,831 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:16:08,833 - INFO - ✅ GET /users - Retrieved 3 users
-2026-03-27 20:16:32,642 - INFO - 🔐 POST /users/auth/login - Login attempt: 12
-2026-03-27 20:16:33,121 - INFO - ✅ POST /users/auth/login - Login successful: 12
-2026-03-27 20:16:33,137 - INFO - 📖 GET /users/12 - Fetching user
-2026-03-27 20:16:33,138 - INFO - ✅ GET /users/12 - User found: 12
-2026-03-27 20:16:42,347 - INFO - ✅ Auth Success - User authenticated: 12
-2026-03-27 20:16:42,348 - INFO - 🗑️ DELETE /users/16 - Deleting user by 12
-2026-03-27 20:16:42,350 - WARNING - ⚠️ DELETE /users/16 - User not found
-2026-03-27 20:16:47,792 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:16:47,796 - INFO - ✅ GET /users - Retrieved 3 users
-2026-03-27 20:16:53,699 - INFO - ✅ Auth Success - User authenticated: 12
-2026-03-27 20:16:53,700 - INFO - 🗑️ DELETE /users/15 - Deleting user by 12
-2026-03-27 20:16:53,712 - INFO -    ✓ Database record deleted
-2026-03-27 20:16:53,712 - INFO - ✅ DELETE /users/15 - User deleted
-2026-03-27 20:16:53,744 - INFO - 📖 GET /users - Fetching all users
-2026-03-27 20:16:53,754 - INFO - ✅ GET /users - Retrieved 2 users
+2026-03-28 17:50:16,408 - INFO - 🚀 Application started - Database initialized
+2026-03-28 17:50:16,423 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 17:50:16,423 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 17:50:19,094 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:19,094 - INFO - 🔮 GET /predict/1.0 - Predicting for 12
+2026-03-28 17:50:19,094 - WARNING - ❌ GET /predict/1.0 - Model not found for 12
+2026-03-28 17:50:19,111 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:19,112 - INFO - ℹ️ DELETE /model - No model found for 12
+2026-03-28 17:50:22,751 - INFO - 🔐 POST /auth/login - Login attempt: 12
+2026-03-28 17:50:23,262 - INFO - ✅ POST /auth/login - Login successful: 12
+2026-03-28 17:50:23,289 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 17:50:23,298 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 17:50:31,902 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:31,902 - INFO - 🤖 POST /train - Training model for 12 (degree=2, points=4)
+2026-03-28 17:50:31,933 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 17:50:33,495 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:33,496 - INFO - 🔮 GET /predict/2.0 - Predicting for 12
+2026-03-28 17:50:33,519 - INFO - ✅ GET /predict/2.0 - Prediction successful for 12: 0.00
+2026-03-28 17:50:47,847 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:47,849 - INFO - 🔮 GET /predict/3.0 - Predicting for 12
+2026-03-28 17:50:47,859 - INFO - ✅ GET /predict/3.0 - Prediction successful for 12: 2.25
+2026-03-28 17:50:52,147 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:52,150 - INFO - 🤖 POST /train - Training model for 12 (degree=3, points=4)
+2026-03-28 17:50:52,150 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 17:50:54,642 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:54,642 - INFO - 🔮 GET /predict/3.0 - Predicting for 12
+2026-03-28 17:50:54,660 - INFO - ✅ GET /predict/3.0 - Prediction successful for 12: 2.00
+2026-03-28 17:50:57,446 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:57,448 - INFO - 🔮 GET /predict/1.0 - Predicting for 12
+2026-03-28 17:50:57,461 - INFO - ✅ GET /predict/1.0 - Prediction successful for 12: 0.00
+2026-03-28 17:50:58,645 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:50:58,645 - INFO - 🔮 GET /predict/1.5 - Predicting for 12
+2026-03-28 17:50:58,666 - INFO - ✅ GET /predict/1.5 - Prediction successful for 12: 0.00
+2026-03-28 17:51:03,303 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:03,303 - INFO - 💳 POST /purchase - Purchase request from 12
+2026-03-28 17:51:03,324 - INFO - ✅ POST /purchase - 10 predictions added for 12 (total: 18)
+2026-03-28 17:51:06,229 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:06,230 - INFO - 🔮 GET /predict/1.5 - Predicting for 12
+2026-03-28 17:51:06,240 - INFO - ✅ GET /predict/1.5 - Prediction successful for 12: 0.00
+2026-03-28 17:51:08,860 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:08,862 - INFO - 🔮 GET /predict/2.0 - Predicting for 12
+2026-03-28 17:51:08,874 - INFO - ✅ GET /predict/2.0 - Prediction successful for 12: 0.00
+2026-03-28 17:51:09,885 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:09,886 - INFO - 🔮 GET /predict/2.5 - Predicting for 12
+2026-03-28 17:51:09,898 - INFO - ✅ GET /predict/2.5 - Prediction successful for 12: 0.00
+2026-03-28 17:51:10,904 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:10,904 - INFO - 🔮 GET /predict/3.0 - Predicting for 12
+2026-03-28 17:51:10,925 - INFO - ✅ GET /predict/3.0 - Prediction successful for 12: 2.00
+2026-03-28 17:51:15,229 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:15,233 - INFO - 🔮 GET /predict/9.0 - Predicting for 12
+2026-03-28 17:51:15,237 - INFO - ✅ GET /predict/9.0 - Prediction successful for 12: 54.00
+2026-03-28 17:51:18,771 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:18,771 - INFO - 🔮 GET /predict/7.5 - Predicting for 12
+2026-03-28 17:51:18,774 - INFO - ✅ GET /predict/7.5 - Prediction successful for 12: 12.31
+2026-03-28 17:51:21,090 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:21,092 - INFO - 📊 GET /accuracy - Accuracy check for 12
+2026-03-28 17:51:21,098 - INFO - ✅ GET /accuracy - R² Score: -9.6071 for 12
+2026-03-28 17:51:24,526 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:24,528 - INFO - 🤖 POST /train - Training model for 12 (degree=1, points=4)
+2026-03-28 17:51:24,536 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 17:51:25,685 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:25,687 - INFO - 🔮 GET /predict/7.5 - Predicting for 12
+2026-03-28 17:51:25,697 - INFO - ✅ GET /predict/7.5 - Prediction successful for 12: 0.75
+2026-03-28 17:51:28,944 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:28,944 - INFO - 🔮 GET /predict/8.0 - Predicting for 12
+2026-03-28 17:51:28,967 - INFO - ✅ GET /predict/8.0 - Prediction successful for 12: 0.50
+2026-03-28 17:51:31,263 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:51:31,264 - INFO - 📊 GET /accuracy - Accuracy check for 12
+2026-03-28 17:51:31,267 - INFO - ✅ GET /accuracy - R² Score: -2.7321 for 12
+2026-03-28 17:52:03,828 - INFO - 🗑️ Cleaned up old model file: 12.pkl
+2026-03-28 17:52:03,829 - INFO - 🚀 Application started - Database initialized
+2026-03-28 17:52:03,944 - INFO - 🚀 Application started - Database initialized
+2026-03-28 17:52:06,093 - INFO - 🚀 Application started - Database initialized
+2026-03-28 17:52:06,095 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 17:52:06,095 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 17:52:07,569 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:07,569 - INFO - 🔮 GET /predict/0.0 - Predicting for 12
+2026-03-28 17:52:07,569 - WARNING - ❌ GET /predict/0.0 - Model not found for 12
+2026-03-28 17:52:07,585 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:07,585 - INFO - ℹ️ DELETE /model - No model found for 12
+2026-03-28 17:52:17,142 - INFO - 🔐 POST /auth/login - Login attempt: 12
+2026-03-28 17:52:17,920 - INFO - ✅ POST /auth/login - Login successful: 12
+2026-03-28 17:52:17,947 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 17:52:17,955 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 17:52:20,222 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 17:52:20,225 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 17:52:42,697 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:42,702 - INFO - 🤖 POST /train - Training model for 12 (degree=1, points=4)
+2026-03-28 17:52:42,742 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 17:52:46,340 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:46,340 - INFO - 🔮 GET /predict/3.0 - Predicting for 12
+2026-03-28 17:52:46,359 - INFO - ✅ GET /predict/3.0 - Prediction successful for 12: 0.91
+2026-03-28 17:52:50,380 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:50,382 - INFO - 📊 GET /accuracy - Accuracy check for 12
+2026-03-28 17:52:50,387 - INFO - ✅ GET /accuracy - R² Score: -2.2111 for 12
+2026-03-28 17:52:53,798 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:53,798 - INFO - 🔮 GET /predict/2.0 - Predicting for 12
+2026-03-28 17:52:53,822 - INFO - ✅ GET /predict/2.0 - Prediction successful for 12: 0.45
+2026-03-28 17:52:55,973 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:55,973 - INFO - 🔮 GET /predict/0.0 - Predicting for 12
+2026-03-28 17:52:55,998 - INFO - ✅ GET /predict/0.0 - Prediction successful for 12: 0.00
+2026-03-28 17:52:57,175 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:57,175 - INFO - 🔮 GET /predict/0.5 - Predicting for 12
+2026-03-28 17:52:57,192 - INFO - ✅ GET /predict/0.5 - Prediction successful for 12: 0.00
+2026-03-28 17:52:59,034 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:52:59,036 - INFO - 🔮 GET /predict/1.0 - Predicting for 12
+2026-03-28 17:52:59,042 - INFO - ✅ GET /predict/1.0 - Prediction successful for 12: 0.00
+2026-03-28 17:53:00,109 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:00,109 - INFO - 🔮 GET /predict/1.5 - Predicting for 12
+2026-03-28 17:53:00,134 - INFO - ✅ GET /predict/1.5 - Prediction successful for 12: 0.23
+2026-03-28 17:53:01,535 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:01,536 - INFO - 🔮 GET /predict/2.0 - Predicting for 12
+2026-03-28 17:53:01,542 - INFO - ✅ GET /predict/2.0 - Prediction successful for 12: 0.45
+2026-03-28 17:53:02,488 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:02,489 - INFO - 🔮 GET /predict/2.5 - Predicting for 12
+2026-03-28 17:53:02,490 - INFO - ✅ GET /predict/2.5 - Prediction successful for 12: 0.68
+2026-03-28 17:53:03,599 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:03,600 - INFO - 🔮 GET /predict/3.0 - Predicting for 12
+2026-03-28 17:53:03,609 - INFO - ✅ GET /predict/3.0 - Prediction successful for 12: 0.91
+2026-03-28 17:53:05,175 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:05,175 - INFO - 🔮 GET /predict/3.5 - Predicting for 12
+2026-03-28 17:53:05,200 - INFO - ✅ GET /predict/3.5 - Prediction successful for 12: 1.14
+2026-03-28 17:53:06,186 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:06,188 - INFO - 🔮 GET /predict/4.0 - Predicting for 12
+2026-03-28 17:53:06,190 - WARNING - ❌ GET /predict/4.0 - No predictions remaining for 12
+2026-03-28 17:53:15,354 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:15,354 - INFO - 💳 POST /purchase - Purchase request from 12
+2026-03-28 17:53:15,373 - INFO - ✅ POST /purchase - 10 predictions added for 12 (total: 10)
+2026-03-28 17:53:18,450 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:18,451 - INFO - 🔮 GET /predict/4.0 - Predicting for 12
+2026-03-28 17:53:18,464 - INFO - ✅ GET /predict/4.0 - Prediction successful for 12: 1.36
+2026-03-28 17:53:21,710 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:21,711 - INFO - 🔮 GET /predict/5.0 - Predicting for 12
+2026-03-28 17:53:21,731 - INFO - ✅ GET /predict/5.0 - Prediction successful for 12: 1.82
+2026-03-28 17:53:23,655 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:23,656 - INFO - 🔮 GET /predict/9.0 - Predicting for 12
+2026-03-28 17:53:23,676 - INFO - ✅ GET /predict/9.0 - Prediction successful for 12: 3.64
+2026-03-28 17:53:25,065 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:25,065 - INFO - 🔮 GET /predict/11.5 - Predicting for 12
+2026-03-28 17:53:25,115 - INFO - ✅ GET /predict/11.5 - Prediction successful for 12: 4.77
+2026-03-28 17:53:26,434 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:26,434 - INFO - 🔮 GET /predict/13.0 - Predicting for 12
+2026-03-28 17:53:26,446 - INFO - ✅ GET /predict/13.0 - Prediction successful for 12: 5.45
+2026-03-28 17:53:32,117 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:32,118 - INFO - 🤖 POST /train - Training model for 12 (degree=2, points=4)
+2026-03-28 17:53:32,124 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 17:53:33,907 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:33,908 - INFO - 🔮 GET /predict/13.0 - Predicting for 12
+2026-03-28 17:53:33,923 - INFO - ✅ GET /predict/13.0 - Prediction successful for 12: 46.00
+2026-03-28 17:53:37,461 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:37,461 - INFO - 🔮 GET /predict/6.0 - Predicting for 12
+2026-03-28 17:53:37,478 - INFO - ✅ GET /predict/6.0 - Prediction successful for 12: 4.00
+2026-03-28 17:53:39,319 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:39,321 - INFO - 🔮 GET /predict/7.0 - Predicting for 12
+2026-03-28 17:53:39,335 - INFO - ✅ GET /predict/7.0 - Prediction successful for 12: 7.00
+2026-03-28 17:53:43,099 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:43,099 - INFO - 🔮 GET /predict/7.8 - Predicting for 12
+2026-03-28 17:53:43,107 - INFO - ✅ GET /predict/7.8 - Prediction successful for 12: 10.12
+2026-03-28 17:53:47,017 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:47,017 - INFO - 🤖 POST /train - Training model for 12 (degree=2, points=4)
+2026-03-28 17:53:47,017 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 17:53:48,821 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:48,822 - INFO - 🔮 GET /predict/7.8 - Predicting for 12
+2026-03-28 17:53:48,838 - INFO - ✅ GET /predict/7.8 - Prediction successful for 12: 28.74
+2026-03-28 17:53:57,434 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:57,434 - INFO - 🤖 POST /train - Training model for 12 (degree=2, points=4)
+2026-03-28 17:53:57,434 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 17:53:59,076 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:53:59,079 - INFO - 🔮 GET /predict/7.8 - Predicting for 12
+2026-03-28 17:53:59,083 - WARNING - ❌ GET /predict/7.8 - No predictions remaining for 12
+2026-03-28 17:54:09,568 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:54:09,568 - INFO - 💳 POST /purchase - Purchase request from 12
+2026-03-28 17:54:09,584 - INFO - ✅ POST /purchase - 10 predictions added for 12 (total: 10)
+2026-03-28 17:54:11,599 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:54:11,600 - INFO - 🔮 GET /predict/7.8 - Predicting for 12
+2026-03-28 17:54:11,627 - INFO - ✅ GET /predict/7.8 - Prediction successful for 12: 37.48
+2026-03-28 17:54:14,967 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:54:14,967 - INFO - 🤖 POST /train - Training model for 12 (degree=5, points=4)
+2026-03-28 17:54:14,972 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 17:54:16,881 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:54:16,883 - INFO - 🔮 GET /predict/7.8 - Predicting for 12
+2026-03-28 17:54:16,896 - INFO - ✅ GET /predict/7.8 - Prediction successful for 12: 108.63
+2026-03-28 17:54:21,123 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 17:54:21,125 - INFO - 📊 GET /accuracy - Accuracy check for 12
+2026-03-28 17:54:21,130 - INFO - ✅ GET /accuracy - R² Score: -83.1306 for 12
+2026-03-28 17:54:51,825 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:52,309 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:54,713 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:54,845 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:55,001 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:55,139 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:55,213 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:55,292 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:55,323 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:55,447 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:55,495 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:55,585 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:55,618 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:55,744 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:55,782 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:55,881 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:55,956 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:56,036 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:56,102 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:56,200 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:56,309 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:56,420 - INFO - 📝 POST /users - Creating user: 10
+2026-03-28 17:54:56,444 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:56,569 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:56,704 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:54:56,902 - WARNING - ⚠️ POST /users - Username already exists: 10
+2026-03-28 17:55:00,391 - INFO - 📝 POST /users - Creating user: 19
+2026-03-28 17:55:00,958 - INFO - ✅ POST /users - User created: 19
+2026-03-28 17:55:00,974 - INFO - 📖 GET /users - Fetching all users
+2026-03-28 17:55:00,976 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-28 17:55:11,599 - INFO - 🔐 POST /auth/login - Login attempt: 10
+2026-03-28 17:55:12,158 - INFO - ✅ POST /auth/login - Login successful: 10
+2026-03-28 17:55:16,481 - INFO - 📖 GET /users - Fetching all users
+2026-03-28 17:55:16,483 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-28 17:55:20,696 - INFO - 📖 GET /users/20 - Fetching user
+2026-03-28 17:55:20,699 - INFO - ✅ GET /users/20 - User found: 10
+2026-03-28 17:55:35,915 - INFO - ✏️ PUT /users/21 - Updating user
+2026-03-28 17:55:36,489 - INFO - ✅ PUT /users/21 - User updated
+2026-03-28 17:55:36,502 - INFO - 📖 GET /users - Fetching all users
+2026-03-28 17:55:36,504 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-28 17:55:51,488 - INFO - ✅ Auth Success - User authenticated: 10
+2026-03-28 17:55:51,490 - INFO - 🗑️ DELETE /users/10 - Deleting user by 10
+2026-03-28 17:55:51,495 - WARNING - ⚠️ DELETE /users/10 - User not found
+2026-03-28 17:56:04,328 - INFO - ✅ Auth Success - User authenticated: 10
+2026-03-28 17:56:04,328 - INFO - 🗑️ DELETE /users/21 - Deleting user by 10
+2026-03-28 17:56:04,347 - INFO -    ✓ Database record deleted
+2026-03-28 17:56:04,351 - INFO - ✅ DELETE /users/21 - User deleted
+2026-03-28 17:56:04,385 - INFO - 📖 GET /users - Fetching all users
+2026-03-28 17:56:04,385 - INFO - ✅ GET /users - Retrieved 4 users
+2026-03-28 17:56:12,169 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 17:56:12,171 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 17:56:13,517 - INFO - ✅ Auth Success - User authenticated: 10
+2026-03-28 17:56:13,519 - INFO - ℹ️ DELETE /model - No model found for 10
+2026-03-28 17:56:20,784 - INFO - 📖 GET /users - Fetching all users
+2026-03-28 17:56:20,788 - INFO - ✅ GET /users - Retrieved 4 users
+2026-03-28 18:13:08,961 - INFO - 🗑️ Cleaned up old model file: 12.pkl
+2026-03-28 18:13:08,963 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:13:08,980 - INFO - 🔐 POST /auth/login - Login attempt: 12
+2026-03-28 18:13:09,388 - INFO - ✅ POST /auth/login - Login successful: 12
+2026-03-28 18:13:15,012 - INFO - 🔐 POST /auth/login - Login attempt: 12
+2026-03-28 18:13:15,493 - INFO - ✅ POST /auth/login - Login successful: 12
+2026-03-28 18:13:15,518 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 18:13:15,521 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 18:13:39,488 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:13:39,491 - INFO - 🤖 POST /train - Training model for 12 (degree=2, points=6)
+2026-03-28 18:13:39,516 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:13:42,872 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:13:42,874 - INFO - 🔮 GET /predict/1.5 - Predicting for 12
+2026-03-28 18:13:42,897 - INFO - ✅ GET /predict/1.5 - Prediction successful for 12: 3.06
+2026-03-28 18:13:50,726 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:13:50,727 - INFO - 🤖 POST /train - Training model for 12 (degree=2, points=7)
+2026-03-28 18:13:50,736 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:13:52,042 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:13:52,044 - INFO - 🔮 GET /predict/1.5 - Predicting for 12
+2026-03-28 18:13:52,063 - INFO - ✅ GET /predict/1.5 - Prediction successful for 12: 3.15
+2026-03-28 18:14:56,768 - INFO - 🗑️ Cleaned up old model file: 12.pkl
+2026-03-28 18:14:56,769 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:14:56,981 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:15:07,308 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:15:07,324 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 18:15:07,326 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 18:15:36,064 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:15:36,478 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:20:09,955 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:26:15,026 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:26:15,231 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:26:31,889 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:26:32,093 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:26:38,065 - INFO - 🚀 Application started - Database initialized
+2026-03-28 18:26:38,102 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 18:26:38,111 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 18:26:38,525 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 18:26:38,527 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 18:26:41,122 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:26:41,123 - INFO - ℹ️ DELETE /model - No model found for 12
+2026-03-28 18:26:46,372 - INFO - 🔐 POST /auth/login - Login attempt: 12
+2026-03-28 18:26:46,890 - INFO - ✅ POST /auth/login - Login successful: 12
+2026-03-28 18:26:46,947 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-28 18:26:46,947 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-28 18:27:02,237 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:02,237 - INFO - 🤖 POST /train - Training model for 12 (degree=2, points=4)
+2026-03-28 18:27:02,259 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:27:05,401 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:05,401 - INFO - 🔮 GET /predict/2.0 - Predicting for 12
+2026-03-28 18:27:05,433 - INFO - ✅ GET /predict/2.0 - Prediction successful for 12: 6.50
+2026-03-28 18:27:07,424 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:07,424 - INFO - 🔮 GET /predict/1.0 - Predicting for 12
+2026-03-28 18:27:07,441 - INFO - ✅ GET /predict/1.0 - Prediction successful for 12: 7.00
+2026-03-28 18:27:08,497 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:08,498 - INFO - 🔮 GET /predict/0.5 - Predicting for 12
+2026-03-28 18:27:08,524 - INFO - ✅ GET /predict/0.5 - Prediction successful for 12: 7.06
+2026-03-28 18:27:09,234 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:09,234 - INFO - 🔮 GET /predict/0.0 - Predicting for 12
+2026-03-28 18:27:09,265 - INFO - ✅ GET /predict/0.0 - Prediction successful for 12: 7.00
+2026-03-28 18:27:10,485 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:10,487 - INFO - 🔮 GET /predict/0.5 - Predicting for 12
+2026-03-28 18:27:10,508 - INFO - ✅ GET /predict/0.5 - Prediction successful for 12: 7.06
+2026-03-28 18:27:13,781 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:13,783 - INFO - 📊 GET /accuracy - Accuracy check for 12
+2026-03-28 18:27:13,793 - INFO - ✅ GET /accuracy - R² Score: -5.5655 for 12
+2026-03-28 18:27:20,063 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:20,063 - INFO - 💳 POST /purchase - Purchase request from 12
+2026-03-28 18:27:20,085 - INFO - ✅ POST /purchase - 10 predictions added for 12 (total: 11)
+2026-03-28 18:27:23,781 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:23,794 - INFO - 🔮 GET /predict/3.0 - Predicting for 12
+2026-03-28 18:27:23,801 - INFO - ✅ GET /predict/3.0 - Prediction successful for 12: 5.50
+2026-03-28 18:27:29,035 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:29,036 - INFO - 🔮 GET /predict/3.0 - Predicting for 12
+2026-03-28 18:27:29,053 - INFO - ✅ GET /predict/3.0 - Prediction successful for 12: 5.50
+2026-03-28 18:27:32,606 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:32,606 - INFO - 🔮 GET /predict/0.0 - Predicting for 12
+2026-03-28 18:27:32,617 - INFO - ✅ GET /predict/0.0 - Prediction successful for 12: 7.00
+2026-03-28 18:27:35,692 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:35,707 - INFO - 🤖 POST /train - Training model for 12 (degree=4, points=4)
+2026-03-28 18:27:35,713 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:27:37,239 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:37,240 - INFO - 🔮 GET /predict/0.0 - Predicting for 12
+2026-03-28 18:27:37,263 - INFO - ✅ GET /predict/0.0 - Prediction successful for 12: 6.93
+2026-03-28 18:27:39,245 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:39,249 - INFO - 🔮 GET /predict/1.0 - Predicting for 12
+2026-03-28 18:27:39,256 - INFO - ✅ GET /predict/1.0 - Prediction successful for 12: 6.85
+2026-03-28 18:27:41,799 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:41,800 - INFO - 🔮 GET /predict/4.0 - Predicting for 12
+2026-03-28 18:27:41,811 - INFO - ✅ GET /predict/4.0 - Prediction successful for 12: 4.00
+2026-03-28 18:27:43,628 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:43,628 - INFO - 🔮 GET /predict/5.5 - Predicting for 12
+2026-03-28 18:27:43,643 - INFO - ✅ GET /predict/5.5 - Prediction successful for 12: 0.87
+2026-03-28 18:27:45,032 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:45,035 - INFO - 🔮 GET /predict/6.5 - Predicting for 12
+2026-03-28 18:27:45,052 - INFO - ✅ GET /predict/6.5 - Prediction successful for 12: 0.00
+2026-03-28 18:27:46,411 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:46,414 - INFO - 🔮 GET /predict/7.5 - Predicting for 12
+2026-03-28 18:27:46,423 - INFO - ✅ GET /predict/7.5 - Prediction successful for 12: 0.00
+2026-03-28 18:27:47,534 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:47,534 - INFO - 🔮 GET /predict/8.5 - Predicting for 12
+2026-03-28 18:27:47,551 - INFO - ✅ GET /predict/8.5 - Prediction successful for 12: 0.00
+2026-03-28 18:27:59,126 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:27:59,127 - INFO - 🔮 GET /predict/8.5 - Predicting for 12
+2026-03-28 18:27:59,135 - INFO - ✅ GET /predict/8.5 - Prediction successful for 12: 0.00
+2026-03-28 18:28:00,442 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:00,445 - INFO - 🔮 GET /predict/8.5 - Predicting for 12
+2026-03-28 18:28:00,445 - WARNING - ❌ GET /predict/8.5 - No predictions remaining for 12
+2026-03-28 18:28:09,468 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:09,468 - INFO - 💳 POST /purchase - Purchase request from 12
+2026-03-28 18:28:09,486 - INFO - ✅ POST /purchase - 10 predictions added for 12 (total: 10)
+2026-03-28 18:28:14,775 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:14,775 - INFO - 💳 POST /purchase - Purchase request from 12
+2026-03-28 18:28:14,800 - INFO - ✅ POST /purchase - 10 predictions added for 12 (total: 20)
+2026-03-28 18:28:16,783 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:16,785 - INFO - 🔮 GET /predict/8.5 - Predicting for 12
+2026-03-28 18:28:16,799 - INFO - ✅ GET /predict/8.5 - Prediction successful for 12: 0.00
+2026-03-28 18:28:19,432 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:19,432 - INFO - 🔮 GET /predict/6.0 - Predicting for 12
+2026-03-28 18:28:19,465 - INFO - ✅ GET /predict/6.0 - Prediction successful for 12: 0.00
+2026-03-28 18:28:20,867 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:20,867 - INFO - 🔮 GET /predict/5.5 - Predicting for 12
+2026-03-28 18:28:20,894 - INFO - ✅ GET /predict/5.5 - Prediction successful for 12: 0.87
+2026-03-28 18:28:23,031 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:23,031 - INFO - 🔮 GET /predict/6.0 - Predicting for 12
+2026-03-28 18:28:23,060 - INFO - ✅ GET /predict/6.0 - Prediction successful for 12: 0.00
+2026-03-28 18:28:27,791 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:27,791 - INFO - 🤖 POST /train - Training model for 12 (degree=2, points=4)
+2026-03-28 18:28:27,809 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:28:29,200 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:29,201 - INFO - 🔮 GET /predict/6.0 - Predicting for 12
+2026-03-28 18:28:29,208 - INFO - ✅ GET /predict/6.0 - Prediction successful for 12: 0.00
+2026-03-28 18:28:30,992 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:30,992 - INFO - 🔮 GET /predict/5.5 - Predicting for 12
+2026-03-28 18:28:31,005 - INFO - ✅ GET /predict/5.5 - Prediction successful for 12: 0.81
+2026-03-28 18:28:37,944 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:37,944 - INFO - 🤖 POST /train - Training model for 12 (degree=1, points=4)
+2026-03-28 18:28:37,959 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:28:45,947 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:45,952 - INFO - 🤖 POST /train - Training model for 12 (degree=1, points=4)
+2026-03-28 18:28:45,956 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:28:47,688 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:47,689 - INFO - 🔮 GET /predict/5.5 - Predicting for 12
+2026-03-28 18:28:47,705 - INFO - ✅ GET /predict/5.5 - Prediction successful for 12: 5.80
+2026-03-28 18:28:50,162 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:50,178 - INFO - 🔮 GET /predict/6.5 - Predicting for 12
+2026-03-28 18:28:50,200 - INFO - ✅ GET /predict/6.5 - Prediction successful for 12: 5.60
+2026-03-28 18:28:51,507 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:51,508 - INFO - 🔮 GET /predict/7.5 - Predicting for 12
+2026-03-28 18:28:51,510 - INFO - ✅ GET /predict/7.5 - Prediction successful for 12: 5.40
+2026-03-28 18:28:52,966 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:52,966 - INFO - 🔮 GET /predict/8.5 - Predicting for 12
+2026-03-28 18:28:52,981 - INFO - ✅ GET /predict/8.5 - Prediction successful for 12: 5.20
+2026-03-28 18:28:54,088 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:54,088 - INFO - 🔮 GET /predict/10.0 - Predicting for 12
+2026-03-28 18:28:54,107 - INFO - ✅ GET /predict/10.0 - Prediction successful for 12: 4.90
+2026-03-28 18:28:55,429 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:55,429 - INFO - 🔮 GET /predict/11.5 - Predicting for 12
+2026-03-28 18:28:55,450 - INFO - ✅ GET /predict/11.5 - Prediction successful for 12: 4.60
+2026-03-28 18:28:56,588 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:56,588 - INFO - 🔮 GET /predict/13.5 - Predicting for 12
+2026-03-28 18:28:56,605 - INFO - ✅ GET /predict/13.5 - Prediction successful for 12: 4.20
+2026-03-28 18:28:57,631 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:57,632 - INFO - 🔮 GET /predict/15.0 - Predicting for 12
+2026-03-28 18:28:57,646 - INFO - ✅ GET /predict/15.0 - Prediction successful for 12: 3.90
+2026-03-28 18:28:59,117 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:28:59,117 - INFO - 🔮 GET /predict/17.5 - Predicting for 12
+2026-03-28 18:28:59,136 - INFO - ✅ GET /predict/17.5 - Prediction successful for 12: 3.40
+2026-03-28 18:29:00,165 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:00,165 - INFO - 🔮 GET /predict/19.0 - Predicting for 12
+2026-03-28 18:29:00,181 - INFO - ✅ GET /predict/19.0 - Prediction successful for 12: 3.10
+2026-03-28 18:29:06,547 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:06,548 - INFO - 🤖 POST /train - Training model for 12 (degree=1, points=4)
+2026-03-28 18:29:06,554 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:29:11,557 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:11,558 - INFO - 🤖 POST /train - Training model for 12 (degree=5, points=4)
+2026-03-28 18:29:11,565 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:29:12,885 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:12,886 - INFO - 🔮 GET /predict/19.0 - Predicting for 12
+2026-03-28 18:29:12,896 - INFO - ✅ GET /predict/19.0 - Prediction successful for 12: 0.00
+2026-03-28 18:29:14,683 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:14,685 - INFO - 📊 GET /accuracy - Accuracy check for 12
+2026-03-28 18:29:14,689 - INFO - ✅ GET /accuracy - R² Score: -11.0554 for 12
+2026-03-28 18:29:20,558 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:20,559 - INFO - 🔮 GET /predict/8.5 - Predicting for 12
+2026-03-28 18:29:20,571 - INFO - ✅ GET /predict/8.5 - Prediction successful for 12: 0.00
+2026-03-28 18:29:23,054 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:23,055 - INFO - 📊 GET /accuracy - Accuracy check for 12
+2026-03-28 18:29:23,059 - INFO - ✅ GET /accuracy - R² Score: -11.0554 for 12
+2026-03-28 18:29:26,838 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:26,840 - INFO - 🤖 POST /train - Training model for 12 (degree=4, points=4)
+2026-03-28 18:29:26,850 - INFO - ✅ POST /train - Model trained for 12
+2026-03-28 18:29:28,034 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:28,036 - INFO - 📊 GET /accuracy - Accuracy check for 12
+2026-03-28 18:29:28,042 - INFO - ✅ GET /accuracy - R² Score: -44.0438 for 12
+2026-03-28 18:29:31,721 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:31,723 - INFO - 🔮 GET /predict/8.5 - Predicting for 12
+2026-03-28 18:29:31,753 - INFO - ✅ GET /predict/8.5 - Prediction successful for 12: 0.00
+2026-03-28 18:29:34,048 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:34,049 - INFO - 🔮 GET /predict/6.5 - Predicting for 12
+2026-03-28 18:29:34,073 - INFO - ✅ GET /predict/6.5 - Prediction successful for 12: 12.79
+2026-03-28 18:29:44,212 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:44,226 - INFO - 💳 POST /purchase - Purchase request from 12
+2026-03-28 18:29:44,235 - INFO - ✅ POST /purchase - 10 predictions added for 12 (total: 10)
+2026-03-28 18:29:46,160 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:46,162 - INFO - 🔮 GET /predict/6.5 - Predicting for 12
+2026-03-28 18:29:46,175 - INFO - ✅ GET /predict/6.5 - Prediction successful for 12: 12.79
+2026-03-28 18:29:50,608 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-28 18:29:50,608 - INFO - 🔮 GET /predict/7.0 - Predicting for 12
+2026-03-28 18:29:50,620 - INFO - ✅ GET /predict/7.0 - Prediction successful for 12: 14.34

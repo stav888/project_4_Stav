@@ -14,21 +14,23 @@ DB_PATH = "users.db"
 
 def init_db():
     """Initialize the SQLite database with users table."""
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_name TEXT UNIQUE NOT NULL,
-        email TEXT NOT NULL,
-        password TEXT NOT NULL,
-        predictions_remaining INTEGER DEFAULT 10
-    )
-    """)
-    
-    conn.commit()
-    conn.close()
+    conn = sqlite3.connect(DB_PATH, timeout=5.0)
+    try:
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_name TEXT UNIQUE NOT NULL,
+            email TEXT NOT NULL,
+            password TEXT NOT NULL,
+            predictions_remaining INTEGER DEFAULT 10
+        )
+        """)
+        
+        conn.commit()
+    finally:
+        conn.close()
 
 
 def hash_password(password: str) -> str:
@@ -71,8 +73,9 @@ def create_user(username: str, email: str, password: str) -> Optional[Dict[str, 
     Returns:
         dict: created user data, or None if failed
     """
+    conn = None
     try:
-        conn = sqlite3.connect(DB_PATH)
+        conn = sqlite3.connect(DB_PATH, timeout=5.0)
         cursor = conn.cursor()
         
         logging.debug(f"   🔄 Hashing password for user: {username}")
@@ -89,7 +92,6 @@ def create_user(username: str, email: str, password: str) -> Optional[Dict[str, 
         user_id = cursor.lastrowid
         logging.debug(f"   ✓ User record inserted | New ID: {user_id}")
         logging.debug(f"   ✓ Default predictions allocated: 10")
-        conn.close()
         
         return {
             "id": user_id,
@@ -99,6 +101,9 @@ def create_user(username: str, email: str, password: str) -> Optional[Dict[str, 
     except sqlite3.IntegrityError:
         logging.debug(f"   ✗ Username already exists: {username}")
         return None
+    finally:
+        if conn:
+            conn.close()
 
 
 def get_user_by_id(user_id: int) -> Optional[Dict[str, Any]]:
@@ -111,7 +116,7 @@ def get_user_by_id(user_id: int) -> Optional[Dict[str, Any]]:
     Returns:
         dict: user data (without password), or None if not found
     """
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=5.0)
     cursor = conn.cursor()
     
     cursor.execute("SELECT id, user_name, email, predictions_remaining FROM users WHERE id = ?", (user_id,))
@@ -139,7 +144,7 @@ def get_user_by_username(username: str) -> Optional[Dict[str, Any]]:
     Returns:
         dict: user data including hashed password, or None if not found
     """
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=5.0)
     cursor = conn.cursor()
     
     cursor.execute("SELECT id, user_name, email, password, predictions_remaining FROM users WHERE user_name = ?", (username,))
@@ -165,7 +170,7 @@ def get_all_users() -> List[Dict[str, Any]]:
     Returns:
         list: list of user dictionaries (without passwords)
     """
-    conn = sqlite3.connect(DB_PATH)
+    conn = sqlite3.connect(DB_PATH, timeout=5.0)
     cursor = conn.cursor()
     
     cursor.execute("SELECT id, user_name, email, predictions_remaining FROM users")
@@ -198,35 +203,36 @@ def update_user(user_id: int, user_name: Optional[str] = None, email: Optional[s
         dict: updated user data, or None if failed
     """
     try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        # Build dynamic update query
-        updates = []
-        params = []
-        
-        if user_name:
-            updates.append("user_name = ?")
-            params.append(user_name)
-        if email:
-            updates.append("email = ?")
-            params.append(email)
-        if password:
-            hashed_pwd = hash_password(password)
-            updates.append("password = ?")
-            params.append(hashed_pwd)
-        
-        if not updates:
+        conn = sqlite3.connect(DB_PATH, timeout=5.0)
+        try:
+            cursor = conn.cursor()
+            
+            # Build dynamic update query
+            updates = []
+            params = []
+            
+            if user_name:
+                updates.append("user_name = ?")
+                params.append(user_name)
+            if email:
+                updates.append("email = ?")
+                params.append(email)
+            if password:
+                hashed_pwd = hash_password(password)
+                updates.append("password = ?")
+                params.append(hashed_pwd)
+            
+            if not updates:
+                return get_user_by_id(user_id)
+            
+            params.append(user_id)
+            query = f"UPDATE users SET {', '.join(updates)} WHERE id = ?"
+            cursor.execute(query, params)
+            
+            conn.commit()
             return get_user_by_id(user_id)
-        
-        params.append(user_id)
-        query = f"UPDATE users SET {', '.join(updates)} WHERE id = ?"
-        cursor.execute(query, params)
-        
-        conn.commit()
-        conn.close()
-        
-        return get_user_by_id(user_id)
+        finally:
+            conn.close()
     except Exception as e:
         print(f"Error updating user: {e}")
         return None
@@ -265,15 +271,16 @@ def delete_user(user_id: int) -> bool:
             logging.debug(f"   ℹ️ No model file found: {model_filename}")
         
         # Delete from database
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        logging.debug(f"   🔄 Removing user record from database...")
-        cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
-        conn.commit()
-        conn.close()
-        
-        logging.info(f"   ✓ Database record deleted")
+        conn = sqlite3.connect(DB_PATH, timeout=5.0)
+        try:
+            cursor = conn.cursor()
+            
+            logging.debug(f"   🔄 Removing user record from database...")
+            cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
+            conn.commit()
+            logging.info(f"   ✓ Database record deleted")
+        finally:
+            conn.close()
         return True
     except Exception as e:
         logging.error(f"Error deleting user {user_id}: {str(e)}", exc_info=True)
@@ -297,20 +304,22 @@ def deduct_prediction(username: str) -> bool:
         return False
     
     try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        logging.debug(f"   🔄 Deducting 1 prediction credit from {username}")
-        cursor.execute(
-            "UPDATE users SET predictions_remaining = predictions_remaining - 1 WHERE user_name = ?",
-            (username,)
-        )
-        
-        conn.commit()
-        new_count = user["predictions_remaining"] - 1
-        logging.debug(f"   ✓ Prediction deducted | Remaining: {new_count}")
-        conn.close()
-        return True
+        conn = sqlite3.connect(DB_PATH, timeout=5.0)
+        try:
+            cursor = conn.cursor()
+            
+            logging.debug(f"   🔄 Deducting 1 prediction credit from {username}")
+            cursor.execute(
+                "UPDATE users SET predictions_remaining = predictions_remaining - 1 WHERE user_name = ?",
+                (username,)
+            )
+            
+            conn.commit()
+            new_count = user["predictions_remaining"] - 1
+            logging.debug(f"   ✓ Prediction deducted | Remaining: {new_count}")
+            return True
+        finally:
+            conn.close()
     except Exception as e:
         logging.error(f"Error deducting prediction: {e}")
         return False
@@ -328,25 +337,27 @@ def add_predictions(username: str, amount: int) -> Optional[int]:
         int: new predictions remaining, or None if failed
     """
     try:
-        conn = sqlite3.connect(DB_PATH)
-        cursor = conn.cursor()
-        
-        logging.debug(f"   🔄 Adding {amount} predictions to {username}")
-        cursor.execute(
-            "UPDATE users SET predictions_remaining = predictions_remaining + ? WHERE user_name = ?",
-            (amount, username)
-        )
-        
-        conn.commit()
-        
-        # Get updated count
-        cursor.execute("SELECT predictions_remaining FROM users WHERE user_name = ?", (username,))
-        result = cursor.fetchone()
-        conn.close()
-        
-        if result:
-            logging.debug(f"   ✓ Predictions added | New total: {result[0]}")
-        return result[0] if result else None
+        conn = sqlite3.connect(DB_PATH, timeout=5.0)
+        try:
+            cursor = conn.cursor()
+            
+            logging.debug(f"   🔄 Adding {amount} predictions to {username}")
+            cursor.execute(
+                "UPDATE users SET predictions_remaining = predictions_remaining + ? WHERE user_name = ?",
+                (amount, username)
+            )
+            
+            conn.commit()
+            
+            # Get updated count
+            cursor.execute("SELECT predictions_remaining FROM users WHERE user_name = ?", (username,))
+            result = cursor.fetchone()
+            
+            if result:
+                logging.debug(f"   ✓ Predictions added | New total: {result[0]}")
+            return result[0] if result else None
+        finally:
+            conn.close()
     except Exception as e:
         logging.error(f"Error adding predictions: {e}")
         return None
