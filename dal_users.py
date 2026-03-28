@@ -4,18 +4,41 @@ Handles all database operations for users.
 """
 
 import sqlite3
-import bcrypt
+from passlib.context import CryptContext
+import hashlib
 import logging
-from typing import Optional, List, Dict, Any
 
 
 DB_PATH = "users.db"
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+
+class Connection:
+    """Context manager for database connections."""
+    def __init__(self):
+        self.conn = sqlite3.connect(DB_PATH, timeout=5.0)
+        self.conn.row_factory = sqlite3.Row
+    
+    def __enter__(self):
+        return self.conn
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.conn.close()
+
+
+def get_connection():
+    """Get a database connection context manager with timeout."""
+    return Connection()
+
+
+def row_to_dict(row):
+    """Convert SQLite Row to dict, or return None."""
+    return dict(row) if row else None
 
 
 def init_db():
     """Initialize the SQLite database with users table."""
-    conn = sqlite3.connect(DB_PATH, timeout=5.0)
-    try:
+    with get_connection() as conn:
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -29,13 +52,11 @@ def init_db():
         """)
         
         conn.commit()
-    finally:
-        conn.close()
 
 
-def hash_password(password: str) -> str:
+def hash_password(password):
     """
-    Hash a password using bcrypt.
+    Hash a password using SHA256 then bcrypt.
 
     Args:
         password (str): plaintext password
@@ -43,11 +64,13 @@ def hash_password(password: str) -> str:
     Returns:
         str: hashed password
     """
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(password.encode(), salt).decode()
+    # Step 1: hash with SHA256 (no length limit)
+    sha_password = hashlib.sha256(password.encode()).hexdigest()
+    # Step 2: bcrypt the result
+    return pwd_context.hash(sha_password)
 
 
-def verify_password(password: str, hashed: str) -> bool:
+def verify_password(password, hashed):
     """
     Verify a plaintext password against a hash.
 
@@ -58,10 +81,11 @@ def verify_password(password: str, hashed: str) -> bool:
     Returns:
         bool: True if passwords match, False otherwise
     """
-    return bcrypt.checkpw(password.encode(), hashed.encode())
+    sha_password = hashlib.sha256(password.encode()).hexdigest()
+    return pwd_context.verify(sha_password, hashed)
 
 
-def create_user(username: str, email: str, password: str) -> Optional[Dict[str, Any]]:
+def create_user(username, email, password):
     """
     Create a new user in the database.
 
@@ -73,40 +97,36 @@ def create_user(username: str, email: str, password: str) -> Optional[Dict[str, 
     Returns:
         dict: created user data, or None if failed
     """
-    conn = None
     try:
-        conn = sqlite3.connect(DB_PATH, timeout=5.0)
-        cursor = conn.cursor()
-        
-        logging.debug(f"   🔄 Hashing password for user: {username}")
-        hashed_pwd = hash_password(password)
-        logging.debug(f"   ✓ Password hashed")
-        
-        logging.debug(f"   🔄 Inserting user record (username={username}, email={email})")
-        cursor.execute("""
-        INSERT INTO users (user_name, email, password, predictions_remaining)
-        VALUES (?, ?, ?, 10)
-        """, (username, email, hashed_pwd))
-        
-        conn.commit()
-        user_id = cursor.lastrowid
-        logging.debug(f"   ✓ User record inserted | New ID: {user_id}")
-        logging.debug(f"   ✓ Default predictions allocated: 10")
-        
-        return {
-            "id": user_id,
-            "user_name": username,
-            "email": email
-        }
+        with get_connection() as conn:
+            cursor = conn.cursor()
+            
+            logging.debug(f"   🔄 Hashing password for user: {username}")
+            hashed_pwd = hash_password(password)
+            logging.debug(f"   ✓ Password hashed")
+            
+            logging.debug(f"   🔄 Inserting user record (username={username}, email={email})")
+            cursor.execute("""
+            INSERT INTO users (user_name, email, password, predictions_remaining)
+            VALUES (?, ?, ?, 10)
+            """, (username, email, hashed_pwd))
+            
+            conn.commit()
+            user_id = cursor.lastrowid
+            logging.debug(f"   ✓ User record inserted | New ID: {user_id}")
+            logging.debug(f"   ✓ Default predictions allocated: 10")
+            
+            return {
+                "id": user_id,
+                "user_name": username,
+                "email": email
+            }
     except sqlite3.IntegrityError:
         logging.debug(f"   ✗ Username already exists: {username}")
         return None
-    finally:
-        if conn:
-            conn.close()
 
 
-def get_user_by_id(user_id: int) -> Optional[Dict[str, Any]]:
+def get_user_by_id(user_id):
     """
     Get a user by ID.
 
@@ -116,25 +136,14 @@ def get_user_by_id(user_id: int) -> Optional[Dict[str, Any]]:
     Returns:
         dict: user data (without password), or None if not found
     """
-    conn = sqlite3.connect(DB_PATH, timeout=5.0)
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT id, user_name, email, predictions_remaining FROM users WHERE id = ?", (user_id,))
-    row = cursor.fetchone()
-    conn.close()
-    
-    if row:
-        return {
-            "id": row[0],
-            "user_name": row[1],
-            "email": row[2],
-            "predictions_remaining": row[3]
-        }
-    
-    return None
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, user_name, email, predictions_remaining FROM users WHERE id = ?", (user_id,))
+        row = cursor.fetchone()
+        return row_to_dict(row)
 
 
-def get_user_by_username(username: str) -> Optional[Dict[str, Any]]:
+def get_user_by_username(username):
     """
     Get a user by username (for login).
 
@@ -144,52 +153,27 @@ def get_user_by_username(username: str) -> Optional[Dict[str, Any]]:
     Returns:
         dict: user data including hashed password, or None if not found
     """
-    conn = sqlite3.connect(DB_PATH, timeout=5.0)
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT id, user_name, email, password, predictions_remaining FROM users WHERE user_name = ?", (username,))
-    row = cursor.fetchone()
-    conn.close()
-    
-    if row:
-        return {
-            "id": row[0],
-            "user_name": row[1],
-            "email": row[2],
-            "password": row[3],
-            "predictions_remaining": row[4]
-        }
-    
-    return None
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, user_name, email, password, predictions_remaining FROM users WHERE user_name = ?", (username,))
+        row = cursor.fetchone()
+        return row_to_dict(row)
 
 
-def get_all_users() -> List[Dict[str, Any]]:
+def get_all_users():
     """
     Get all users from the database.
 
     Returns:
         list: list of user dictionaries (without passwords)
     """
-    conn = sqlite3.connect(DB_PATH, timeout=5.0)
-    cursor = conn.cursor()
-    
-    cursor.execute("SELECT id, user_name, email, predictions_remaining FROM users")
-    rows = cursor.fetchall()
-    conn.close()
-    
-    users = []
-    for row in rows:
-        users.append({
-            "id": row[0],
-            "user_name": row[1],
-            "email": row[2],
-            "predictions_remaining": row[3]
-        })
-    
-    return users
+    with get_connection() as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT id, user_name, email, predictions_remaining FROM users")
+        return [row_to_dict(row) for row in cursor.fetchall()]
 
 
-def update_user(user_id: int, user_name: Optional[str] = None, email: Optional[str] = None, password: Optional[str] = None) -> Optional[Dict[str, Any]]:
+def update_user(user_id, user_name=None, email=None, password=None):
     """
     Update a user's username, email and/or password.
 
@@ -203,8 +187,7 @@ def update_user(user_id: int, user_name: Optional[str] = None, email: Optional[s
         dict: updated user data, or None if failed
     """
     try:
-        conn = sqlite3.connect(DB_PATH, timeout=5.0)
-        try:
+        with get_connection() as conn:
             cursor = conn.cursor()
             
             # Build dynamic update query
@@ -231,14 +214,12 @@ def update_user(user_id: int, user_name: Optional[str] = None, email: Optional[s
             
             conn.commit()
             return get_user_by_id(user_id)
-        finally:
-            conn.close()
     except Exception as e:
         print(f"Error updating user: {e}")
         return None
 
 
-def delete_user(user_id: int) -> bool:
+def delete_user(user_id):
     """
     Delete a user from the database and their model file.
 
@@ -271,23 +252,20 @@ def delete_user(user_id: int) -> bool:
             logging.debug(f"   ℹ️ No model file found: {model_filename}")
         
         # Delete from database
-        conn = sqlite3.connect(DB_PATH, timeout=5.0)
-        try:
+        with get_connection() as conn:
             cursor = conn.cursor()
             
             logging.debug(f"   🔄 Removing user record from database...")
             cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
             conn.commit()
             logging.info(f"   ✓ Database record deleted")
-        finally:
-            conn.close()
         return True
     except Exception as e:
         logging.error(f"Error deleting user {user_id}: {str(e)}", exc_info=True)
         return False
 
 
-def deduct_prediction(username: str) -> bool:
+def deduct_prediction(username):
     """
     Deduct one prediction from a user's remaining count.
 
@@ -304,8 +282,7 @@ def deduct_prediction(username: str) -> bool:
         return False
     
     try:
-        conn = sqlite3.connect(DB_PATH, timeout=5.0)
-        try:
+        with get_connection() as conn:
             cursor = conn.cursor()
             
             logging.debug(f"   🔄 Deducting 1 prediction credit from {username}")
@@ -318,14 +295,12 @@ def deduct_prediction(username: str) -> bool:
             new_count = user["predictions_remaining"] - 1
             logging.debug(f"   ✓ Prediction deducted | Remaining: {new_count}")
             return True
-        finally:
-            conn.close()
     except Exception as e:
         logging.error(f"Error deducting prediction: {e}")
         return False
 
 
-def add_predictions(username: str, amount: int) -> Optional[int]:
+def add_predictions(username, amount):
     """
     Add predictions to a user's remaining count.
 
@@ -337,8 +312,7 @@ def add_predictions(username: str, amount: int) -> Optional[int]:
         int: new predictions remaining, or None if failed
     """
     try:
-        conn = sqlite3.connect(DB_PATH, timeout=5.0)
-        try:
+        with get_connection() as conn:
             cursor = conn.cursor()
             
             logging.debug(f"   🔄 Adding {amount} predictions to {username}")
@@ -356,14 +330,12 @@ def add_predictions(username: str, amount: int) -> Optional[int]:
             if result:
                 logging.debug(f"   ✓ Predictions added | New total: {result[0]}")
             return result[0] if result else None
-        finally:
-            conn.close()
     except Exception as e:
         logging.error(f"Error adding predictions: {e}")
         return None
 
 
-def get_predictions_remaining(username: str) -> Optional[int]:
+def get_predictions_remaining(username):
     """
     Get the number of predictions remaining for a user.
 
