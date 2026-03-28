@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>👤 User Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0b0b0e;
+  --surface: #13131a;
+  --surface2: #1a1a24;
+  --border: #2a2a3a;
+  --gold: #c9a84c;
+  --gold2: #e8c97a;
+  --cream: #f0e6d0;
+  --muted: #5a5a70;
+  --muted2: #8a8aa0;
+  --danger: #e05050;
+  --danger-bg: #2a1010;
+  --success: #4ecb71;
+  --success-bg: #0d2a18;
+  --info: #5090e0;
+  --text: #dedad4;
+  --radius: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 13px;
+  min-height: 100vh; overflow-x: hidden;
+}
+
+.bg-layer {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 5% 15%,  rgba(201,168,76,.08) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 70% at 95% 85%,  rgba(201,168,76,.05) 0%, transparent 65%);
+  animation: bgBreath 9s ease-in-out infinite alternate;
+}
+@keyframes bgBreath { from { opacity:.7; } to { opacity:1; } }
+
+.particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.p {
+  position: absolute; border-radius: 50%;
+  background: var(--gold); opacity: 0;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0%   { transform: translateY(105vh); opacity: 0; }
+  8%   { opacity: .35; }
+  90%  { opacity: .12; }
+  100% { transform: translateY(-5vh) translateX(30px); opacity: 0; }
+}
+
+header {
+  position: relative; z-index: 10;
+  padding: 3rem 2rem 2rem; text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.eyebrow {
+  font-size: .6rem; letter-spacing: .55em; color: var(--gold); text-transform: uppercase;
+  margin-bottom: .9rem; opacity: 0; animation: fadeDown .7s .1s forwards;
+}
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  background: linear-gradient(135deg, var(--cream) 0%, var(--gold2) 45%, var(--cream) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  opacity: 0; animation: fadeDown .7s .25s forwards;
+}
+.tagline {
+  font-size: .65rem; letter-spacing: .2em; color: var(--muted2);
+  margin-top: .5rem; opacity: 0; animation: fadeDown .7s .4s forwards;
+}
+.gold-line {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 1.2rem auto 0; opacity: 0; animation: fadeDown .7s .55s forwards;
+}
+@keyframes fadeDown { from { opacity:0; transform:translateY(-14px); } to { opacity:1; transform:translateY(0); } }
+
+/* NAV */
+nav {
+  position: relative; z-index: 10;
+  display: flex; justify-content: center; gap: .5rem;
+  padding: .9rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+nav a {
+  font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted2); text-decoration: none;
+  padding: .45rem 1rem; border-radius: 5px; border: 1px solid transparent;
+  transition: all .2s;
+}
+nav a:hover { color: var(--text); border-color: var(--border); }
+nav a.active { color: var(--gold); border-color: rgba(201,168,76,.3); background: rgba(201,168,76,.06); }
+
+main {
+  position: relative; z-index: 10;
+  max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+  display: flex; flex-direction: column; gap: 1.5rem;
+}
+
+#toast {
+  position: fixed; top: 1.2rem; right: 1.2rem; z-index: 9999;
+  padding: .75rem 1.2rem; border-radius: var(--radius);
+  font-size: .72rem; letter-spacing: .03em;
+  display: flex; align-items: center; gap: .5rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,.6);
+  transform: translateX(120%); opacity: 0;
+  transition: transform .35s cubic-bezier(.34,1.4,.64,1), opacity .35s;
+  pointer-events: none;
+}
+#toast.show { transform: translateX(0); opacity: 1; }
+#toast.success { background: var(--success-bg); border: 1px solid var(--success); color: var(--success); }
+#toast.error   { background: var(--danger-bg);  border: 1px solid var(--danger);  color: var(--danger); }
+#toast.info    { background: #0d1a2a; border: 1px solid var(--info); color: var(--info); }
+
+/* CARD */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden;
+}
+
+.card-header {
+  padding: 1rem 1.3rem; border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem;
+}
+.card-title {
+  font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream);
+  display: flex; align-items: center; gap: .5rem;
+}
+
+.card-body { padding: 1.3rem; }
+
+/* FORM GRID */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: .4rem; }
+label { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+input[type=text], input[type=email], input[type=password], input[type=number] {
+  padding: .6rem .8rem; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 5px; color: var(--text); font-family: 'DM Mono', monospace; font-size: .78rem;
+  transition: border-color .2s, box-shadow .2s; width: 100%;
+}
+input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,168,76,.1); }
+input::placeholder { color: var(--muted); }
+
+/* BUTTONS */
+.btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .5rem .9rem; border: 1px solid transparent; border-radius: 5px;
+  font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .04em;
+  cursor: pointer; transition: all .2s; white-space: nowrap;
+  position: relative; overflow: hidden;
+}
+.btn::after { content:''; position:absolute; inset:0; background:white; opacity:0; transition:opacity .15s; }
+.btn:hover::after { opacity:.05; }
+.btn:active { transform: scale(.97); }
+.btn-gold {
+  background: linear-gradient(135deg, #b8922e, var(--gold2));
+  color: #1a1200; border-color: var(--gold);
+  box-shadow: 0 2px 12px rgba(201,168,76,.25);
+}
+.btn-ghost  { background: transparent; color: var(--muted2); border-color: var(--border); }
+.btn-ghost:hover { color: var(--text); border-color: var(--muted2); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border-color: #5a2020; }
+.btn-danger:hover { border-color: var(--danger); }
+.btn-info   { background: #0d1a2a; color: var(--info); border-color: #1a3050; }
+.btn-info:hover { border-color: var(--info); }
+.btn-full { width: 100%; justify-content: center; }
+
+/* RESPONSE */
+.response-box {
+  margin-top: 1rem; padding: .75rem 1rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 5px; font-size: .72rem; font-family: 'DM Mono', monospace;
+  white-space: pre-wrap; word-break: break-all; line-height: 1.6;
+  display: none;
+}
+.response-box.success { border-color: var(--success); color: var(--success); display: block; }
+.response-box.error   { border-color: var(--danger);  color: var(--danger);  display: block; }
+.response-box.info    { border-color: var(--info);    color: #a0c4f0;        display: block; }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; min-width: 400px; }
+thead tr { background: var(--surface2); border-bottom: 1px solid var(--border); }
+th {
+  padding: .75rem 1rem; font-size: .62rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold); font-weight: 500;
+  text-align: left; white-space: nowrap;
+}
+tbody tr {
+  border-bottom: 1px solid rgba(42,42,58,.6);
+  transition: background .18s; animation: rowIn .4s ease both;
+}
+@keyframes rowIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:translateY(0); } }
+tbody tr:hover { background: rgba(201,168,76,.04); }
+td { padding: .7rem 1rem; font-size: .73rem; color: var(--text); vertical-align: middle; }
+td.id-cell { color: var(--muted2); font-size: .65rem; }
+td.name-cell { font-family: 'Playfair Display', serif; font-size: .9rem; color: var(--cream); }
+td.email-cell { color: var(--muted2); }
+.action-btn {
+  background: none; border: none; cursor: pointer;
+  font-size: .95rem; padding: .25rem .35rem; border-radius: 4px;
+  transition: all .18s; opacity: .6;
+}
+.action-btn:hover { opacity: 1; transform: scale(1.15); }
+.action-btn.edit:hover { background: rgba(80,144,224,.15); }
+.action-btn.del:hover  { background: rgba(224,80,80,.15); }
+.actions-cell { display: flex; gap: 4px; }
+
+.empty {
+  padding: 4rem 2rem; text-align: center; color: var(--muted); font-size: .75rem; letter-spacing: .05em;
+}
+.empty .icon { font-size: 2.5rem; display: block; margin-bottom: .8rem; opacity: .4; }
+
+.stats {
+  display: flex; gap: 1.5rem; flex-wrap: wrap;
+  padding: .9rem 1.3rem; border-top: 1px solid var(--border); background: var(--surface2);
+}
+.stat { font-size: .62rem; color: var(--muted2); letter-spacing: .05em; }
+.stat span { color: var(--gold2); font-weight: 500; }
+
+/* MODAL */
+.overlay {
+  position: fixed; inset: 0; z-index: 500;
+  background: rgba(0,0,0,.75); backdrop-filter: blur(4px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; transition: opacity .25s;
+}
+.overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; width: min(520px, 95vw);
+  box-shadow: 0 24px 80px rgba(0,0,0,.7);
+  transform: translateY(24px) scale(.97);
+  transition: transform .3s cubic-bezier(.34,1.2,.64,1);
+  overflow: hidden;
+}
+.overlay.open .modal { transform: translateY(0) scale(1); }
+.modal-header {
+  padding: 1.2rem 1.5rem; border-bottom: 1px solid var(--border);
+  background: var(--surface2); display: flex; align-items: center; justify-content: space-between;
+}
+.modal-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--cream); }
+.modal-close {
+  background: none; border: none; color: var(--muted2); font-size: 1.2rem;
+  cursor: pointer; padding: .2rem .4rem; border-radius: 4px; transition: color .2s; line-height: 1;
+}
+.modal-close:hover { color: var(--text); }
+.modal-body { padding: 1.4rem; }
+.modal-footer {
+  padding: 1rem 1.5rem; border-top: 1px solid var(--border);
+  display: flex; justify-content: flex-end; gap: .7rem;
+}
+.confirm-body { padding: 2rem 1.5rem; text-align: center; }
+.confirm-body .warn-icon { font-size: 2.5rem; margin-bottom: .8rem; }
+.confirm-body p { font-size: .78rem; color: var(--muted2); line-height: 1.6; }
+.confirm-body .uname { font-family: 'Playfair Display', serif; color: var(--cream); font-style: italic; }
+
+.spinner {
+  display: inline-block; width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,.2); border-top-color: currentColor;
+  border-radius: 50%; animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 600px) {
+  .form-grid { grid-template-columns: 1fr; }
+  .btn-full-mobile { width: 100%; justify-content: center; }
+}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="particles" id="particles"></div>
+<div id="toast"></div>
+
+<header>
+  <div class="eyebrow">✦ Project 4 — REST for ML ✦</div>
+  <h1>User Management</h1>
+  <p class="tagline">Register · Login · Manage Users</p>
+  <div class="gold-line"></div>
+</header>
+
+<nav>
+  <a href="/" class="active">👤 Users</a>
+  <a href="/ml">🤖 ML Model</a>
+</nav>
+
+<main>
+
+  <!-- REGISTER -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">➕ Register New User</span>
+    </div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="e.g. john_doe"/></div>
+        <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="john@example.com"/></div>
+        <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="••••••••"/></div>
+      </div>
+      <button class="btn btn-gold" onclick="registerUser()">➕ Register</button>
+      <div class="response-box" id="reg-response"></div>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">🔑 Login</span>
+    </div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group"><label>Username</label><input type="text" id="login-username" placeholder="e.g. john_doe"/></div>
+        <div class="form-group"><label>Password</label><input type="password" id="login-password" placeholder="••••••••"/></div>
+      </div>
+      <button class="btn btn-gold" onclick="loginUser()">🔑 Login & Get Token</button>
+      <div class="response-box" id="login-response"></div>
+    </div>
+  </div>
+
+  <!-- ALL USERS TABLE -->
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">📋 All Users</span>
+      <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+        <button class="btn btn-ghost" onclick="loadUsers()">↻ Refresh</button>
+      </div>
+    </div>
+    <div class="table-wrap" id="tableWrap">
+      <div class="empty"><span class="icon">👥</span>Click Refresh to load users.</div>
+    </div>
+    <div class="stats" id="stats" style="display:none;">
+      <div class="stat">Total users: <span id="statCount">0</span></div>
+    </div>
+  </div>
+
+  <!-- GET BY ID -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">🔍 Get User by ID</span></div>
+    <div class="card-body">
+      <div class="form-grid" style="grid-template-columns: minmax(140px,220px);">
+        <div class="form-group"><label>User ID</label><input type="number" id="get-id" placeholder="e.g. 1"/></div>
+      </div>
+      <button class="btn btn-info" onclick="getUserById()">🔍 Get User</button>
+      <div class="response-box" id="get-id-response"></div>
+    </div>
+  </div>
+
+  <!-- UPDATE -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">✏️ Update User</span></div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group"><label>User ID</label><input type="number" id="upd-id" placeholder="1"/></div>
+        <div class="form-group"><label>New Username</label><input type="text" id="upd-username" placeholder="new_name"/></div>
+        <div class="form-group"><label>New Email</label><input type="email" id="upd-email" placeholder="new@example.com"/></div>
+        <div class="form-group"><label>New Password</label><input type="password" id="upd-password" placeholder="••••••••"/></div>
+      </div>
+      <button class="btn btn-gold" onclick="updateUser()">✏️ Update</button>
+      <div class="response-box" id="upd-response"></div>
+    </div>
+  </div>
+
+  <!-- DELETE -->
+  <div class="card">
+    <div class="card-header"><span class="card-title">🗑️ Delete User</span></div>
+    <div class="card-body">
+      <div class="form-grid" style="grid-template-columns: minmax(140px,220px);">
+        <div class="form-group"><label>User ID</label><input type="number" id="del-id" placeholder="e.g. 1"/></div>
+      </div>
+      <button class="btn btn-danger" onclick="openDelete()">🗑️ Delete</button>
+      <div class="response-box" id="del-response"></div>
+    </div>
+  </div>
+
+</main>
+
+<!-- Delete Confirm Modal -->
+<div class="overlay" id="deleteOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Delete User</span>
+      <button class="modal-close" onclick="closeDelete()">✕</button>
+    </div>
+    <div class="confirm-body">
+      <div class="warn-icon">🗑️</div>
+      <p>Permanently delete user <span class="uname" id="deleteUserName"></span>?</p>
+      <p style="margin-top:.6rem;font-size:.68rem;">This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeDelete()">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const BASE = 'http://127.0.0.1:8000';
+
+/* Particles */
+const pc = document.getElementById('particles');
+for (let i = 0; i < 22; i++) {
+  const p = document.createElement('div'); p.className = 'p';
+  const s = Math.random() * 3 + 1;
+  p.style.cssText = `left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${10+Math.random()*20}s;animation-delay:${-Math.random()*20}s;`;
+  pc.appendChild(p);
+}
+
+/* Toast */
+let toastTimer;
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  const icon = { success:'✓', error:'✕', info:'ℹ' }[type] || '';
+  el.textContent = icon + '  ' + msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = type; }, 3200);
+}
+
+function showResponse(id, data, type = 'info') {
+  const el = document.getElementById(id);
+  el.className = 'response-box ' + type;
+  el.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+}
+
+function esc(s) {
+  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* Load & render users table */
+async function loadUsers() {
+  document.getElementById('tableWrap').innerHTML = `<div class="empty"><span class="spinner" style="font-size:1.5rem;"></span></div>`;
+  try {
+    const response = await req('GET', '/users');
+    const data = response.users || response;
+    if (!Array.isArray(data) || !data.length) {
+      document.getElementById('tableWrap').innerHTML = `<div class="empty"><span class="icon">👥</span>No users found.</div>`;
+      document.getElementById('stats').style.display = 'none';
+      return;
+    }
+    const rows = data.map((u, i) => `
+      <tr style="animation-delay:${i*.04}s">
+        <td class="id-cell">${u.id}</td>
+        <td class="name-cell">${esc(u.user_name)}</td>
+        <td class="email-cell">${esc(u.email)}</td>
+        <td><div class="actions-cell">
+          <button class="action-btn edit" title="Edit" onclick="fillUpdate(${u.id},'${esc(u.user_name)}','${esc(u.email)}')">✏️</button>
+          <button class="action-btn del"  title="Delete" onclick="prefillDelete(${u.id},'${esc(u.user_name)}')">🗑️</button>
+        </div></td>
+      </tr>`).join('');
+    document.getElementById('tableWrap').innerHTML = `<table>
+      <thead><tr><th>ID</th><th>Username</th><th>Email</th><th></th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>`;
+    document.getElementById('statCount').textContent = data.length;
+    document.getElementById('stats').style.display = 'flex';
+  } catch(e) { toast(e.message, 'error'); }
+}
+
+async function req(method, path, body) {
+  const opts = { method, headers: { 'Content-Type': 'application/json' } };
+  const token = localStorage.getItem('jwt_token');
+  if (token) opts.headers['Authorization'] = `Bearer ${token}`;
+  if (body) opts.body = JSON.stringify(body);
+  const res = await fetch(BASE + path, opts);
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.detail || 'HTTP ' + res.status);
+  return data;
+}
+
+async function registerUser() {
+  const body = { user_name: document.getElementById('reg-username').value, email: document.getElementById('reg-email').value, password: document.getElementById('reg-password').value };
+  try { const d = await req('POST', '/users', body); showResponse('reg-response', d, 'success'); toast(`User "${d.user_name}" created`, 'success'); loadUsers(); }
+  catch(e) { showResponse('reg-response', e.message, 'error'); toast(e.message, 'error'); }
+}
+
+async function loginUser() {
+  const body = { username: document.getElementById('login-username').value, password: document.getElementById('login-password').value };
+  try {
+    const d = await req('POST', '/users/auth/login', body);
+    if (d.token) { localStorage.setItem('jwt_token', d.token); showResponse('login-response', '✅ Token saved!\n\n' + JSON.stringify(d, null, 2), 'success'); toast('Logged in — token saved', 'success'); }
+    else { showResponse('login-response', d, 'error'); }
+  } catch(e) { showResponse('login-response', e.message, 'error'); toast(e.message, 'error'); }
+}
+
+async function getUserById() {
+  const id = document.getElementById('get-id').value;
+  if (!id) return toast('Please enter a user ID', 'error');
+  try { const d = await req('GET', `/users/${id}`); showResponse('get-id-response', d, 'info'); toast(`Found: ${d.user_name}`, 'info'); }
+  catch(e) { showResponse('get-id-response', e.message, 'error'); toast(e.message, 'error'); }
+}
+
+async function updateUser() {
+  const id = document.getElementById('upd-id').value;
+  if (!id) return toast('Please enter a user ID', 'error');
+  const body = { user_name: document.getElementById('upd-username').value, email: document.getElementById('upd-email').value, password: document.getElementById('upd-password').value };
+  try { const d = await req('PUT', `/users/${id}`, body); showResponse('upd-response', d, 'success'); toast(`Updated user #${id}`, 'success'); loadUsers(); }
+  catch(e) { showResponse('upd-response', e.message, 'error'); toast(e.message, 'error'); }
+}
+
+function fillUpdate(id, name, email) {
+  document.getElementById('upd-id').value = id;
+  document.getElementById('upd-username').value = name;
+  document.getElementById('upd-email').value = email;
+  document.getElementById('upd-id').closest('.card').scrollIntoView({ behavior: 'smooth' });
+}
+
+let deleteTarget = null;
+function prefillDelete(id, name) {
+  document.getElementById('del-id').value = id;
+  document.getElementById('deleteUserName').textContent = `"${name}"`;
+  deleteTarget = { id, name };
+  document.getElementById('deleteOverlay').classList.add('open');
+}
+function openDelete() {
+  const id = document.getElementById('del-id').value;
+  if (!id) return toast('Please enter a user ID', 'error');
+  deleteTarget = { id, name: `#${id}` };
+  document.getElementById('deleteUserName').textContent = `#${id}`;
+  document.getElementById('deleteOverlay').classList.add('open');
+}
+function closeDelete() { deleteTarget = null; document.getElementById('deleteOverlay').classList.remove('open'); }
+async function confirmDelete() {
+  if (!deleteTarget) { toast('No user selected for deletion', 'error'); return; }
+  const userId = deleteTarget.id;  // Save the ID before closeDelete() is called
+  try {
+    const response = await req('DELETE', `/users/${userId}`);
+    console.log('Delete response:', response);  // Log response to browser console
+    toast('User deleted', 'success');
+    closeDelete();
+    showResponse('del-response', `✅ User ${userId} deleted successfully\n\n${JSON.stringify(response, null, 2)}`, 'success');
+    loadUsers();
+  } catch(e) {
+    console.error('Delete error:', e);  // Log error to browser console
+    toast(e.message, 'error');
+    showResponse('del-response', `❌ Error: ${e.message}`, 'error');
+    closeDelete();
+  }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDelete(); });
+document.getElementById('deleteOverlay').addEventListener('click', e => { if (e.target.id === 'deleteOverlay') closeDelete(); });
+</script>
+</body>
+</html>

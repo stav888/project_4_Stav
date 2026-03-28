@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>🤖 ML Model</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #0b0b0e;
+  --surface: #13131a;
+  --surface2: #1a1a24;
+  --border: #2a2a3a;
+  --gold: #c9a84c;
+  --gold2: #e8c97a;
+  --cream: #f0e6d0;
+  --muted: #5a5a70;
+  --muted2: #8a8aa0;
+  --danger: #e05050;
+  --danger-bg: #2a1010;
+  --success: #4ecb71;
+  --success-bg: #0d2a18;
+  --info: #5090e0;
+  --text: #dedad4;
+  --radius: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg); color: var(--text);
+  font-family: 'DM Mono', monospace; font-size: 13px;
+  min-height: 100vh; overflow-x: hidden;
+}
+
+.bg-layer {
+  position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 5% 15%,  rgba(201,168,76,.08) 0%, transparent 65%),
+    radial-gradient(ellipse 50% 70% at 95% 85%,  rgba(201,168,76,.05) 0%, transparent 65%);
+  animation: bgBreath 9s ease-in-out infinite alternate;
+}
+@keyframes bgBreath { from { opacity:.7; } to { opacity:1; } }
+
+.particles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+.p {
+  position: absolute; border-radius: 50%;
+  background: var(--gold); opacity: 0;
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0%   { transform: translateY(105vh); opacity: 0; }
+  8%   { opacity: .35; }
+  90%  { opacity: .12; }
+  100% { transform: translateY(-5vh) translateX(30px); opacity: 0; }
+}
+
+header {
+  position: relative; z-index: 10;
+  padding: 3rem 2rem 2rem; text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.eyebrow {
+  font-size: .6rem; letter-spacing: .55em; color: var(--gold); text-transform: uppercase;
+  margin-bottom: .9rem; opacity: 0; animation: fadeDown .7s .1s forwards;
+}
+h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 5vw, 3.4rem);
+  background: linear-gradient(135deg, var(--cream) 0%, var(--gold2) 45%, var(--cream) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  opacity: 0; animation: fadeDown .7s .25s forwards;
+}
+.tagline {
+  font-size: .65rem; letter-spacing: .2em; color: var(--muted2);
+  margin-top: .5rem; opacity: 0; animation: fadeDown .7s .4s forwards;
+}
+.gold-line {
+  width: 60px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 1.2rem auto 0; opacity: 0; animation: fadeDown .7s .55s forwards;
+}
+@keyframes fadeDown { from { opacity:0; transform:translateY(-14px); } to { opacity:1; transform:translateY(0); } }
+
+nav {
+  position: relative; z-index: 10;
+  display: flex; justify-content: center; gap: .5rem;
+  padding: .9rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+}
+nav a {
+  font-family: 'DM Mono', monospace; font-size: .68rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted2); text-decoration: none;
+  padding: .45rem 1rem; border-radius: 5px; border: 1px solid transparent;
+  transition: all .2s;
+}
+nav a:hover { color: var(--text); border-color: var(--border); }
+nav a.active { color: var(--gold); border-color: rgba(201,168,76,.3); background: rgba(201,168,76,.06); }
+
+/* STATUS BAR */
+.status-bar {
+  position: relative; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem;
+  padding: .7rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg);
+  font-size: .65rem; letter-spacing: .05em; color: var(--muted2);
+}
+.token-badge {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .3rem .8rem; border-radius: 20px; font-size: .65rem; font-weight: 500;
+}
+.token-active   { background: var(--success-bg); border: 1px solid var(--success); color: var(--success); }
+.token-inactive { background: var(--danger-bg);  border: 1px solid var(--danger);  color: var(--danger); }
+
+main {
+  position: relative; z-index: 10;
+  max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem;
+}
+
+#toast {
+  position: fixed; top: 1.2rem; right: 1.2rem; z-index: 9999;
+  padding: .75rem 1.2rem; border-radius: var(--radius);
+  font-size: .72rem; letter-spacing: .03em;
+  display: flex; align-items: center; gap: .5rem;
+  box-shadow: 0 8px 30px rgba(0,0,0,.6);
+  transform: translateX(120%); opacity: 0;
+  transition: transform .35s cubic-bezier(.34,1.4,.64,1), opacity .35s;
+  pointer-events: none;
+}
+#toast.show { transform: translateX(0); opacity: 1; }
+#toast.success { background: var(--success-bg); border: 1px solid var(--success); color: var(--success); }
+#toast.error   { background: var(--danger-bg);  border: 1px solid var(--danger);  color: var(--danger); }
+#toast.info    { background: #0d1a2a; border: 1px solid var(--info); color: var(--info); }
+
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem;
+}
+.card-header {
+  padding: 1rem 1.3rem; border-bottom: 1px solid var(--border);
+  background: var(--surface2);
+  display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .6rem;
+}
+.card-title { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--cream); }
+.card-body { padding: 1.3rem; }
+
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: .4rem; }
+label { font-size: .6rem; letter-spacing: .15em; text-transform: uppercase; color: var(--gold); font-weight: 500; }
+input[type=text], input[type=password], input[type=number] {
+  padding: .6rem .8rem; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 5px; color: var(--text); font-family: 'DM Mono', monospace; font-size: .78rem;
+  transition: border-color .2s, box-shadow .2s; width: 100%;
+}
+input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,168,76,.1); }
+input::placeholder { color: var(--muted); }
+.hint { font-size: .62rem; color: var(--muted); margin-top: .2rem; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  padding: .5rem .9rem; border: 1px solid transparent; border-radius: 5px;
+  font-family: 'DM Mono', monospace; font-size: .7rem; letter-spacing: .04em;
+  cursor: pointer; transition: all .2s; white-space: nowrap;
+  position: relative; overflow: hidden;
+}
+.btn::after { content:''; position:absolute; inset:0; background:white; opacity:0; transition:opacity .15s; }
+.btn:hover::after { opacity:.05; }
+.btn:active { transform: scale(.97); }
+.btn-gold {
+  background: linear-gradient(135deg, #b8922e, var(--gold2));
+  color: #1a1200; border-color: var(--gold);
+  box-shadow: 0 2px 12px rgba(201,168,76,.25);
+}
+.btn-ghost  { background: transparent; color: var(--muted2); border-color: var(--border); }
+.btn-ghost:hover { color: var(--text); border-color: var(--muted2); }
+.btn-green  { background: var(--success-bg); color: var(--success); border-color: #1a5a30; }
+.btn-green:hover { border-color: var(--success); }
+.btn-danger { background: var(--danger-bg); color: var(--danger); border-color: #5a2020; }
+.btn-danger:hover { border-color: var(--danger); }
+.btn-full { width: 100%; justify-content: center; }
+
+.response-box {
+  margin-top: 1rem; padding: .75rem 1rem;
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 5px; font-size: .72rem; font-family: 'DM Mono', monospace;
+  white-space: pre-wrap; word-break: break-all; line-height: 1.6; display: none;
+}
+.response-box.success { border-color: var(--success); color: var(--success); display: block; }
+.response-box.error   { border-color: var(--danger);  color: var(--danger);  display: block; }
+.response-box.info    { border-color: var(--info);    color: #a0c4f0;        display: block; }
+
+/* TWO COL */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+
+/* PREDICT RESULT */
+.predict-result {
+  margin-top: 1.2rem;
+  background: linear-gradient(135deg, #0d1f0d, #0d1a1f);
+  border: 1px solid rgba(78,203,113,.3);
+  border-radius: var(--radius); padding: 1.8rem 1.5rem;
+  text-align: center; display: none;
+  animation: fadeDown .5s ease forwards;
+}
+.predict-result .rl {
+  font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted2); margin-bottom: .5rem;
+}
+.predict-result .rv {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 8vw, 3.2rem);
+  color: var(--success);
+  background: linear-gradient(135deg, var(--success), #a0f0c0);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.predict-result .ru { font-size: .7rem; color: var(--muted2); margin-top: .3rem; letter-spacing: .1em; text-transform: uppercase; }
+
+/* ACCURACY RESULT */
+.accuracy-result {
+  margin-top: 1.2rem;
+  background: linear-gradient(135deg, #1f1a0d, #1f1a0d);
+  border: 1px solid rgba(218,180,105,.3);
+  border-radius: var(--radius); padding: 1.8rem 1.5rem;
+  text-align: center; display: none;
+  animation: fadeDown .5s ease forwards;
+}
+.accuracy-result .rl {
+  font-size: .58rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted2); margin-bottom: .5rem;
+}
+.accuracy-result .rv {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 8vw, 3.2rem);
+  color: var(--gold);
+  background: linear-gradient(135deg, var(--gold), #f0d89c);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.accuracy-result .ru { font-size: .7rem; color: var(--muted2); margin-top: .3rem; letter-spacing: .1em; text-transform: uppercase; }
+
+/* LOGIN GATE */
+#login-gate {
+  max-width: 460px; margin: 0 auto;
+}
+
+/* SPINNER */
+.spinner {
+  display: inline-block; width: 12px; height: 12px;
+  border: 2px solid rgba(255,255,255,.2); border-top-color: currentColor;
+  border-radius: 50%; animation: spin .7s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 640px) {
+  .two-col { grid-template-columns: 1fr; }
+  .form-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="bg-layer"></div>
+<div class="particles" id="particles"></div>
+<div id="toast"></div>
+
+<header>
+  <div class="eyebrow">✦ Project 4 — REST for ML ✦</div>
+  <h1>ML Model</h1>
+  <p class="tagline">Train · Predict · Running Times</p>
+  <div class="gold-line"></div>
+</header>
+
+<nav>
+  <a href="/">👤 Users</a>
+  <a href="/ml" class="active">🤖 ML Model</a>
+</nav>
+
+<div class="status-bar">
+  <span id="token-status" class="token-badge token-inactive">⛔ Not logged in</span>
+  <button class="btn btn-danger" id="logout-btn" onclick="logout()" style="display:none;padding:.3rem .8rem;font-size:.65rem;">Logout</button>
+</div>
+
+<main>
+
+  <!-- LOGIN GATE -->
+  <div id="login-gate">
+    <div class="card">
+      <div class="card-header"><span class="card-title">🔑 Login Required</span></div>
+      <div class="card-body">
+        <p style="font-size:.75rem;color:var(--muted2);margin-bottom:1.2rem;line-height:1.7;">
+          You must be logged in to access model training and prediction.
+        </p>
+        <div class="form-grid" style="grid-template-columns:1fr;">
+          <div class="form-group"><label>Username</label><input type="text" id="gate-username" placeholder="e.g. john_doe"/></div>
+          <div class="form-group"><label>Password</label><input type="password" id="gate-password" placeholder="••••••••" onkeydown="if(event.key==='Enter') gateLogin()"/></div>
+        </div>
+        <button class="btn btn-gold btn-full" style="margin-top:.5rem;" onclick="gateLogin()">🔑 Login</button>
+        <div class="response-box" id="gate-response"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ML CONTENT -->
+  <div id="ml-content" style="display:none;">
+    <div class="two-col">
+
+      <!-- TRAIN -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">🏋️ Train Model</span></div>
+        <div class="card-body">
+          <div class="form-group" style="margin-bottom:1rem;">
+            <label>X Values (comma-separated)</label>
+            <input type="text" id="train-x" placeholder="2,3,5,7,9,12,16,20,25,30"/>
+            <span class="hint">Training hours</span>
+          </div>
+          <div class="form-group" style="margin-bottom:1rem;">
+            <label>Y Values (comma-separated)</label>
+            <input type="text" id="train-y" placeholder="95,85,70,65,60,55,50,53,58,70"/>
+            <span class="hint">Running times</span>
+          </div>
+          <div class="form-group" style="margin-bottom:1.2rem;">
+            <label>Polynomial Degree</label>
+            <input type="number" id="train-degree" value="3" min="1" max="10"/>
+          </div>
+          <button class="btn btn-gold btn-full" id="train-btn" onclick="trainModel()">🚀 Train Model</button>
+          <div class="response-box" id="train-response"></div>
+        </div>
+      </div>
+
+      <!-- PREDICT -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">🔮 Predict Running Time</span></div>
+        <div class="card-body">
+          <p style="font-size:.73rem;color:var(--muted2);line-height:1.7;margin-bottom:1.2rem;">
+            Enter a number of training hours to get a predicted running time from your trained model.
+          </p>
+          <div class="form-group" style="margin-bottom:1.2rem;">
+            <label>Training Hours</label>
+            <input type="number" id="predict-hours" placeholder="e.g. 15" step="0.5" min="0" onkeydown="if(event.key==='Enter') predictRun()"/>
+          </div>
+          <div style="font-size:.7rem;color:var(--muted2);margin-bottom:.8rem;line-height:1.4;">
+            <div id="predictions-remaining" style="margin-bottom:.5rem;">📊 Predictions remaining: <span style="color:var(--gold);">--</span></div>
+          </div>
+          <button class="btn btn-green btn-full" id="predict-btn" onclick="predictRun()">🔮 Predict</button>
+          <div class="response-box" id="predict-response"></div>
+          <div class="predict-result" id="predict-result">
+            <div class="rl">Predicted Running Time</div>
+            <div class="rv" id="predict-value">--</div>
+            <div class="ru">minutes</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PURCHASE PREDICTIONS -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">💳 Purchase Predictions</span></div>
+        <div class="card-body">
+          <p style="font-size:.73rem;color:var(--muted2);line-height:1.7;margin-bottom:1.2rem;">
+            Out of predictions? Purchase 10 more with your credit card. (Simulated payment)
+          </p>
+          <div class="form-group" style="margin-bottom:.8rem;">
+            <label>Card Number</label>
+            <input type="text" id="card-number" placeholder="4111111111111111" maxlength="19"/>
+          </div>
+          <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:1rem;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Expiry (MM/YY)</label>
+              <input type="text" id="card-expiry" placeholder="12/27" maxlength="5"/>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>CVV</label>
+              <input type="text" id="card-cvv" placeholder="123" maxlength="3"/>
+            </div>
+          </div>
+          <button class="btn btn-gold btn-full" id="purchase-btn" style="margin-top:.8rem;" onclick="purchasePredictions()">💳 Purchase (10 credits)</button>
+          <div class="response-box" id="purchase-response"></div>
+        </div>
+      </div>
+
+      <!-- MODEL ACCURACY -->
+      <div class="card">
+        <div class="card-header"><span class="card-title">📊 Model Accuracy</span></div>
+        <div class="card-body">
+          <p style="font-size:.73rem;color:var(--muted2);line-height:1.7;margin-bottom:1.2rem;">
+            View your model's accuracy score. Higher values indicate better model performance.
+          </p>
+          <button class="btn btn-green btn-full" id="accuracy-btn" onclick="getModelAccuracy()">📊 Check Accuracy</button>
+          <div class="accuracy-result" id="accuracy-response"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+<script>
+const BASE = 'http://127.0.0.1:8000';
+
+/* Particles */
+const pc = document.getElementById('particles');
+for (let i = 0; i < 22; i++) {
+  const p = document.createElement('div'); p.className = 'p';
+  const s = Math.random() * 3 + 1;
+  p.style.cssText = `left:${Math.random()*100}%;width:${s}px;height:${s}px;animation-duration:${10+Math.random()*20}s;animation-delay:${-Math.random()*20}s;`;
+  pc.appendChild(p);
+}
+
+let toastTimer;
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  const icon = { success:'✓', error:'✕', info:'ℹ' }[type] || '';
+  el.textContent = icon + '  ' + msg;
+  el.className = 'show ' + type;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => { el.className = type; }, 3200);
+}
+
+function showResponse(id, data, type = 'info') {
+  const el = document.getElementById(id);
+  el.className = 'response-box ' + type;
+  el.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
+}
+
+function getToken() { return localStorage.getItem('jwt_token'); }
+function getUserId() { return localStorage.getItem('user_id'); }
+
+async function fetchUserInfo() {
+  const token = getToken();
+  const userId = getUserId();
+  const username = localStorage.getItem('username') || 'unknown';
+  if (!token || !userId) return;
+  try {
+    const res = await fetch(`${BASE}/users/${userId}`, { headers: {'Authorization': `Bearer ${token}`} });
+    if (res.ok) {
+      const user = await res.json();
+      const predictions = user.predictions_remaining !== null ? user.predictions_remaining : 0;
+      updatePredictionsDisplay(predictions);
+      console.log(`✅ USER VERIFIED: User ${username} (ID: ${userId}) exists and is active`);
+    } else if (res.status === 404 || res.status === 401) {
+      // User was deleted or unauthorized - force logout
+      console.warn(`⚠️ USER DELETED/INVALID: User ${username} (ID: ${userId}) detected as deleted or unauthorized (${res.status}) - forcing logout`);
+      logout();
+      toast('❌ User account was deleted or session expired', 'error');
+    } else {
+      console.error('Failed to fetch user info:', res.status);
+      updatePredictionsDisplay(null);
+    }
+  } catch(e) {
+    console.error('Error fetching user info:', e);
+    updatePredictionsDisplay(null);
+  }
+}
+
+function checkLogin() {
+  const token = getToken();
+  const userId = getUserId();
+  
+  if (token && userId) {
+    // Show logged in UI immediately
+    document.getElementById('login-gate').style.display   = 'none';
+    document.getElementById('ml-content').style.display   = 'block';
+    document.getElementById('token-status').textContent   = `✅ Logged in (ID: ${userId})`;
+    document.getElementById('token-status').className     = 'token-badge token-active';
+    document.getElementById('logout-btn').style.display   = 'inline-flex';
+    
+    // Verify user still exists (this will logout if user was deleted)
+    fetchUserInfo();
+  } else if (token && !userId) {
+    // Token exists but no user ID - corrupted session, logout
+    console.warn('⚠️ Token exists but no user ID - clearing session');
+    logout();
+  }
+}
+
+function logout() {
+  const userId = getUserId();
+  const username = localStorage.getItem('username') || 'unknown';
+  
+  // Log logout to console for debugging
+  console.log(`🔓 LOGOUT EVENT: User ${username} (ID: ${userId}) logged out at ${new Date().toLocaleTimeString()}`);
+  
+  localStorage.removeItem('jwt_token');
+  localStorage.removeItem('user_id');
+  localStorage.removeItem('username');
+  document.getElementById('login-gate').style.display   = 'block';
+  document.getElementById('ml-content').style.display   = 'none';
+  document.getElementById('token-status').textContent   = '⛔ Not logged in';
+  document.getElementById('token-status').className     = 'token-badge token-inactive';
+  document.getElementById('logout-btn').style.display   = 'none';
+  document.getElementById('gate-password').value = '';
+  document.getElementById('gate-response').className = 'response-box';
+  document.getElementById('predictions-remaining').innerHTML = '📊 Predictions remaining: <span style="color:var(--muted);">--</span>';
+  toast('Logged out', 'info');
+}
+
+async function gateLogin() {
+  const username = document.getElementById('gate-username').value;
+  const body = { username: username, password: document.getElementById('gate-password').value };
+  try {
+    const res  = await fetch(`${BASE}/users/auth/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
+    const data = await res.json();
+    if (res.ok && data.token && data.id) {
+      localStorage.setItem('jwt_token', data.token);
+      localStorage.setItem('user_id', data.id);
+      localStorage.setItem('username', username);
+      console.log(`✅ LOGIN SUCCESS: User ${username} (ID: ${data.id}) logged in at ${new Date().toLocaleTimeString()}`);
+      checkLogin();
+      toast('Welcome back!', 'success');
+    }
+    else { showResponse('gate-response', data.error || data.detail || JSON.stringify(data), 'error'); toast('Login failed', 'error'); }
+  } catch(e) { showResponse('gate-response', '❌ ' + e.message, 'error'); toast(e.message, 'error'); }
+}
+
+async function trainModel() {
+  const token = getToken();
+  if (!token) return toast('Not logged in', 'error');
+  const X = document.getElementById('train-x').value.split(',').map(v=>parseFloat(v.trim())).filter(v=>!isNaN(v));
+  const Y = document.getElementById('train-y').value.split(',').map(v=>parseFloat(v.trim())).filter(v=>!isNaN(v));
+  const degree = parseInt(document.getElementById('train-degree').value) || 3;
+  if (!X.length || !Y.length) return toast('Please enter valid X and Y values', 'error');
+  if (X.length !== Y.length)  return toast('X and Y must have the same number of values', 'error');
+  const btn = document.getElementById('train-btn');
+  btn.innerHTML = '<span class="spinner"></span> Training…'; btn.disabled = true;
+  try {
+    const res  = await fetch(`${BASE}/train`, { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`}, body:JSON.stringify({X,Y,degree}) });
+    const data = await res.json();
+    if (res.status === 404 || res.status === 401) {
+      // User was deleted or unauthorized - force logout
+      console.warn('User no longer exists or token invalid - logging out');
+      logout();
+      toast('❌ User account was deleted or session expired', 'error');
+    } else {
+      showResponse('train-response', data, res.ok ? 'success' : 'error');
+      if (res.ok) toast('Model trained successfully', 'success');
+      else toast(data.detail || 'Training failed', 'error');
+    }
+  } catch(e) { showResponse('train-response', '❌ ' + e.message, 'error'); toast(e.message, 'error'); }
+  finally { btn.innerHTML = '🚀 Train Model'; btn.disabled = false; }
+}
+
+async function predictRun() {
+  const token = getToken();
+  if (!token) return toast('Not logged in', 'error');
+  const hours = document.getElementById('predict-hours').value;
+  if (!hours) return toast('Please enter training hours', 'error');
+  if (parseFloat(hours) < 0) return toast('Training hours cannot be negative', 'error');
+  const btn = document.getElementById('predict-btn');
+  btn.innerHTML = '<span class="spinner"></span> Predicting…'; btn.disabled = true;
+  document.getElementById('predict-result').style.display = 'none';
+  try {
+    const res  = await fetch(`${BASE}/predict/${hours}`, { headers:{'Authorization':`Bearer ${token}`} });
+    const data = await res.json();
+    if (res.ok && data.predicted_running_time !== undefined) {
+      document.getElementById('predict-response').className = 'response-box';
+      document.getElementById('predict-value').textContent = parseFloat(data.predicted_running_time).toFixed(2);
+      document.getElementById('predict-result').style.display = 'block';
+      updatePredictionsDisplay(data.predictions_remaining);
+      toast(`Predicted: ${parseFloat(data.predicted_running_time).toFixed(2)} min`, 'success');
+    } else if (res.status === 404 || res.status === 401) {
+      // User was deleted or unauthorized - force logout
+      console.warn('User no longer exists or token invalid - logging out');
+      logout();
+      toast('❌ User account was deleted or session expired', 'error');
+    } else {
+      showResponse('predict-response', data.error || data.detail || JSON.stringify(data), 'error');
+      toast(data.detail || 'Prediction failed', 'error');
+    }
+  } catch(e) { showResponse('predict-response', '❌ ' + e.message, 'error'); toast(e.message, 'error'); }
+  finally { btn.innerHTML = '🔮 Predict'; btn.disabled = false; }
+}
+
+async function purchasePredictions() {
+  const token = getToken();
+  if (!token) return toast('Not logged in', 'error');
+  const cardNumber = document.getElementById('card-number').value.trim();
+  const expiry = document.getElementById('card-expiry').value.trim();
+  const cvv = document.getElementById('card-cvv').value.trim();
+  
+  if (!cardNumber || !expiry || !cvv) return toast('Please fill in all card details', 'error');
+  
+  const btn = document.getElementById('purchase-btn');
+  btn.innerHTML = '<span class="spinner"></span> Processing…'; btn.disabled = true;
+  
+  try {
+    const res = await fetch(`${BASE}/purchase`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+      body: JSON.stringify({ card_number: cardNumber, expiry: expiry, cvv: cvv })
+    });
+    const data = await res.json();
+    
+    if (res.status === 404 || res.status === 401) {
+      // User was deleted or unauthorized - force logout
+      console.warn('User no longer exists or token invalid - logging out');
+      logout();
+      toast('❌ User account was deleted or session expired', 'error');
+    } else if (res.ok && data.predictions_remaining !== undefined) {
+      showResponse('purchase-response', data, 'success');
+      updatePredictionsDisplay(data.predictions_remaining);
+      document.getElementById('card-number').value = '';
+      document.getElementById('card-expiry').value = '';
+      document.getElementById('card-cvv').value = '';
+      toast('Purchase successful! 10 credits added', 'success');
+    } else {
+      showResponse('purchase-response', data.detail || 'Purchase failed', 'error');
+      toast(data.detail || 'Purchase failed', 'error');
+    }
+  } catch(e) {
+    showResponse('purchase-response', '❌ ' + e.message, 'error');
+    toast(e.message, 'error');
+  } finally {
+    btn.innerHTML = '💳 Purchase (10 credits)';
+    btn.disabled = false;
+  }
+}
+
+async function getModelAccuracy() {
+  const token = getToken();
+  if (!token) return toast('Not logged in', 'error');
+  
+  console.log('🎯 Accuracy check started');
+  const btn = document.getElementById('accuracy-btn');
+  btn.innerHTML = '<span class="spinner"></span> Calculating…'; btn.disabled = true;
+  
+  try {
+    console.log(`📡 Fetching ${BASE}/accuracy`);
+    const res = await fetch(`${BASE}/accuracy`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    console.log(`📍 Response status: ${res.status}`);
+    const data = await res.json();
+    console.log('📦 Response data:', data);
+    
+    if (res.status === 404 || res.status === 401) {
+      console.warn('User deleted or invalid token');
+      logout();
+      toast('❌ User account was deleted or session expired', 'error');
+    } else if (res.ok) {
+      console.log('✅ Success - displaying accuracy');
+      // Display accuracy in box format matching predict-result style
+      const accuracyText = `
+        <div class="rl">R² Score</div>
+        <div class="rv">${data.message || 'N/A'}</div>
+        <div class="ru">${data.note || 'Model Accuracy'}</div>
+      `;
+      document.getElementById('accuracy-response').innerHTML = accuracyText;
+      document.getElementById('accuracy-response').style.display = 'block';
+      toast('✅ Accuracy: ' + data.message, 'success');
+    } else {
+      console.error('Error response:', data);
+      showResponse('accuracy-response', data.detail || 'Failed to get accuracy', 'error');
+      toast(data.detail || 'Failed to get accuracy', 'error');
+    }
+  } catch(e) {
+    console.error('❌ Exception:', e.message);
+    showResponse('accuracy-response', '❌ ' + e.message, 'error');
+    toast(e.message, 'error');
+  } finally {
+    btn.innerHTML = '📊 Check Accuracy';
+    btn.disabled = false;
+  }
+}
+
+function updatePredictionsDisplay(count) {
+  const el = document.getElementById('predictions-remaining');
+  if (el && count !== undefined) {
+    const color = count > 0 ? 'var(--gold)' : 'var(--danger)';
+    el.innerHTML = `📊 Predictions remaining: <span style="color:${color}">${count}</span>`;
+  }
+}
+
+checkLogin();
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+2026-03-27 20:00:19,326 - INFO - 🔐 POST /users/auth/login - Login attempt: 11
+2026-03-27 20:00:19,875 - INFO - ✅ POST /users/auth/login - Login successful: 11
+2026-03-27 20:01:07,393 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:01:07,551 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:01:15,299 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:01:21,288 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:01:21,352 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:01:22,020 - INFO - 🔐 POST /users/auth/login - Login attempt: 11
+2026-03-27 20:01:22,530 - INFO - ✅ POST /users/auth/login - Login successful: 11
+2026-03-27 20:01:25,911 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:01:25,916 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:01:25,916 - INFO - ✅ GET /users/12 - User found: 11
+2026-03-27 20:02:00,127 - INFO - 📝 POST /users - Creating user: 21
+2026-03-27 20:02:00,656 - INFO - ✅ POST /users - User created: 21
+2026-03-27 20:02:00,669 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:02:00,669 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-27 20:02:18,578 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:02:18,581 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-27 20:02:25,576 - INFO - 📖 GET /users/11 - Fetching user
+2026-03-27 20:02:25,578 - WARNING - ⚠️ GET /users/11 - User not found
+2026-03-27 20:02:32,981 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:02:32,984 - INFO - ✅ GET /users/12 - User found: 11
+2026-03-27 20:02:50,570 - INFO - ✏️ PUT /users/12 - Updating user
+2026-03-27 20:02:51,049 - INFO - ✅ PUT /users/12 - User updated
+2026-03-27 20:02:51,061 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:02:51,061 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-27 20:03:32,838 - INFO - 🔐 POST /users/auth/login - Login attempt: 11
+2026-03-27 20:03:32,840 - WARNING - ❌ POST /users/auth/login - Invalid credentials: 11
+2026-03-27 20:03:37,905 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:03:37,906 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-27 20:03:50,166 - INFO - 🔐 POST /users/auth/login - Login attempt: 12
+2026-03-27 20:03:50,636 - INFO - ✅ POST /users/auth/login - Login successful: 12
+2026-03-27 20:03:50,655 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:03:50,657 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-27 20:04:00,080 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:04:00,083 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-27 20:05:13,941 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:05:13,943 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-27 20:06:01,866 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:06:04,397 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:06:05,657 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:06:25,329 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:06:25,421 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:06:28,851 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:06:34,705 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:06:34,707 - INFO - ✅ GET /users - Retrieved 5 users
+2026-03-27 20:06:39,268 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:06:39,269 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-27 20:08:46,092 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-27 20:08:46,092 - INFO - 🗑️ DELETE /users/14 - Deleting user by 12
+2026-03-27 20:08:46,102 - INFO -    ✓ Database record deleted
+2026-03-27 20:08:46,102 - INFO - ✅ DELETE /users/14 - User deleted
+2026-03-27 20:08:46,140 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:08:46,140 - INFO - ✅ GET /users - Retrieved 4 users
+2026-03-27 20:08:54,476 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:08:54,478 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-27 20:09:00,279 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:09:00,281 - INFO - ✅ GET /users - Retrieved 4 users
+2026-03-27 20:10:11,509 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:10:11,512 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:10:11,512 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:10:17,308 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:10:17,308 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:10:17,335 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:11:03,398 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:11:03,482 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:11:24,480 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:11:24,508 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:11:28,970 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:11:34,057 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:11:37,382 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:11:37,733 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:12:51,312 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:12:55,054 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:12:55,314 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:06,607 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:10,180 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:14,275 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:18,105 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:21,995 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:22,769 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:25,920 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:28,569 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:29,842 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:34,012 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:37,836 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:40,721 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:41,320 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:45,619 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:13:45,797 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:14:20,080 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:14:23,408 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:14:23,423 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:14:23,423 - INFO - ✅ GET /users - Retrieved 4 users
+2026-03-27 20:14:44,262 - INFO - 🔐 POST /users/auth/login - Login attempt: 11
+2026-03-27 20:14:44,266 - WARNING - ❌ POST /users/auth/login - Invalid credentials: 11
+2026-03-27 20:14:49,527 - INFO - 🔐 POST /users/auth/login - Login attempt: 12
+2026-03-27 20:14:50,066 - INFO - ✅ POST /users/auth/login - Login successful: 12
+2026-03-27 20:14:50,083 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:14:50,085 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-27 20:15:02,697 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-27 20:15:02,699 - INFO - 🗑️ DELETE /users/7 - Deleting user by 12
+2026-03-27 20:15:02,701 - WARNING - ⚠️ DELETE /users/7 - User not found
+2026-03-27 20:15:11,835 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-27 20:15:11,837 - INFO - 🗑️ DELETE /users/16 - Deleting user by 12
+2026-03-27 20:15:11,854 - INFO -    ✓ Database record deleted
+2026-03-27 20:15:11,856 - INFO - ✅ DELETE /users/16 - User deleted
+2026-03-27 20:15:11,885 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:15:11,885 - INFO - ✅ GET /users - Retrieved 3 users
+2026-03-27 20:15:17,388 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:15:17,392 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-27 20:15:34,485 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:15:34,487 - INFO - ✅ GET /users - Retrieved 3 users
+2026-03-27 20:16:06,872 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:16:06,930 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:16:08,283 - INFO - 🚀 Application started - Database initialized
+2026-03-27 20:16:08,831 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:16:08,833 - INFO - ✅ GET /users - Retrieved 3 users
+2026-03-27 20:16:32,642 - INFO - 🔐 POST /users/auth/login - Login attempt: 12
+2026-03-27 20:16:33,121 - INFO - ✅ POST /users/auth/login - Login successful: 12
+2026-03-27 20:16:33,137 - INFO - 📖 GET /users/12 - Fetching user
+2026-03-27 20:16:33,138 - INFO - ✅ GET /users/12 - User found: 12
+2026-03-27 20:16:42,347 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-27 20:16:42,348 - INFO - 🗑️ DELETE /users/16 - Deleting user by 12
+2026-03-27 20:16:42,350 - WARNING - ⚠️ DELETE /users/16 - User not found
+2026-03-27 20:16:47,792 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:16:47,796 - INFO - ✅ GET /users - Retrieved 3 users
+2026-03-27 20:16:53,699 - INFO - ✅ Auth Success - User authenticated: 12
+2026-03-27 20:16:53,700 - INFO - 🗑️ DELETE /users/15 - Deleting user by 12
+2026-03-27 20:16:53,712 - INFO -    ✓ Database record deleted
+2026-03-27 20:16:53,712 - INFO - ✅ DELETE /users/15 - User deleted
+2026-03-27 20:16:53,744 - INFO - 📖 GET /users - Fetching all users
+2026-03-27 20:16:53,754 - INFO - ✅ GET /users - Retrieved 2 users
