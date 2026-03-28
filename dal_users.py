@@ -13,22 +13,11 @@ DB_PATH = "users.db"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
-class Connection:
-    """Context manager for database connections."""
-    def __init__(self):
-        self.conn = sqlite3.connect(DB_PATH, timeout=5.0)
-        self.conn.row_factory = sqlite3.Row
-    
-    def __enter__(self):
-        return self.conn
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.conn.close()
-
-
 def get_connection():
-    """Get a database connection context manager with timeout."""
-    return Connection()
+    """Get a database connection with timeout."""
+    conn = sqlite3.connect(DB_PATH, timeout=5.0)
+    conn.row_factory = sqlite3.Row
+    return conn
 
 
 def row_to_dict(row):
@@ -38,7 +27,8 @@ def row_to_dict(row):
 
 def init_db():
     """Initialize the SQLite database with users table."""
-    with get_connection() as conn:
+    conn = get_connection()
+    try:
         cursor = conn.cursor()
         
         cursor.execute("""
@@ -52,6 +42,8 @@ def init_db():
         """)
         
         conn.commit()
+    finally:
+        conn.close()
 
 
 def hash_password(password):
@@ -98,29 +90,30 @@ def create_user(username, email, password):
         dict: created user data, or None if failed
     """
     try:
-        with get_connection() as conn:
-            cursor = conn.cursor()
-            
-            logging.debug(f"   🔄 Hashing password for user: {username}")
-            hashed_pwd = hash_password(password)
-            logging.debug(f"   ✓ Password hashed")
-            
-            logging.debug(f"   🔄 Inserting user record (username={username}, email={email})")
-            cursor.execute("""
-            INSERT INTO users (user_name, email, password, predictions_remaining)
-            VALUES (?, ?, ?, 10)
-            """, (username, email, hashed_pwd))
-            
-            conn.commit()
-            user_id = cursor.lastrowid
-            logging.debug(f"   ✓ User record inserted | New ID: {user_id}")
-            logging.debug(f"   ✓ Default predictions allocated: 10")
-            
-            return {
-                "id": user_id,
-                "user_name": username,
-                "email": email
-            }
+        conn = get_connection()
+        cursor = conn.cursor()
+        
+        logging.debug(f"   🔄 Hashing password for user: {username}")
+        hashed_pwd = hash_password(password)
+        logging.debug(f"   ✓ Password hashed")
+        
+        logging.debug(f"   🔄 Inserting user record (username={username}, email={email})")
+        cursor.execute("""
+        INSERT INTO users (user_name, email, password, predictions_remaining)
+        VALUES (?, ?, ?, 10)
+        """, (username, email, hashed_pwd))
+        
+        conn.commit()
+        user_id = cursor.lastrowid
+        logging.debug(f"   ✓ User record inserted | New ID: {user_id}")
+        logging.debug(f"   ✓ Default predictions allocated: 10")
+        conn.close()
+        
+        return {
+            "id": user_id,
+            "user_name": username,
+            "email": email
+        }
     except sqlite3.IntegrityError:
         logging.debug(f"   ✗ Username already exists: {username}")
         return None
@@ -136,11 +129,14 @@ def get_user_by_id(user_id):
     Returns:
         dict: user data (without password), or None if not found
     """
-    with get_connection() as conn:
+    conn = get_connection()
+    try:
         cursor = conn.cursor()
         cursor.execute("SELECT id, user_name, email, predictions_remaining FROM users WHERE id = ?", (user_id,))
         row = cursor.fetchone()
         return row_to_dict(row)
+    finally:
+        conn.close()
 
 
 def get_user_by_username(username):
@@ -153,11 +149,14 @@ def get_user_by_username(username):
     Returns:
         dict: user data including hashed password, or None if not found
     """
-    with get_connection() as conn:
+    conn = get_connection()
+    try:
         cursor = conn.cursor()
         cursor.execute("SELECT id, user_name, email, password, predictions_remaining FROM users WHERE user_name = ?", (username,))
         row = cursor.fetchone()
         return row_to_dict(row)
+    finally:
+        conn.close()
 
 
 def get_all_users():
@@ -167,10 +166,13 @@ def get_all_users():
     Returns:
         list: list of user dictionaries (without passwords)
     """
-    with get_connection() as conn:
+    conn = get_connection()
+    try:
         cursor = conn.cursor()
         cursor.execute("SELECT id, user_name, email, predictions_remaining FROM users")
         return [row_to_dict(row) for row in cursor.fetchall()]
+    finally:
+        conn.close()
 
 
 def update_user(user_id, user_name=None, email=None, password=None):
@@ -187,7 +189,8 @@ def update_user(user_id, user_name=None, email=None, password=None):
         dict: updated user data, or None if failed
     """
     try:
-        with get_connection() as conn:
+        conn = get_connection()
+        try:
             cursor = conn.cursor()
             
             # Build dynamic update query
@@ -214,6 +217,8 @@ def update_user(user_id, user_name=None, email=None, password=None):
             
             conn.commit()
             return get_user_by_id(user_id)
+        finally:
+            conn.close()
     except Exception as e:
         print(f"Error updating user: {e}")
         return None
@@ -252,13 +257,16 @@ def delete_user(user_id):
             logging.debug(f"   ℹ️ No model file found: {model_filename}")
         
         # Delete from database
-        with get_connection() as conn:
+        conn = get_connection()
+        try:
             cursor = conn.cursor()
             
             logging.debug(f"   🔄 Removing user record from database...")
             cursor.execute("DELETE FROM users WHERE id = ?", (user_id,))
             conn.commit()
             logging.info(f"   ✓ Database record deleted")
+        finally:
+            conn.close()
         return True
     except Exception as e:
         logging.error(f"Error deleting user {user_id}: {str(e)}", exc_info=True)
@@ -282,7 +290,8 @@ def deduct_prediction(username):
         return False
     
     try:
-        with get_connection() as conn:
+        conn = get_connection()
+        try:
             cursor = conn.cursor()
             
             logging.debug(f"   🔄 Deducting 1 prediction credit from {username}")
@@ -295,6 +304,8 @@ def deduct_prediction(username):
             new_count = user["predictions_remaining"] - 1
             logging.debug(f"   ✓ Prediction deducted | Remaining: {new_count}")
             return True
+        finally:
+            conn.close()
     except Exception as e:
         logging.error(f"Error deducting prediction: {e}")
         return False
@@ -312,7 +323,8 @@ def add_predictions(username, amount):
         int: new predictions remaining, or None if failed
     """
     try:
-        with get_connection() as conn:
+        conn = get_connection()
+        try:
             cursor = conn.cursor()
             
             logging.debug(f"   🔄 Adding {amount} predictions to {username}")
@@ -330,6 +342,8 @@ def add_predictions(username, amount):
             if result:
                 logging.debug(f"   ✓ Predictions added | New total: {result[0]}")
             return result[0] if result else None
+        finally:
+            conn.close()
     except Exception as e:
         logging.error(f"Error adding predictions: {e}")
         return None
