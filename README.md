@@ -14,17 +14,17 @@ This application provides a complete machine learning pipeline for training poly
 
 ## 🔄 Recent Improvements (Latest Session)
 
+### Model Persistence
+- ✅ Models now persist between sessions (no startup deletion)
+- ✅ Models persist across logins (users don't need to retrain)
+- ✅ Models only deleted when user account is deleted
+- ✅ Better UX - users keep their trained models
+- ✅ Proper cascade cleanup on account deletion
+
 ### Database Reliability
 - ✅ Fixed "database is locked" errors with 5-second connection timeout
 - ✅ Added try-finally blocks to guarantee connection closure
 - ✅ Proper resource management across all database operations
-
-### Model Training Validation
-- ✅ Models deleted on login (forces retraining each session)
-- ✅ Models deleted on logout
-- ✅ Predict button disabled until model is trained
-- ✅ Backend validates model file exists before prediction
-- ✅ Frontend sessionStorage tracks training state
 
 ### Polynomial Degree Constraints
 - ✅ Limited to degree 1-5 (prevents overfitting and 0.00 predictions)
@@ -33,7 +33,7 @@ This application provides a complete machine learning pipeline for training poly
 - ✅ Default degree 2 (quadratic) - best for extrapolation
 
 ### Payment Card Handling
-- ✅ Card number: int type with 13-19 digit validation
+- ✅ Card number: str type with 13-19 digit validation (prevents 0 loss)
 - ✅ Expiry: str type with automatic "/" formatting (1225 → 12/25)
 - ✅ CVV: str type with exactly 3-digit validation
 - ✅ All fields validated before API submission
@@ -44,11 +44,6 @@ This application provides a complete machine learning pipeline for training poly
 - ✅ Real-time predict button enable/disable based on model state
 - ✅ Improved error messages with validation feedback
 
-### Startup Cleanup
-- ✅ All old .pkl files deleted on app startup
-- ✅ Ensures fresh state for each new session
-- ✅ Logging confirms cleanup with emoji indicators
-
 ## 🎯 Features
 
 ### Authentication & User Management
@@ -56,15 +51,15 @@ This application provides a complete machine learning pipeline for training poly
 - ✅ Secure password hashing using bcrypt
 - ✅ User CRUD operations (Create, Read, Update, Delete)
 - ✅ Session persistence in localStorage
-- ✅ Model cleanup on login (forces retraining each session)
-- ✅ Model cleanup on logout (deletes model file)
+- ✅ Models persist across login/logout sessions
+- ✅ Model cleanup only on user account deletion
 
 ### ML Model Operations
 - ✅ Train polynomial regression models with **degree 1-5** (prevents overfitting)
-- ✅ Individual .pkl model files per user
+- ✅ Individual .pkl model files per user (persist between sessions)
 - ✅ Model predictions with real-time results
 - ✅ **REQUIRED training validation** - cannot predict without trained model
-- ✅ Automatic model file cleanup when user deleted
+- ✅ Automatic model file cleanup when user account deleted
 - ✅ Predictions clamped to minimum 0.0 (realistic values)
 - ✅ Model accuracy (R² score) calculation
 
@@ -100,7 +95,7 @@ This application provides a complete machine learning pipeline for training poly
 - ✅ SQLite connection timeout (5-second retry logic)
 - ✅ Try-finally blocks ensure connections always close
 - ✅ Prevents "database is locked" errors
-- ✅ Proper cascade deletion of user files
+- ✅ Proper cascade deletion of user files on account deletion
 
 ### Frontend Improvements
 - ✅ Port-agnostic configuration (uses window.location.origin)
@@ -109,6 +104,7 @@ This application provides a complete machine learning pipeline for training poly
 - ✅ Real-time model training status
 - ✅ Disabled predict button when no model trained
 - ✅ Toast notifications for all operations
+- ✅ Models persist - no need to retrain on login
 
 ### Clean Code Architecture
 - ✅ Simple, maintainable FastAPI structure
