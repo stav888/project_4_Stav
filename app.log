@@ -14,14 +14,6 @@
 2026-03-29 20:40:29,655 - WARNING - ❌ POST /auth/login - Invalid credentials: 23
 2026-03-29 20:40:41,040 - INFO - 📖 GET /users - Fetching all users
 2026-03-29 20:40:41,043 - INFO - ✅ GET /users - Retrieved 6 users
-2026-03-29 20:40:50,440 - INFO - 🔐 POST /auth/login - Login attempt: 12
-2026-03-29 20:40:50,459 - WARNING - (trapped) error reading bcrypt version
-Traceback (most recent call last):
-  File "C:\Users\Stav\PycharmProjects\19_3\.venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
-    version = _bcrypt.__about__.__version__
-              ^^^^^^^^^^^^^^^^^
-AttributeError: module 'bcrypt' has no attribute '__about__'
-2026-03-29 20:40:50,964 - WARNING - ❌ POST /auth/login - Invalid credentials: 12
 2026-03-29 20:40:54,710 - INFO - 📖 GET /users - Fetching all users
 2026-03-29 20:40:54,712 - INFO - ✅ GET /users - Retrieved 6 users
 2026-03-29 20:41:03,460 - INFO - 🔐 POST /auth/login - Login attempt: 12
@@ -73,12 +65,6 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-03-29 21:01:33,572 - INFO - 📖 GET /users - Fetching all users
 2026-03-29 21:01:33,574 - INFO - ✅ GET /users - Retrieved 4 users
 2026-03-29 21:01:38,413 - INFO - 🔐 POST /auth/login - Login attempt: 12
-2026-03-29 21:01:38,425 - WARNING - (trapped) error reading bcrypt version
-Traceback (most recent call last):
-  File "C:\Users\Stav\PycharmProjects\19_3\.venv\Lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
-    version = _bcrypt.__about__.__version__
-              ^^^^^^^^^^^^^^^^^
-AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-03-29 21:01:39,584 - INFO - ✅ POST /auth/login - Login successful: 12
 2026-03-29 21:13:43,583 - INFO - 📖 GET /users - Fetching all users
 2026-03-29 21:13:43,611 - INFO - ✅ GET /users - Retrieved 4 users
