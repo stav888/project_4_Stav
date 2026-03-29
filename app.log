@@ -14,6 +14,8 @@
 2026-03-29 20:40:29,655 - WARNING - ❌ POST /auth/login - Invalid credentials: 23
 2026-03-29 20:40:41,040 - INFO - 📖 GET /users - Fetching all users
 2026-03-29 20:40:41,043 - INFO - ✅ GET /users - Retrieved 6 users
+2026-03-29 20:40:50,440 - INFO - 🔐 POST /auth/login - Login attempt: 12
+2026-03-29 20:40:50,964 - WARNING - ❌ POST /auth/login - Invalid credentials: 12
 2026-03-29 20:40:54,710 - INFO - 📖 GET /users - Fetching all users
 2026-03-29 20:40:54,712 - INFO - ✅ GET /users - Retrieved 6 users
 2026-03-29 20:41:03,460 - INFO - 🔐 POST /auth/login - Login attempt: 12
