@@ -1,8 +1,10 @@
 fastapi
 uvicorn
+pydantic
+email-validator
+passlib[bcrypt]
+bcrypt
+PyJWT
 scikit-learn
 numpy
 joblib
-PyJWT
-bcrypt
-python-multipart
