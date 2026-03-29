@@ -14,6 +14,17 @@ This application provides a complete machine learning pipeline for training poly
 
 ## 🔄 Recent Improvements (Latest Session)
 
+### User Account Security
+- ✅ **Users can only delete their own account** → 403 Forbidden for unauthorized delete attempts
+- ✅ Enforced at router layer with `current_user["id"]` authentication check
+- ✅ Prevents users from deleting other accounts
+
+### Password Hashing Security
+- ✅ Hybrid approach: SHA256 pre-hash → bcrypt (handles unlimited password length)
+- ✅ Backward compatibility: Old passwords (bcrypt-only) still work, new passwords use SHA256+bcrypt
+- ✅ Automatic migration: Password change upgrades to stronger SHA256+bcrypt method
+- ✅ Upgraded bcrypt for passlib compatibility (fixed version detection errors)
+
 ### Model Persistence
 - ✅ Models now persist between sessions (no startup deletion)
 - ✅ Models persist across logins (users don't need to retrain)
@@ -71,10 +82,11 @@ This application provides a complete machine learning pipeline for training poly
 - ✅ Payment validation with card format checking
 
 ### Security & Validation
+- ✅ **User deletion protected** - only authenticated users can delete their own account (403 Forbidden for others)
 - ✅ Deleted users cannot access ANY features
 - ✅ User existence validation on all ML operations
 - ✅ Protected endpoints with Bearer token authentication
-- ✅ Passwords never stored in plaintext (bcrypt hashing)
+- ✅ Passwords hashed with SHA256 → bcrypt (handles unlimited length)
 - ✅ Auto-logout when user is detected as deleted
 - ✅ Disabled predict button until model is trained
 - ✅ Frontend model validation with sessionStorage tracking

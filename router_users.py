@@ -82,6 +82,9 @@ def update_existing_user(user_id: int, user_data: UserUpdate):
 @router.delete("/{user_id}")
 def delete_existing_user(user_id: int, current_user = Depends(get_current_user)):
     """Delete a user (requires authentication)."""
+    if current_user["id"] != user_id:
+        logger.warning(f"⚠️ DELETE /users/{user_id} - Unauthorized delete attempt by {current_user['user_name']}")
+        raise HTTPException(status_code=403, detail="Can only delete own account")
     logger.info(f"🗑️ DELETE /users/{user_id} - Deleting user by {current_user['user_name']}")
     user = dal_users.get_user_by_id(user_id)
     if user is None:

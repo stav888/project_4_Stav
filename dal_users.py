@@ -65,6 +65,7 @@ def hash_password(password):
 def verify_password(password, hashed):
     """
     Verify a plaintext password against a hash.
+    Supports both old (bcrypt only) and new (SHA256+bcrypt) formats.
 
     Args:
         password (str): plaintext password
@@ -73,8 +74,19 @@ def verify_password(password, hashed):
     Returns:
         bool: True if passwords match, False otherwise
     """
+    # Try new way: SHA256 + bcrypt
     sha_password = hashlib.sha256(password.encode()).hexdigest()
-    return pwd_context.verify(sha_password, hashed)
+    if pwd_context.verify(sha_password, hashed):
+        return True
+    
+    # Fallback to old way: bcrypt only (backward compatibility)
+    try:
+        if pwd_context.verify(password, hashed):
+            return True
+    except:
+        pass
+    
+    return False
 
 
 def create_user(username, email, password):
