@@ -393,10 +393,11 @@ td.email-cell { color: var(--muted2); }
       <div class="warn-icon">🗑️</div>
       <p>Permanently delete user <span class="uname" id="deleteUserName"></span>?</p>
       <p style="margin-top:.6rem;font-size:.68rem;">This action cannot be undone.</p>
+      <p id="deleteAuthWarning" style="display:none;margin-top:.8rem;font-size:.72rem;color:#e87070;"></p>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeDelete()">Cancel</button>
-      <button class="btn btn-danger" onclick="confirmDelete()">Delete</button>
+      <button class="btn btn-danger" id="deleteConfirmBtn" onclick="confirmDelete()">Delete</button>
     </div>
   </div>
 </div>
@@ -470,14 +471,25 @@ async function req(method, path, body) {
   if (token) opts.headers['Authorization'] = `Bearer ${token}`;
   if (body) opts.body = JSON.stringify(body);
   const res = await fetch(BASE + path, opts);
-  const data = await res.json();
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    const text = await res.text().catch(() => 'HTTP ' + res.status);
+    throw new Error(text);
+  }
   if (!res.ok) throw new Error(data.detail || 'HTTP ' + res.status);
   return data;
 }
 
 async function registerUser() {
   const body = { user_name: document.getElementById('reg-username').value, email: document.getElementById('reg-email').value, password: document.getElementById('reg-password').value };
-  try { const d = await req('POST', '/users', body); showResponse('reg-response', d, 'success'); toast(`User "${d.user_name}" created`, 'success'); loadUsers(); }
+  try {
+    const d = await req('POST', '/users', body);
+    showResponse('reg-response', d, 'success');
+    toast(`User created`, 'success');
+    loadUsers();
+  }
   catch(e) { showResponse('reg-response', e.message, 'error'); toast(e.message, 'error'); }
 }
 
@@ -485,7 +497,12 @@ async function loginUser() {
   const body = { username: document.getElementById('login-username').value, password: document.getElementById('login-password').value };
   try {
     const d = await req('POST', '/auth/login', body);
-    if (d.token) { localStorage.setItem('jwt_token', d.token); showResponse('login-response', '✅ Token saved!\n\n' + JSON.stringify(d, null, 2), 'success'); toast('Logged in — token saved', 'success'); }
+    if (d.access_token) {
+      localStorage.setItem('jwt_token', d.access_token);
+      localStorage.setItem('user_id', d.id);
+      localStorage.setItem('username', d.user_name);
+      showResponse('login-response', '✅ Token saved!\n\n' + JSON.stringify(d, null, 2), 'success'); toast('Logged in — token saved', 'success');
+    }
     else { showResponse('login-response', d, 'error'); }
   } catch(e) { showResponse('login-response', e.message, 'error'); toast(e.message, 'error'); }
 }
@@ -513,32 +530,47 @@ function fillUpdate(id, name, email) {
 }
 
 let deleteTarget = null;
+function openDeleteModal(id, name) {
+  deleteTarget = { id: parseInt(id), name };
+  document.getElementById('deleteUserName').textContent = name ? `"${name}"` : `#${id}`;
+  document.getElementById('deleteAuthWarning').style.display = 'none';
+  document.getElementById('deleteConfirmBtn').disabled = false;
+  document.getElementById('deleteConfirmBtn').style.opacity = '1';
+  document.getElementById('deleteOverlay').classList.add('open');
+}
 function prefillDelete(id, name) {
   document.getElementById('del-id').value = id;
-  document.getElementById('deleteUserName').textContent = `"${name}"`;
-  deleteTarget = { id, name };
-  document.getElementById('deleteOverlay').classList.add('open');
+  openDeleteModal(id, name);
 }
 function openDelete() {
   const id = document.getElementById('del-id').value;
   if (!id) return toast('Please enter a user ID', 'error');
-  deleteTarget = { id, name: `#${id}` };
-  document.getElementById('deleteUserName').textContent = `#${id}`;
-  document.getElementById('deleteOverlay').classList.add('open');
+  openDeleteModal(id, null);
 }
 function closeDelete() { deleteTarget = null; document.getElementById('deleteOverlay').classList.remove('open'); }
 async function confirmDelete() {
   if (!deleteTarget) { toast('No user selected for deletion', 'error'); return; }
-  const userId = deleteTarget.id;  // Save the ID before closeDelete() is called
+  const loggedInId = parseInt(localStorage.getItem('user_id'));
+  const warning = document.getElementById('deleteAuthWarning');
+  if (!localStorage.getItem('jwt_token') || !loggedInId) {
+    warning.textContent = 'You must be logged in as this user to delete them.';
+    warning.style.display = 'block';
+    return;
+  }
+  if (loggedInId !== deleteTarget.id) {
+    const loggedInName = localStorage.getItem('username') || `#${loggedInId}`;
+    warning.textContent = `You can only delete your own account. Log in as ${deleteTarget.name || `#${deleteTarget.id}`} first.`;
+    warning.style.display = 'block';
+    return;
+  }
+  const userId = deleteTarget.id;
   try {
     const response = await req('DELETE', `/users/${userId}`);
-    console.log('Delete response:', response);  // Log response to browser console
     toast('User deleted', 'success');
     closeDelete();
     showResponse('del-response', `✅ User ${userId} deleted successfully\n\n${JSON.stringify(response, null, 2)}`, 'success');
     loadUsers();
   } catch(e) {
-    console.error('Delete error:', e);  // Log error to browser console
     toast(e.message, 'error');
     showResponse('del-response', `❌ Error: ${e.message}`, 'error');
     closeDelete();

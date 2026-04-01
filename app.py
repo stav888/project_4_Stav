@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.responses import FileResponse
 import os
 import logging
-from pathlib import Path
 
 import dal_users
 from router_users import router as users_router
@@ -24,7 +23,7 @@ app = FastAPI(title="🏃‍♂️ Running Time Prediction API")
 
 @app.on_event("startup")
 def startup():
-    dal_users.init_db()
+    dal_users.create_table_users()
     logger.info("🚀 Application started - Database initialized")
     # No model deletion needed - models persist between sessions ✅
     # Flush all handlers immediately after startup

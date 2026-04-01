@@ -489,9 +489,9 @@ function logout() {
   
   // Delete model file from server before clearing token (wait for it to complete)
   if (token) {
-    fetch(`${BASE}/model`, { 
+    fetch(`${BASE}/ml/model`, {
       method: 'DELETE',
-      headers: {'Authorization': `Bearer ${token}`} 
+      headers: {'Authorization': `Bearer ${token}`}
     })
     .then(res => {
       if (res.ok) {
@@ -555,8 +555,8 @@ async function gateLogin() {
   try {
     const res  = await fetch(`${BASE}/auth/login`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     const data = await res.json();
-    if (res.ok && data.token && data.id) {
-      localStorage.setItem('jwt_token', data.token);
+    if (res.ok && data.access_token && data.id) {
+      localStorage.setItem('jwt_token', data.access_token);
       localStorage.setItem('user_id', data.id);
       localStorage.setItem('username', username);
       sessionStorage.removeItem('modelTrained'); // Reset model trained flag on new login
@@ -579,7 +579,7 @@ async function trainModel() {
   const btn = document.getElementById('train-btn');
   btn.innerHTML = '<span class="spinner"></span> Training…'; btn.disabled = true;
   try {
-    const res  = await fetch(`${BASE}/train`, { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`}, body:JSON.stringify({X,Y,degree}) });
+    const res  = await fetch(`${BASE}/ml/train`, { method:'POST', headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`}, body:JSON.stringify({X,Y,degree}) });
     const data = await res.json();
     if (res.status === 404 || res.status === 401) {
       // User was deleted or unauthorized - force logout
@@ -616,7 +616,7 @@ async function predictRun() {
   btn.innerHTML = '<span class="spinner"></span> Predicting…'; btn.disabled = true;
   document.getElementById('predict-result').style.display = 'none';
   try {
-    const res  = await fetch(`${BASE}/predict/${hours}`, { headers:{'Authorization':`Bearer ${token}`} });
+    const res  = await fetch(`${BASE}/ml/predict/${hours}`, { headers:{'Authorization':`Bearer ${token}`} });
     const data = await res.json();
     if (res.ok && data.predicted_running_time !== undefined) {
       document.getElementById('predict-response').className = 'response-box';
@@ -658,7 +658,7 @@ async function purchasePredictions() {
   btn.innerHTML = '<span class="spinner"></span> Processing…'; btn.disabled = true;
   
   try {
-    const res = await fetch(`${BASE}/purchase`, {
+    const res = await fetch(`${BASE}/ml/purchase`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
       body: JSON.stringify({ card_number: cardNumber, expiry: expiry, cvv: cvv })
@@ -699,8 +699,8 @@ async function getModelAccuracy() {
   btn.innerHTML = '<span class="spinner"></span> Calculating…'; btn.disabled = true;
   
   try {
-    console.log(`📡 Fetching ${BASE}/accuracy`);
-    const res = await fetch(`${BASE}/accuracy`, {
+    console.log(`📡 Fetching ${BASE}/ml/accuracy`);
+    const res = await fetch(`${BASE}/ml/accuracy`, {
       headers: { 'Authorization': `Bearer ${token}` }
     });
     console.log(`📍 Response status: ${res.status}`);

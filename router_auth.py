@@ -30,13 +30,20 @@ def flush_logs():
 def login(credentials: LoginRequest):
     """Login a user and return JWT token."""
     logger.info(f"🔐 POST /auth/login - Login attempt: {credentials.username}")
-    user = dal_users.get_user_by_username(credentials.username)
-    if user is None or not dal_users.verify_password(credentials.password, user["password"]):
+    if not dal_users.login_user(credentials.username, credentials.password):
         logger.warning(f"❌ POST /auth/login - Invalid credentials: {credentials.username}")
         flush_logs()
         raise HTTPException(status_code=401, detail="Invalid username or password")
+
+    user = dal_users.get_user_by_username(credentials.username)
+    
+    # Safety check: ensure user exists
+    if not user:
+        logger.error(f"❌ POST /auth/login - User disappeared after login: {credentials.username}")
+        flush_logs()
+        raise HTTPException(status_code=500, detail="Authentication error")
     
     token = create_access_token(credentials.username)
     logger.info(f"✅ POST /auth/login - Login successful: {credentials.username}")
     flush_logs()
-    return {"token": token, "user_name": user["user_name"], "id": user["id"]}
+    return {"access_token": token, "token_type": "bearer", "user_name": user["user_name"], "id": user["id"]}

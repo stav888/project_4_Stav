@@ -16,7 +16,7 @@ import numpy as np
 from sklearn.metrics import r2_score
 
 logger = logging.getLogger('app')
-router = APIRouter(prefix="", tags=["ml"])
+router = APIRouter(prefix="/ml", tags=["ml"])
 
 
 class TrainRequest(BaseModel):
@@ -34,14 +34,14 @@ class PredictResponse(BaseModel):
 
 class PurchaseRequest(BaseModel):
     """Request model for purchasing predictions."""
-    card_number: str
+    card_number: str = Field(min_length=13, max_length=19)
     expiry: str
     cvv: str
 
 
 def get_model_filename(username: str) -> str:
     """Generate model filename from username."""
-    return f"{username}.pkl"
+    return f"{username}.joblib"
 
 
 @router.post("/train")

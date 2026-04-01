@@ -14,6 +14,11 @@ This application provides a complete machine learning pipeline for training poly
 
 ## 🔄 Recent Improvements (Latest Session)
 
+### Dependencies Cleanup
+- ✅ Updated `requirements.txt` with all essential dependencies (no version pinning)
+- ✅ Removed unused `python-multipart` (not needed for JSON-only API)
+- ✅ Clean dependency list: FastAPI, Uvicorn, Pydantic, Passlib, PyJWT, Scikit-learn, NumPy, Joblib
+
 ### User Account Security
 - ✅ **Users can only delete their own account** → 403 Forbidden for unauthorized delete attempts
 - ✅ Enforced at router layer with `current_user["id"]` authentication check
@@ -131,9 +136,30 @@ This application provides a complete machine learning pipeline for training poly
 - **Server**: Uvicorn
 - **Database**: SQLite
 - **Auth**: JWT (PyJWT)
-- **Hashing**: Bcrypt
+- **Hashing**: Bcrypt with SHA256 pre-hashing (via passlib)
+- **Validation**: Pydantic with email-validator
 - **ML**: Scikit-learn (Polynomial Regression)
 - **Frontend**: HTML5 + Vanilla JavaScript
+
+## 📋 Dependencies
+
+```txt
+fastapi                 # REST API framework
+uvicorn                 # ASGI server
+pydantic                # Data validation & modeling
+email-validator         # Email field validation
+passlib[bcrypt]         # Password hashing with bcrypt
+bcrypt                  # Bcrypt cryptography
+PyJWT                   # JWT token handling
+scikit-learn            # Machine learning models
+numpy                   # Numerical computing
+joblib                  # Model persistence & serialization
+```
+
+**Installation:**
+```bash
+pip install -r requirements.txt
+```
 
 ## 📦 Project Structure
 

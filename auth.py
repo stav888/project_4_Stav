@@ -5,13 +5,20 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 import jwt
 from jwt.exceptions import InvalidTokenError
 import logging
+import os
+from dotenv import load_dotenv
 import dal_users
 
-logger = logging.getLogger('app')
+# Load variables from .env into the environment
+load_dotenv()
 
-SECRET_KEY = "change-this-secret-key"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
+# Access the variables
+SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")  # Default fallback
+ALGORITHM = os.getenv("ALGORITHM", "HS256")  # Default to HS256 if not set
+# Convert to int since env variables are always strings
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
+
+logger = logging.getLogger('app')
 
 bearer_scheme = HTTPBearer()
 
