@@ -10,25 +10,28 @@ import os
 import dal_users
 from auth import create_access_token
 
+# Set up authentication logging
 logger = logging.getLogger('app')
+
+# Create auth router with prefix
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
+# Request model for login credentials
 class LoginRequest(BaseModel):
-    """Request model for login."""
     username: str
     password: str
 
 
+# Helper function to flush all logs
 def flush_logs():
-    """Flush all log handlers to ensure logs are written to disk."""
     for handler in logging.getLogger().handlers:
         handler.flush()
 
 
+# Login endpoint - authenticate user and return JWT token
 @router.post("/login")
 def login(credentials: LoginRequest):
-    """Login a user and return JWT token."""
     logger.info(f"🔐 POST /auth/login - Login attempt: {credentials.username}")
     if not dal_users.login_user(credentials.username, credentials.password):
         logger.warning(f"❌ POST /auth/login - Invalid credentials: {credentials.username}")
@@ -37,7 +40,6 @@ def login(credentials: LoginRequest):
 
     user = dal_users.get_user_by_username(credentials.username)
     
-    # Safety check: ensure user exists
     if not user:
         logger.error(f"❌ POST /auth/login - User disappeared after login: {credentials.username}")
         flush_logs()

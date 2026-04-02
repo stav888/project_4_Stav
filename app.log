@@ -86,19 +86,9 @@
 2026-04-01 16:15:19,027 - INFO - 📖 GET /users - Fetching all users
 2026-04-01 16:15:19,056 - INFO - ✅ GET /users - Retrieved 1 users
 2026-04-01 16:15:25,865 - INFO - 🔐 POST /auth/login - Login attempt: 3
-2026-04-01 16:15:25,979 - WARNING - (trapped) error reading bcrypt version
-Traceback (most recent call last):
-  File "C:\Users\Stav\AppData\Local\Programs\Python\Python310\lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
-    version = _bcrypt.__about__.__version__
-AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-04-01 16:21:10,626 - INFO - 📖 GET /users - Fetching all users
 2026-04-01 16:21:10,629 - INFO - ✅ GET /users - Retrieved 1 users
 2026-04-01 16:21:15,365 - INFO - 🔐 POST /auth/login - Login attempt: 3
-2026-04-01 16:21:15,369 - WARNING - (trapped) error reading bcrypt version
-Traceback (most recent call last):
-  File "C:\Users\Stav\AppData\Local\Programs\Python\Python310\lib\site-packages\passlib\handlers\bcrypt.py", line 620, in _load_backend_mixin
-    version = _bcrypt.__about__.__version__
-AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-04-01 16:22:19,841 - INFO - 🚀 Application started - Database initialized
 2026-04-01 16:22:36,791 - INFO - 🔐 POST /auth/login - Login attempt: 3
 2026-04-01 16:22:37,176 - INFO - ✅ POST /auth/login - Login successful: 3
@@ -247,3 +237,43 @@ AttributeError: module 'bcrypt' has no attribute '__about__'
 2026-04-01 18:26:04,095 - INFO - ✅ Auth Success - User authenticated: 33
 2026-04-01 18:26:04,096 - INFO - 📊 GET /accuracy - Accuracy check for 33
 2026-04-01 18:26:04,098 - INFO - ✅ GET /accuracy - R² Score: -1.4960 for 33
+2026-04-02 14:07:32,508 - INFO - 🚀 Application started - Database initialized
+2026-04-02 14:13:04,614 - INFO - 🚀 Application started - Database initialized
+2026-04-02 14:14:03,317 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:06:56,477 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:07:59,952 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:08:03,056 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:08:27,181 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:08:33,985 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:09:23,659 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:09:44,555 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:10:00,410 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:10:03,286 - INFO - 🚀 Application started - Database initialized
+2026-04-02 15:12:12,898 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:18:49,782 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:19:47,653 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:20:01,603 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:20:16,669 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:20:47,695 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:21:25,833 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:22:00,346 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:22:51,369 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:23:17,844 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:23:40,460 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:24:11,710 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:24:18,866 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:24:35,711 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:26:09,934 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:27:29,745 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:27:41,216 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:27:51,275 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:28:55,262 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:29:20,872 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:29:45,760 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:32:37,351 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:33:34,221 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:36:54,107 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:37:53,885 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:43:49,643 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:44:28,155 - INFO - 🚀 Application started - Database initialized
+2026-04-02 17:45:54,459 - INFO - 🚀 Application started - Database initialized

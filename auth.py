@@ -1,3 +1,8 @@
+"""
+Authentication Module
+JWT token generation, validation, and user authentication management.
+"""
+
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 from fastapi import Depends, HTTPException, status
@@ -9,19 +14,21 @@ import os
 from dotenv import load_dotenv
 import dal_users
 
-# Load variables from .env into the environment
+# Load environment variables from .env file
 load_dotenv()
 
-# Access the variables
-SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")  # Default fallback
-ALGORITHM = os.getenv("ALGORITHM", "HS256")  # Default to HS256 if not set
-# Convert to int since env variables are always strings
+# Configure authentication settings from environment
+SECRET_KEY = os.getenv("SECRET_KEY", "change-this-secret-key")
+ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "60"))
 
+# Set up authentication logging
 logger = logging.getLogger('app')
 
+# HTTP Bearer token scheme
 bearer_scheme = HTTPBearer()
 
+# Generate JWT token for authenticated user
 def create_access_token(user_name: str) -> str:
     expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     payload = {
@@ -31,6 +38,7 @@ def create_access_token(user_name: str) -> str:
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
+# Decode and validate JWT token
 def verify_token(token: str) -> Optional[str]:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -39,6 +47,7 @@ def verify_token(token: str) -> Optional[str]:
     except InvalidTokenError:
         return None
 
+# Validate token and return authenticated user
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
 ):

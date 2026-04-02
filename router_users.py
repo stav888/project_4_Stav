@@ -10,27 +10,28 @@ import logging
 import dal_users
 from auth import get_current_user
 
+# Set up users router
 logger = logging.getLogger('app')
 router = APIRouter(prefix="/users", tags=["users"])
 
 
+# Request model for creating a user
 class UserCreate(BaseModel):
-    """Request model for creating a user."""
     user_name: str = Field(min_length=1, max_length=50)
     email: str
     password: str = Field(min_length=4, max_length=100)
 
 
+# Request model for updating a user
 class UserUpdate(BaseModel):
-    """Request model for updating a user."""
     user_name: Optional[str] = None
     email: Optional[str] = None
     password: Optional[str] = None
 
 
+# Create new user endpoint
 @router.post("")
 def create_new_user(user: UserCreate):
-    """Create a new user."""
     logger.info(f"📝 POST /users - Creating user: {user.user_name}")
     result = dal_users.insert_user(user.user_name, user.email, user.password)
 
@@ -42,18 +43,18 @@ def create_new_user(user: UserCreate):
     return {"message": "User created successfully", "user": result}
 
 
+# Get all users endpoint
 @router.get("")
 def get_users():
-    """Get all users."""
     logger.info(f"📖 GET /users - Fetching all users")
     result = dal_users.get_all_users()
     logger.info(f"✅ GET /users - Retrieved {len(result)} users")
     return result
 
 
+# Get user by ID endpoint
 @router.get("/{user_id}")
 def get_user(user_id: int):
-    """Get a user by ID."""
     logger.info(f"📖 GET /users/{user_id} - Fetching user")
     user = dal_users.get_user_by_id(user_id)
     if user is None:
@@ -63,9 +64,9 @@ def get_user(user_id: int):
     return user
 
 
+# Update user endpoint
 @router.put("/{user_id}")
 def update_existing_user(user_id: int, user_data: UserUpdate):
-    """Update a user."""
     logger.info(f"✏️ PUT /users/{user_id} - Updating user")
 
     # Fetch current values to fill in missing optional fields
@@ -89,9 +90,9 @@ def update_existing_user(user_id: int, user_data: UserUpdate):
     return result
 
 
+# Delete user endpoint (requires authentication)
 @router.delete("/{user_id}")
 def delete_existing_user(user_id: int, current_user = Depends(get_current_user)):
-    """Delete a user (requires authentication)."""
     if current_user["id"] != user_id:
         logger.warning(f"⚠️ DELETE /users/{user_id} - Unauthorized delete attempt by {current_user['user_name']}")
         raise HTTPException(status_code=403, detail="Can only delete own account")

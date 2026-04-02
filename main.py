@@ -10,39 +10,31 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import PolynomialFeatures
 
 
-def train_and_save_model(training_hours, running_times, model_name, degree=2):
+def train_and_save_model(training_hours, running_times, model_name, degree=3):
     """
     Trains a polynomial regression model and saves it.
-
-    Args:
-        training_hours (list): X values (training hours)
-        running_times (list): Y values (running times)
-        model_name (str): file name (e.g., "john.pkl")
-        degree (int): polynomial degree (default 2)
-
+    
+    Parameters:
+        training_hours (array): X values
+        running_times (array): y values
+        model_name (str): file name
+        degree (int): polynomial degree (default 3)
+    
     Returns:
         trained model
-
-    Raises:
-        ValueError: if training_hours and running_times have different lengths
     """
     if len(training_hours) != len(running_times):
         raise ValueError("training_hours and running_times must have same length")
 
-    # Reshape training_hours for sklearn
     X = np.array(training_hours).reshape(-1, 1)
     Y = np.array(running_times)
 
-    # Create polynomial regression pipeline
     model = Pipeline([
         ("poly", PolynomialFeatures(degree=degree)),
         ("linear", LinearRegression())
     ])
 
-    # Fit the model
     model.fit(X, Y)
-    
-    # Save to disk
     joblib.dump(model, model_name)
     print(f"Model saved to {model_name}")
 
@@ -51,37 +43,33 @@ def train_and_save_model(training_hours, running_times, model_name, degree=2):
 
 def predict_from_model(model_name, hours_value):
     """
-    Loads model and predicts running time.
-
-    Args:
-        model_name (str): username / file name (e.g., "john.pkl")
-        hours_value (float): number of training hours
-
+    Loads model and predicts running time for given hours.
+    
+    Parameters:
+        model_name (str): file name of saved model
+        hours_value (float): training hours value
+    
     Returns:
-        float: predicted running time (minimum 0.0)
-
-    Raises:
-        FileNotFoundError: if model file doesn't exist
+        float: predicted running time (min 0.0)
     """
     model = joblib.load(model_name)
     X_new = np.array([[hours_value]])
     prediction = model.predict(X_new)
     
-    # Ensure prediction is not negative (running time cannot be negative)
     return float(max(0.0, prediction[0]))
 
 
 def get_model_accuracy(model_name, training_hours, running_times):
     """
-    Calculates R² score (accuracy) of the trained model.
-
-    Args:
-        model_name (str): file name of the model
-        training_hours (list): X values used in training
-        running_times (list): Y values used in training
-
+    Calculate R² accuracy score for trained model.
+    
+    Parameters:
+        model_name (str): file name of saved model
+        training_hours (array): X values
+        running_times (array): y values
+    
     Returns:
-        float: R² score between 0 and 1
+        float: R² score
     """
     model = joblib.load(model_name)
     X = np.array(training_hours).reshape(-1, 1)
@@ -89,3 +77,20 @@ def get_model_accuracy(model_name, training_hours, running_times):
     
     score = model.score(X, Y)
     return float(score)
+
+
+if __name__ == "__main__":
+    # Example dataset
+    training_hours = np.array([2, 3, 5, 7, 9, 12, 16, 20, 25, 30]).reshape(-1, 1)
+    running_times = np.array([95, 85, 70, 65, 60, 55, 50, 53, 58, 70])
+    
+    # Train and save
+    train_and_save_model(training_hours, running_times, "running_model.joblib", degree=3)
+    
+    # Predict example
+    result = predict_from_model("running_model.joblib", 15)
+    print(f"Predicted running time for 15 training hours: {result}")
+    
+    # Get accuracy
+    accuracy = get_model_accuracy("running_model.joblib", training_hours, running_times)
+    print(f"Model R² score: {accuracy}")

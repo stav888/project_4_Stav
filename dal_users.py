@@ -1,36 +1,48 @@
+"""
+Database Access Layer for Users
+Handles all user-related database operations and password hashing.
+"""
+
 import sqlite3
 import hashlib
 import logging
 import os
 from passlib.context import CryptContext
 
+# Initialize bcrypt password hashing context
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+# Database file name
 DB_NAME = "users.db"
 
 
+# Get database connection with Row factory
 def get_connection():
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
     return conn
 
 
+# Convert SQLite Row to dictionary
 def row_to_dict(row):
     if row is None:
         return None
     return dict(row)
 
 
+# Hash password with SHA256 + bcrypt
 def hash_password(password: str):
     sha_password = hashlib.sha256(password.encode()).hexdigest()
     return pwd_context.hash(sha_password)
 
 
+# Verify password against hashed password
 def verify_password(plain_password: str, hashed_password: str):
     sha_password = hashlib.sha256(plain_password.encode()).hexdigest()
     return pwd_context.verify(sha_password, hashed_password)
 
 
+# Create users table if it doesn't exist
 def create_table_users():
     with get_connection() as conn:
         conn.execute("""
@@ -45,16 +57,19 @@ def create_table_users():
         """)
 
 
+# Drop users table
 def drop_table_users():
     with get_connection() as conn:
         conn.execute("DROP TABLE IF EXISTS users")
 
 
+# Drop and recreate users table
 def recreate_table_users():
     drop_table_users()
     create_table_users()
 
 
+# Fetch all users
 def get_all_users():
     query = """
     SELECT id, user_name, email, predictions_remaining
@@ -66,6 +81,7 @@ def get_all_users():
     return [row_to_dict(row) for row in rows]
 
 
+# Fetch user by ID
 def get_user_by_id(user_id):
     query = """
     SELECT id, user_name, email, predictions_remaining
@@ -77,6 +93,7 @@ def get_user_by_id(user_id):
     return row_to_dict(row)
 
 
+# Fetch user by username
 def get_user_by_username(user_name):
     query = """
     SELECT *
@@ -88,6 +105,7 @@ def get_user_by_username(user_name):
     return row_to_dict(row)
 
 
+# Create new user with hashed password
 def insert_user(user_name, email, password):
     query = """
     INSERT INTO users (user_name, email, password)
@@ -104,6 +122,7 @@ def insert_user(user_name, email, password):
         return None
 
 
+# Update user profile with new credentials
 def update_user(user_id, user_name, email, password):
     query = """
     UPDATE users
@@ -128,6 +147,7 @@ def update_user(user_id, user_name, email, password):
         return "duplicate"
 
 
+# Delete user and their associated ML model
 def delete_user(user_id):
     existing_user = get_user_by_id(user_id)
     if existing_user is None:
@@ -147,6 +167,7 @@ def delete_user(user_id):
     return existing_user
 
 
+# Verify user login credentials
 def login_user(user_name, password):
     user = get_user_by_username(user_name)
 
@@ -156,6 +177,7 @@ def login_user(user_name, password):
     return verify_password(password, user["password"])
 
 
+# Deduct one prediction credit from user
 def deduct_prediction(username):
     user = get_user_by_username(username)
 
@@ -175,6 +197,7 @@ def deduct_prediction(username):
         return False
 
 
+# Add prediction credits to user
 def add_predictions(username, amount):
     try:
         with get_connection() as conn:
@@ -192,6 +215,7 @@ def add_predictions(username, amount):
         return None
 
 
+# Get remaining prediction credits for user
 def get_predictions_remaining(username):
     user = get_user_by_username(username)
     return user["predictions_remaining"] if user else None

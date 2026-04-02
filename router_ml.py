@@ -15,38 +15,39 @@ import joblib
 import numpy as np
 from sklearn.metrics import r2_score
 
+# Set up ML router
 logger = logging.getLogger('app')
 router = APIRouter(prefix="/ml", tags=["ml"])
 
 
+# Request model for training
 class TrainRequest(BaseModel):
-    """Request model for training."""
     X: List[float]
     Y: List[float]
     degree: int = Field(default=2, ge=1, le=5, description="Polynomial degree (1-5)")
 
 
+# Response model for prediction
 class PredictResponse(BaseModel):
-    """Response model for prediction."""
     predicted_running_time: float
     predictions_remaining: Optional[int] = None
 
 
+# Request model for purchasing predictions
 class PurchaseRequest(BaseModel):
-    """Request model for purchasing predictions."""
     card_number: str = Field(min_length=13, max_length=19)
     expiry: str
     cvv: str
 
 
+# Helper function to generate model filename
 def get_model_filename(username: str) -> str:
-    """Generate model filename from username."""
     return f"{username}.joblib"
 
 
+# Train polynomial regression model endpoint
 @router.post("/train")
 def train_model(request: TrainRequest, current_user = Depends(get_current_user)):
-    """Train a polynomial regression model."""
     username = current_user['user_name']
     logger.info(f"🤖 POST /train - Training model for {username} (degree={request.degree}, points={len(request.X)})")
     user = dal_users.get_user_by_username(username)
@@ -65,9 +66,9 @@ def train_model(request: TrainRequest, current_user = Depends(get_current_user))
     }
 
 
+# Delete user's trained model endpoint
 @router.delete("/model")
 def delete_model(current_user = Depends(get_current_user)):
-    """Delete user's trained model (called on logout)."""
     username = current_user['user_name']
     model_filename = get_model_filename(username)
     
@@ -84,9 +85,9 @@ def delete_model(current_user = Depends(get_current_user)):
         return {"message": "No model to delete"}
 
 
+# Predict running time endpoint
 @router.get("/predict/{hours}")
 def predict_running_time(hours: float, current_user = Depends(get_current_user)):
-    """Predict running time for given training hours."""
     username = current_user['user_name']
     logger.info(f"🔮 GET /predict/{hours} - Predicting for {username}")
     user = dal_users.get_user_by_username(username)
@@ -119,9 +120,9 @@ def predict_running_time(hours: float, current_user = Depends(get_current_user))
     }
 
 
+# Purchase predictions endpoint
 @router.post("/purchase")
 def purchase_predictions(request: PurchaseRequest, current_user = Depends(get_current_user)):
-    """Purchase additional predictions using credit card (simulated payment)."""
     username = current_user['user_name']
     logger.info(f"💳 POST /purchase - Purchase request from {username}")
     user = dal_users.get_user_by_username(username)
@@ -145,9 +146,9 @@ def purchase_predictions(request: PurchaseRequest, current_user = Depends(get_cu
     return {"message": "Payment successful. 10 predictions added.", "predictions_remaining": new_count}
 
 
+# Get model accuracy endpoint
 @router.get("/accuracy")
 def get_accuracy(current_user = Depends(get_current_user)):
-    """Get R² accuracy score of the trained model."""
     username = current_user['user_name']
     logger.info(f"📊 GET /accuracy - Accuracy check for {username}")
     model_filename = get_model_filename(username)
