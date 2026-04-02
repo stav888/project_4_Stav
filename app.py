@@ -4,7 +4,7 @@ Initializes FastAPI app with routes, database, and error handling.
 """
 
 from fastapi import FastAPI
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, Response
 import os
 import logging
 
@@ -34,6 +34,10 @@ def startup():
     logger.info("🚀 Application started - Database initialized")
     for handler in logging.getLogger().handlers:
         handler.flush()
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    return Response(status_code=204)
 
 # Home page endpoint
 @app.get("/")
