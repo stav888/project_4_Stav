@@ -1,22 +1,17 @@
 """
-Database Access Layer for Users
-Handles all user-related database operations and password hashing.
+Database access layer - all user database operations.
 """
 
 import sqlite3
+from passlib.context import CryptContext
 import hashlib
 import logging
 import os
-from passlib.context import CryptContext
 
-# Initialize bcrypt password hashing context
+DB_NAME = "users.db"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-# Database file name
-DB_NAME = "users.db"
 
-
-# Get database connection with Row factory
 def get_connection():
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
@@ -32,7 +27,9 @@ def row_to_dict(row):
 
 # Hash password with SHA256 + bcrypt
 def hash_password(password: str):
+    # Step 1: hash with SHA256 (no length limit)
     sha_password = hashlib.sha256(password.encode()).hexdigest()
+    # Step 2: bcrypt the result
     return pwd_context.hash(sha_password)
 
 
@@ -44,17 +41,17 @@ def verify_password(plain_password: str, hashed_password: str):
 
 # Create users table if it doesn't exist
 def create_table_users():
+    query = """
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_name TEXT NOT NULL UNIQUE,
+        email TEXT NOT NULL UNIQUE,
+        password TEXT NOT NULL,
+        predictions_remaining INTEGER DEFAULT 10
+    )
+    """
     with get_connection() as conn:
-        conn.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_name TEXT NOT NULL UNIQUE,
-            email TEXT NOT NULL UNIQUE,
-            password TEXT NOT NULL,
-            predictions_remaining INTEGER DEFAULT 10,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        )
-        """)
+        conn.execute(query)
 
 
 # Drop users table
@@ -117,6 +114,7 @@ def insert_user(user_name, email, password):
         with get_connection() as conn:
             cursor = conn.execute(query, (user_name, email, hashed_password))
             user_id = cursor.lastrowid
+            conn.commit()
         return get_user_by_id(user_id)
     except sqlite3.IntegrityError:
         return None
@@ -153,6 +151,7 @@ def delete_user(user_id):
     if existing_user is None:
         return None
 
+    # Delete associated ML model file
     model_filename = f"{existing_user['user_name']}.joblib"
     if os.path.exists(model_filename):
         try:
@@ -163,12 +162,16 @@ def delete_user(user_id):
 
     with get_connection() as conn:
         conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
+        conn.commit()
 
     return existing_user
 
 
 # Verify user login credentials
 def login_user(user_name, password):
+    if not user_name or not password:
+        return False
+    
     user = get_user_by_username(user_name)
 
     if user is None:
@@ -191,6 +194,7 @@ def deduct_prediction(username):
                 "UPDATE users SET predictions_remaining = predictions_remaining - 1 WHERE user_name = ?",
                 (username,)
             )
+            conn.commit()
         return True
     except Exception as e:
         logging.error(f"Error deducting prediction: {e}")
@@ -209,6 +213,7 @@ def add_predictions(username, amount):
                 "SELECT predictions_remaining FROM users WHERE user_name = ?",
                 (username,)
             ).fetchone()
+            conn.commit()
         return result[0] if result else None
     except Exception as e:
         logging.error(f"Error adding predictions: {e}")

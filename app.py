@@ -23,10 +23,8 @@ logging.basicConfig(
 )
 logger = logging.getLogger('app')
 
-# Initialize FastAPI app
 app = FastAPI(title="🏃‍♂️ Running Time Prediction API")
 
-# Create database tables on startup
 @app.on_event("startup")
 def startup():
     dal_users.create_table_users()
@@ -34,24 +32,18 @@ def startup():
     for handler in logging.getLogger().handlers:
         handler.flush()
 
-# Home page endpoint
 @app.get("/")
 def root():
     if os.path.exists("users.html"):
         return FileResponse("users.html", media_type="text/html")
     return {"message": "🏃‍♂️ API Ready"}
 
-# ML page endpoint
 @app.get("/ml")
 def ml_page():
     if os.path.exists("ml.html"):
         return FileResponse("ml.html", media_type="text/html")
     return {"message": "🏃‍♂️ ML Page"}
 
-# Register API routers
 app.include_router(users_router)
-app.include_router(ml_router)
 app.include_router(auth_router)
-
-# To run the app:
-# uvicorn app:app --host 127.0.0.1 --port 8000 --reload
+app.include_router(ml_router)

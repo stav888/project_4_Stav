@@ -1,6 +1,5 @@
 """
-Authentication Module
-JWT token generation, validation, and user authentication management.
+JWT token generation and authentication.
 """
 
 from datetime import datetime, timedelta, timezone
@@ -51,6 +50,13 @@ def verify_token(token: str) -> Optional[str]:
 def get_current_user(
     credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme),
 ):
+    if not credentials:
+        logger.warning(f"❌ Auth Error - No token provided")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Please login first",
+        )
+    
     token = credentials.credentials
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -72,7 +78,8 @@ def get_current_user(
         logger.warning(f"❌ Auth Error - User does not exist: {user_name}")
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="User does not exist",
+            detail="User account no longer exists - please login again",
         )
+    
     logger.info(f"✅ Auth Success - User authenticated: {user_name}")
     return user

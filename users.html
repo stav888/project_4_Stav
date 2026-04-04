@@ -302,7 +302,11 @@ td.email-cell { color: var(--muted2); }
     <div class="card-body">
       <div class="form-grid">
         <div class="form-group"><label>Username</label><input type="text" id="reg-username" placeholder="e.g. john_doe"/></div>
-        <div class="form-group"><label>Email</label><input type="email" id="reg-email" placeholder="john@example.com"/></div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="text" id="reg-email" placeholder="john@example.com" required title="Email must contain @ symbol"/>
+          <small style="font-size: 0.6rem; color: #8a8aa0; margin-top: 0.2rem;">Must include @ symbol</small>
+        </div>
         <div class="form-group"><label>Password</label><input type="password" id="reg-password" placeholder="••••••••"/></div>
       </div>
       <button class="btn btn-gold" onclick="registerUser()">➕ Register</button>
@@ -360,8 +364,13 @@ td.email-cell { color: var(--muted2); }
       <div class="form-grid">
         <div class="form-group"><label>User ID</label><input type="number" id="upd-id" placeholder="1"/></div>
         <div class="form-group"><label>New Username</label><input type="text" id="upd-username" placeholder="new_name"/></div>
-        <div class="form-group"><label>New Email</label><input type="email" id="upd-email" placeholder="new@example.com"/></div>
-        <div class="form-group"><label>New Password</label><input type="password" id="upd-password" placeholder="••••••••"/></div>
+        <div class="form-group">
+          <label>New Email</label>
+          <input type="email" id="upd-email" placeholder="new@example.com"/>
+        </div>
+        <div class="form-group"><label>New Password *</label><input type="password" id="upd-password" placeholder="••••••••" required/>
+          <small style="font-size: 0.6rem; color: #e87070; margin-top: 0.2rem;">Required for security</small>
+        </div>
       </div>
       <button class="btn btn-gold" onclick="updateUser()">✏️ Update</button>
       <div class="response-box" id="upd-response"></div>
@@ -431,6 +440,16 @@ function showResponse(id, data, type = 'info') {
   el.textContent = typeof data === 'string' ? data : JSON.stringify(data, null, 2);
 }
 
+function formatValidationError(errors) {
+  if (!Array.isArray(errors)) return null;
+  const messages = errors.map(e => {
+    const field = Array.isArray(e.loc) ? e.loc[e.loc.length - 1] : 'field';
+    const msg = e.msg || 'Invalid input';
+    return `⚠️ ${field}: ${msg}`;
+  }).join('\n');
+  return messages;
+}
+
 function esc(s) {
   return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -478,12 +497,36 @@ async function req(method, path, body) {
     const text = await res.text().catch(() => 'HTTP ' + res.status);
     throw new Error(text);
   }
-  if (!res.ok) throw new Error(data.detail || 'HTTP ' + res.status);
+  if (!res.ok) {
+    let msg = 'HTTP ' + res.status;
+    if (data.detail) {
+      if (Array.isArray(data.detail)) {
+        msg = formatValidationError(data.detail);
+      } else if (typeof data.detail === 'string') {
+        msg = data.detail;
+      } else {
+        msg = JSON.stringify(data.detail);
+      }
+    }
+    throw new Error(msg);
+  }
   return data;
 }
 
 async function registerUser() {
-  const body = { user_name: document.getElementById('reg-username').value, email: document.getElementById('reg-email').value, password: document.getElementById('reg-password').value };
+  const username = document.getElementById('reg-username').value;
+  const email = document.getElementById('reg-email').value;
+  const password = document.getElementById('reg-password').value;
+  
+  // Email validation: must be in format something@domain.extension
+  const emailRegex = /.+@.+\..+/;
+  if (!emailRegex.test(email)) {
+    showResponse('reg-response', 'Invalid email. Format: username@domain.com', 'error');
+    toast('Invalid email format', 'error');
+    return;
+  }
+  
+  const body = { user_name: username, email: email, password: password };
   try {
     const d = await req('POST', '/users', body);
     showResponse('reg-response', d, 'success');
@@ -501,6 +544,12 @@ async function loginUser() {
       localStorage.setItem('jwt_token', d.access_token);
       localStorage.setItem('user_id', d.id);
       localStorage.setItem('username', d.user_name);
+      // Update UI to show logged-in user
+      const loggedInEl = document.getElementById('loggedInUser');
+      if (loggedInEl) {
+        loggedInEl.textContent = `Logged in as: ${d.user_name} (ID: ${d.id})`;
+        loggedInEl.style.display = 'block';
+      }
       showResponse('login-response', '✅ Token saved!\n\n' + JSON.stringify(d, null, 2), 'success'); toast('Logged in — token saved', 'success');
     }
     else { showResponse('login-response', d, 'error'); }
@@ -517,8 +566,40 @@ async function getUserById() {
 async function updateUser() {
   const id = document.getElementById('upd-id').value;
   if (!id) return toast('Please enter a user ID', 'error');
-  const body = { user_name: document.getElementById('upd-username').value, email: document.getElementById('upd-email').value, password: document.getElementById('upd-password').value };
-  try { const d = await req('PUT', `/users/${id}`, body); showResponse('upd-response', d, 'success'); toast(`Updated user #${id}`, 'success'); loadUsers(); }
+  
+  const password = document.getElementById('upd-password').value;
+  if (!password) {
+    showResponse('upd-response', '⚠️ Password is required to update user account', 'error');
+    toast('Password is required', 'error');
+    return;
+  }
+  
+  const email = document.getElementById('upd-email').value;
+  // Email validation: must be in format something@domain.extension
+  if (email) { // Only validate if email is provided
+    const emailRegex = /.+@.+\..+/;
+    if (!emailRegex.test(email)) {
+      showResponse('upd-response', 'Invalid email. Format: username@domain.com', 'error');
+      toast('Invalid email format', 'error');
+      return;
+    }
+  }
+  
+  const body = { user_name: document.getElementById('upd-username').value, email: email, password: password };
+  try { 
+    const d = await req('PUT', `/users/${id}`, body); 
+    showResponse('upd-response', d, 'success'); 
+    toast(`Updated! You will be logged out for security.`, 'success');
+    loadUsers();
+    // Clear authentication to force re-login after update
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('username');
+    const loggedInEl = document.getElementById('loggedInUser');
+    if (loggedInEl) loggedInEl.style.display = 'none';
+    // Redirect to login after 2 seconds
+    setTimeout(() => { location.reload(); }, 2000);
+  }
   catch(e) { showResponse('upd-response', e.message, 'error'); toast(e.message, 'error'); }
 }
 
@@ -566,10 +647,17 @@ async function confirmDelete() {
   const userId = deleteTarget.id;
   try {
     const response = await req('DELETE', `/users/${userId}`);
-    toast('User deleted', 'success');
+    toast('Account deleted! Logging out...', 'success');
     closeDelete();
     showResponse('del-response', `✅ User ${userId} deleted successfully\n\n${JSON.stringify(response, null, 2)}`, 'success');
-    loadUsers();
+    // Clear authentication after deletion
+    localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('username');
+    const loggedInEl = document.getElementById('loggedInUser');
+    if (loggedInEl) loggedInEl.style.display = 'none';
+    // Reload after 2 seconds
+    setTimeout(() => { location.reload(); }, 2000);
   } catch(e) {
     toast(e.message, 'error');
     showResponse('del-response', `❌ Error: ${e.message}`, 'error');

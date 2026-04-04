@@ -1,25 +1,25 @@
 """
-User Management Endpoints
-Handles user CRUD operations and login.
+User management endpoints - CRUD operations for users.
 """
 
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional
 import logging
-import dal_users
-from auth import get_current_user
 
-# Set up users router
+from auth import get_current_user
+import dal_users
+
+
 logger = logging.getLogger('app')
 router = APIRouter(prefix="/users", tags=["users"])
 
 
 # Request model for creating a user
 class UserCreate(BaseModel):
-    user_name: str = Field(min_length=1, max_length=50)
+    user_name: str = Field(..., min_length=1, max_length=50)
     email: str
-    password: str = Field(min_length=4, max_length=100)
+    password: str = Field(..., min_length=4, max_length=100)
 
 
 # Request model for updating a user
@@ -64,12 +64,14 @@ def get_user(user_id: int):
     return user
 
 
-# Update user endpoint
+# Update user endpoint (requires authentication)
 @router.put("/{user_id}")
-def update_existing_user(user_id: int, user_data: UserUpdate):
-    logger.info(f"✏️ PUT /users/{user_id} - Updating user")
-
-    # Fetch current values to fill in missing optional fields
+def update_existing_user(user_id: int, user_data: UserUpdate, current_user=Depends(get_current_user)):
+    if current_user["id"] != user_id:
+        logger.warning(f"⚠️ PUT /users/{user_id} - Unauthorized update attempt by {current_user['user_name']}")
+        raise HTTPException(status_code=403, detail="Can only update own account")
+    
+    logger.info(f"✏️ PUT /users/{user_id} - Updating user by {current_user['user_name']}")
     current = dal_users.get_user_by_id(user_id)
     if current is None:
         logger.warning(f"⚠️ PUT /users/{user_id} - User not found")
@@ -77,8 +79,9 @@ def update_existing_user(user_id: int, user_data: UserUpdate):
 
     new_username = user_data.user_name or current["user_name"]
     new_email = user_data.email or current["email"]
+    new_password = user_data.password if user_data.password else None
 
-    result = dal_users.update_user(user_id, new_username, new_email, user_data.password)
+    result = dal_users.update_user(user_id, new_username, new_email, new_password)
 
     if result is None:
         logger.warning(f"⚠️ PUT /users/{user_id} - Update failed")
@@ -87,12 +90,12 @@ def update_existing_user(user_id: int, user_data: UserUpdate):
         raise HTTPException(status_code=400, detail="Username or email already exists")
 
     logger.info(f"✅ PUT /users/{user_id} - User updated")
-    return result
+    return {"message": "User updated successfully", "user": result}
 
 
 # Delete user endpoint (requires authentication)
 @router.delete("/{user_id}")
-def delete_existing_user(user_id: int, current_user = Depends(get_current_user)):
+def delete_existing_user(user_id: int, current_user=Depends(get_current_user)):
     if current_user["id"] != user_id:
         logger.warning(f"⚠️ DELETE /users/{user_id} - Unauthorized delete attempt by {current_user['user_name']}")
         raise HTTPException(status_code=403, detail="Can only delete own account")
@@ -105,3 +108,11 @@ def delete_existing_user(user_id: int, current_user = Depends(get_current_user))
 
     logger.info(f"✅ DELETE /users/{user_id} - User deleted")
     return {"message": "User deleted successfully", "user": deleted}
+
+
+@router.delete("/table/recreate")
+def recreate_users_table(current_user=Depends(get_current_user)):
+    logger.info(f"🔄 DELETE /table/recreate - Recreating users table by {current_user['user_name']}")
+    dal_users.recreate_table_users()
+    logger.info(f"✅ DELETE /table/recreate - Users table recreated")
+    return {"message": "Users table dropped and recreated successfully"}
