@@ -110,6 +110,7 @@ def delete_existing_user(user_id: int, current_user=Depends(get_current_user)):
     return {"message": "User deleted successfully", "user": deleted}
 
 
+# Recreate users table (requires authentication)
 @router.delete("/table/recreate")
 def recreate_users_table(current_user=Depends(get_current_user)):
     logger.info(f"🔄 DELETE /table/recreate - Recreating users table by {current_user['user_name']}")
