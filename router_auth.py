@@ -15,11 +15,12 @@ logger = logging.getLogger('app')
 router = APIRouter(prefix="/auth", tags=["auth"])
 
 
+# Request model for login credentials
 class LoginRequest(BaseModel):
     username: str = Field(..., min_length=1, max_length=255)
     password: str = Field(..., min_length=1)
 
-
+# Flush log handlers to disk
 def flush_logs():
     for handler in logging.getLogger().handlers:
         handler.flush()
