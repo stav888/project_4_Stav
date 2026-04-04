@@ -12,7 +12,7 @@ from router_users import router as users_router
 from router_ml import router as ml_router
 from router_auth import router as auth_router
 
-# Set up app logging to file and console
+# Setup logging with file and console output
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -25,6 +25,7 @@ logger = logging.getLogger('app')
 
 app = FastAPI(title="🏃‍♂️ Running Time Prediction API")
 
+# Initialize database on application startup
 @app.on_event("startup")
 def startup():
     dal_users.create_table_users()
@@ -32,18 +33,21 @@ def startup():
     for handler in logging.getLogger().handlers:
         handler.flush()
 
+# Serve user management page
 @app.get("/")
 def root():
     if os.path.exists("users.html"):
         return FileResponse("users.html", media_type="text/html")
     return {"message": "🏃‍♂️ API Ready"}
 
+# Serve ML operations page
 @app.get("/ml")
 def ml_page():
     if os.path.exists("ml.html"):
         return FileResponse("ml.html", media_type="text/html")
     return {"message": "🏃‍♂️ ML Page"}
 
-app.include_router(users_router)
-app.include_router(auth_router)
-app.include_router(ml_router)
+# Register API routers
+app.include_router(users_router)  # User CRUD endpoints
+app.include_router(auth_router)   # Authentication endpoints
+app.include_router(ml_router)     # ML operations endpoints
