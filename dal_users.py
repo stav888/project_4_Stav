@@ -11,7 +11,7 @@ import os
 DB_NAME = "users.db"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
+# Get database connection with Row factory
 def get_connection():
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
@@ -66,7 +66,7 @@ def recreate_table_users():
     create_table_users()
 
 
-# Fetch all users
+# Get all users
 def get_all_users():
     query = """
     SELECT id, user_name, email, predictions_remaining
@@ -78,7 +78,7 @@ def get_all_users():
     return [row_to_dict(row) for row in rows]
 
 
-# Fetch user by ID
+# Get user by ID
 def get_user_by_id(user_id):
     query = """
     SELECT id, user_name, email, predictions_remaining
@@ -90,7 +90,7 @@ def get_user_by_id(user_id):
     return row_to_dict(row)
 
 
-# Fetch user by username
+# Get user by username
 def get_user_by_username(user_name):
     query = """
     SELECT *
@@ -102,7 +102,7 @@ def get_user_by_username(user_name):
     return row_to_dict(row)
 
 
-# Create new user with hashed password
+# Insert new user with hashed password
 def insert_user(user_name, email, password):
     query = """
     INSERT INTO users (user_name, email, password)
@@ -145,7 +145,7 @@ def update_user(user_id, user_name, email, password):
         return "duplicate"
 
 
-# Delete user and their associated ML model
+# Delete user and their ML model file
 def delete_user(user_id):
     existing_user = get_user_by_id(user_id)
     if existing_user is None:
