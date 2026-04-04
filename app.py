@@ -20,7 +20,7 @@ logging.basicConfig(
         logging.FileHandler('app.log', encoding='utf-8'),
         logging.StreamHandler()
     ]
-) 
+)
 logger = logging.getLogger('app')
 
 app = FastAPI(title="🏃‍♂️ Running Time Prediction API")
