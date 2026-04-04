@@ -1,1 +1,49 @@
-
+2026-04-04 10:40:34,079 - INFO - 🚀 Application started - Database initialized
+2026-04-04 10:42:34,232 - INFO - 🚀 Application started - Database initialized
+2026-04-04 10:43:57,955 - INFO - 🚀 Application started - Database initialized
+2026-04-04 10:44:32,375 - INFO - 🚀 Application started - Database initialized
+2026-04-04 10:47:40,621 - INFO - 🚀 Application started - Database initialized
+2026-04-04 10:47:43,660 - INFO - 🚀 Application started - Database initialized
+2026-04-04 10:47:54,098 - INFO - 🚀 Application started - Database initialized
+2026-04-04 10:48:19,362 - INFO - 📖 GET /users - Fetching all users
+2026-04-04 10:48:19,364 - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-04 10:48:33,585 - INFO - 🔐 POST /auth/login - Login attempt: 35
+2026-04-04 10:48:33,587 - WARNING - ❌ POST /auth/login - Invalid credentials: 35
+2026-04-04 10:48:35,542 - INFO - 📖 GET /users - Fetching all users
+2026-04-04 10:48:35,543 - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-04 10:48:40,470 - INFO - 🔐 POST /auth/login - Login attempt: 335
+2026-04-04 10:48:40,472 - WARNING - ❌ POST /auth/login - Invalid credentials: 335
+2026-04-04 10:48:45,746 - INFO - 🔐 POST /auth/login - Login attempt: 355
+2026-04-04 10:48:46,128 - INFO - ✅ POST /auth/login - Login successful: 355
+2026-04-04 10:48:52,751 - INFO - 📖 GET /users/35 - Fetching user
+2026-04-04 10:48:52,752 - INFO - ✅ GET /users/35 - User found: 355
+2026-04-04 10:49:08,400 - INFO - ✅ Auth Success - User authenticated: 355
+2026-04-04 10:49:08,401 - INFO - ✏️ PUT /users/35 - Updating user by 355
+2026-04-04 10:49:08,770 - INFO - ✅ PUT /users/35 - User updated
+2026-04-04 10:49:08,783 - INFO - 📖 GET /users - Fetching all users
+2026-04-04 10:49:08,784 - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-04 10:49:21,895 - INFO - 📖 GET /users - Fetching all users
+2026-04-04 10:49:21,896 - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-04 10:49:59,685 - INFO - 🔐 POST /auth/login - Login attempt: 350
+2026-04-04 10:50:00,037 - INFO - ✅ POST /auth/login - Login successful: 350
+2026-04-04 10:50:00,059 - INFO - 📖 GET /users/35 - Fetching user
+2026-04-04 10:50:00,060 - INFO - ✅ GET /users/35 - User found: 350
+2026-04-04 10:50:03,895 - INFO - 📖 GET /users - Fetching all users
+2026-04-04 10:50:03,896 - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-04 10:50:17,775 - INFO - ✅ Auth Success - User authenticated: 350
+2026-04-04 10:50:17,776 - INFO - ✏️ PUT /users/35 - Updating user by 350
+2026-04-04 10:50:18,137 - INFO - ✅ PUT /users/35 - User updated
+2026-04-04 10:50:18,150 - INFO - 📖 GET /users - Fetching all users
+2026-04-04 10:50:18,151 - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-04 10:50:38,307 - INFO - 📖 GET /users - Fetching all users
+2026-04-04 10:50:38,308 - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-04 10:50:46,159 - INFO - 🔐 POST /auth/login - Login attempt: 350
+2026-04-04 10:50:46,488 - INFO - ✅ POST /auth/login - Login successful: 350
+2026-04-04 10:50:46,665 - INFO - 📖 GET /users/35 - Fetching user
+2026-04-04 10:50:46,667 - INFO - ✅ GET /users/35 - User found: 350
+2026-04-04 10:50:53,038 - INFO - 📖 GET /users/35 - Fetching user
+2026-04-04 10:50:53,039 - INFO - ✅ GET /users/35 - User found: 350
+2026-04-04 10:50:58,850 - INFO - 📖 GET /users/35 - Fetching user
+2026-04-04 10:50:58,851 - INFO - ✅ GET /users/35 - User found: 350
+2026-04-04 10:51:02,994 - INFO - ✅ Auth Success - User authenticated: 350
+2026-04-04 10:51:02,995 - INFO - ℹ️ DELETE /model - No model found for 350
