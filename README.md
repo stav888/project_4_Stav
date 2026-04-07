@@ -139,7 +139,7 @@ CREATE TABLE users (
 ## 🎯 ML Model Details
 
 - **Algorithm:** Polynomial Regression (scikit-learn Pipeline)
-- **Default degree:** 3
+- **Default degree:** 2
 - **Degree range:** 1–5 (validated by API)
 - **Model file:** `<username>.joblib` — saved per user
 - **Accuracy metric:** R² score
