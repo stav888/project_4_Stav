@@ -8,4 +8,4 @@ PyJWT==2.8.0
 scikit-learn==1.3.2
 numpy==1.24.3
 joblib==1.3.2
-python-dotenv==1.0.0
+python-dotenv==1.0.0 
