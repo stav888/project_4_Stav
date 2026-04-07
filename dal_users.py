@@ -5,8 +5,8 @@ Database access layer - all user database operations.
 import sqlite3
 from passlib.context import CryptContext
 import hashlib
-import logging
 import os
+from log import logger
 
 DB_NAME = "users.db"
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -118,6 +118,9 @@ def insert_user(user_name, email, password):
         return get_user_by_id(user_id)
     except sqlite3.IntegrityError:
         return None
+    except Exception as e:
+        logger.error(f"Error inserting user {user_name}: {str(e)}", exc_info=True)
+        raise
 
 
 # Update user profile with new credentials
@@ -156,9 +159,9 @@ def delete_user(user_id):
     if os.path.exists(model_filename):
         try:
             os.remove(model_filename)
-            logging.info(f"   ✓ Model file deleted: {model_filename}")
+            logger.info(f"   ✓ Model file deleted: {model_filename}")
         except Exception as e:
-            logging.warning(f"   ⚠️ Could not delete model file {model_filename}: {str(e)}")
+            logger.warning(f"   ⚠️ Could not delete model file {model_filename}: {str(e)}")
 
     with get_connection() as conn:
         conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
@@ -185,7 +188,7 @@ def deduct_prediction(username):
     user = get_user_by_username(username)
 
     if not user or user["predictions_remaining"] <= 0:
-        logging.warning(f"🚫 DEDUCT PREDICTION BLOCKED - No credits remaining | Username: {username}")
+        logger.warning(f"🚫 DEDUCT PREDICTION BLOCKED - No credits remaining | Username: {username}")
         return False
 
     try:
@@ -197,7 +200,7 @@ def deduct_prediction(username):
             conn.commit()
         return True
     except Exception as e:
-        logging.error(f"Error deducting prediction: {e}")
+        logger.error(f"Error deducting prediction: {e}")
         return False
 
 
@@ -216,7 +219,7 @@ def add_predictions(username, amount):
             conn.commit()
         return result[0] if result else None
     except Exception as e:
-        logging.error(f"Error adding predictions: {e}")
+        logger.error(f"Error adding predictions: {e}")
         return None
 
 

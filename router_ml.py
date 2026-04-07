@@ -6,7 +6,6 @@ Handles model training and prediction with JWT authentication.
 from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel, Field
 from typing import List, Optional
-import logging
 from auth import get_current_user
 from main import train_and_save_model, predict_from_model
 import dal_users
@@ -14,9 +13,9 @@ import os
 import joblib
 import numpy as np
 from sklearn.metrics import r2_score
+from log import logger
 
 # Set up ML router
-logger = logging.getLogger('app')
 router = APIRouter(prefix="/ml", tags=["ml"])
 
 

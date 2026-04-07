@@ -1,49 +1,89 @@
-2026-04-04 10:40:34,079 - INFO - 🚀 Application started - Database initialized
-2026-04-04 10:42:34,232 - INFO - 🚀 Application started - Database initialized
-2026-04-04 10:43:57,955 - INFO - 🚀 Application started - Database initialized
-2026-04-04 10:44:32,375 - INFO - 🚀 Application started - Database initialized
-2026-04-04 10:47:40,621 - INFO - 🚀 Application started - Database initialized
-2026-04-04 10:47:43,660 - INFO - 🚀 Application started - Database initialized
-2026-04-04 10:47:54,098 - INFO - 🚀 Application started - Database initialized
-2026-04-04 10:48:19,362 - INFO - 📖 GET /users - Fetching all users
-2026-04-04 10:48:19,364 - INFO - ✅ GET /users - Retrieved 1 users
-2026-04-04 10:48:33,585 - INFO - 🔐 POST /auth/login - Login attempt: 35
-2026-04-04 10:48:33,587 - WARNING - ❌ POST /auth/login - Invalid credentials: 35
-2026-04-04 10:48:35,542 - INFO - 📖 GET /users - Fetching all users
-2026-04-04 10:48:35,543 - INFO - ✅ GET /users - Retrieved 1 users
-2026-04-04 10:48:40,470 - INFO - 🔐 POST /auth/login - Login attempt: 335
-2026-04-04 10:48:40,472 - WARNING - ❌ POST /auth/login - Invalid credentials: 335
-2026-04-04 10:48:45,746 - INFO - 🔐 POST /auth/login - Login attempt: 355
-2026-04-04 10:48:46,128 - INFO - ✅ POST /auth/login - Login successful: 355
-2026-04-04 10:48:52,751 - INFO - 📖 GET /users/35 - Fetching user
-2026-04-04 10:48:52,752 - INFO - ✅ GET /users/35 - User found: 355
-2026-04-04 10:49:08,400 - INFO - ✅ Auth Success - User authenticated: 355
-2026-04-04 10:49:08,401 - INFO - ✏️ PUT /users/35 - Updating user by 355
-2026-04-04 10:49:08,770 - INFO - ✅ PUT /users/35 - User updated
-2026-04-04 10:49:08,783 - INFO - 📖 GET /users - Fetching all users
-2026-04-04 10:49:08,784 - INFO - ✅ GET /users - Retrieved 1 users
-2026-04-04 10:49:21,895 - INFO - 📖 GET /users - Fetching all users
-2026-04-04 10:49:21,896 - INFO - ✅ GET /users - Retrieved 1 users
-2026-04-04 10:49:59,685 - INFO - 🔐 POST /auth/login - Login attempt: 350
-2026-04-04 10:50:00,037 - INFO - ✅ POST /auth/login - Login successful: 350
-2026-04-04 10:50:00,059 - INFO - 📖 GET /users/35 - Fetching user
-2026-04-04 10:50:00,060 - INFO - ✅ GET /users/35 - User found: 350
-2026-04-04 10:50:03,895 - INFO - 📖 GET /users - Fetching all users
-2026-04-04 10:50:03,896 - INFO - ✅ GET /users - Retrieved 1 users
-2026-04-04 10:50:17,775 - INFO - ✅ Auth Success - User authenticated: 350
-2026-04-04 10:50:17,776 - INFO - ✏️ PUT /users/35 - Updating user by 350
-2026-04-04 10:50:18,137 - INFO - ✅ PUT /users/35 - User updated
-2026-04-04 10:50:18,150 - INFO - 📖 GET /users - Fetching all users
-2026-04-04 10:50:18,151 - INFO - ✅ GET /users - Retrieved 1 users
-2026-04-04 10:50:38,307 - INFO - 📖 GET /users - Fetching all users
-2026-04-04 10:50:38,308 - INFO - ✅ GET /users - Retrieved 1 users
-2026-04-04 10:50:46,159 - INFO - 🔐 POST /auth/login - Login attempt: 350
-2026-04-04 10:50:46,488 - INFO - ✅ POST /auth/login - Login successful: 350
-2026-04-04 10:50:46,665 - INFO - 📖 GET /users/35 - Fetching user
-2026-04-04 10:50:46,667 - INFO - ✅ GET /users/35 - User found: 350
-2026-04-04 10:50:53,038 - INFO - 📖 GET /users/35 - Fetching user
-2026-04-04 10:50:53,039 - INFO - ✅ GET /users/35 - User found: 350
-2026-04-04 10:50:58,850 - INFO - 📖 GET /users/35 - Fetching user
-2026-04-04 10:50:58,851 - INFO - ✅ GET /users/35 - User found: 350
-2026-04-04 10:51:02,994 - INFO - ✅ Auth Success - User authenticated: 350
-2026-04-04 10:51:02,995 - INFO - ℹ️ DELETE /model - No model found for 350
+2026-04-07 17:53:23,963 - app - INFO - 📝 POST /users - Creating user: 543
+2026-04-07 18:00:01,370 - app - INFO - 📝 POST /users - Creating user: 54
+2026-04-07 18:01:32,233 - app - INFO - 📝 POST /users - Creating user: 7875
+2026-04-07 18:03:48,694 - app - INFO - 📝 POST /users - Creating user: 32
+2026-04-07 18:05:00,236 - app - INFO - 🚀 Application started - Database initialized
+2026-04-07 18:06:00,847 - app - INFO - 🚀 Application started - Database initialized
+2026-04-07 18:06:26,888 - app - INFO - 📝 POST /users - Creating user: py313test
+2026-04-07 18:06:27,272 - app - INFO - ✅ POST /users - User created: py313test
+2026-04-07 18:07:06,199 - app - INFO - 🚀 Application started - Database initialized
+2026-04-07 18:07:48,364 - app - INFO - 📝 POST /users - Creating user: 67
+2026-04-07 18:07:48,721 - app - INFO - ✅ POST /users - User created: 67
+2026-04-07 18:07:48,742 - app - INFO - 📖 GET /users - Fetching all users
+2026-04-07 18:07:48,746 - app - INFO - ✅ GET /users - Retrieved 2 users
+2026-04-07 18:08:10,119 - app - INFO - 📖 GET /users - Fetching all users
+2026-04-07 18:08:10,122 - app - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-07 18:08:13,772 - app - INFO - 🔐 POST /auth/login - Login attempt: 67
+2026-04-07 18:08:14,126 - app - INFO - ✅ POST /auth/login - Login successful: 67
+2026-04-07 18:08:19,646 - app - INFO - 📖 GET /users/5 - Fetching user
+2026-04-07 18:08:19,650 - app - INFO - ✅ GET /users/5 - User found: 67
+2026-04-07 18:08:36,431 - app - INFO - ✅ Auth Success - User authenticated: 67
+2026-04-07 18:08:36,435 - app - INFO - ✏️ PUT /users/5 - Updating user by 67
+2026-04-07 18:08:36,790 - app - INFO - ✅ PUT /users/5 - User updated
+2026-04-07 18:08:36,804 - app - INFO - 📖 GET /users - Fetching all users
+2026-04-07 18:08:36,806 - app - INFO - ✅ GET /users - Retrieved 1 users
+2026-04-07 18:08:57,184 - app - INFO - 🔐 POST /auth/login - Login attempt: 66
+2026-04-07 18:08:57,525 - app - INFO - ✅ POST /auth/login - Login successful: 66
+2026-04-07 18:08:57,544 - app - INFO - 📖 GET /users/5 - Fetching user
+2026-04-07 18:08:57,548 - app - INFO - ✅ GET /users/5 - User found: 66
+2026-04-07 18:09:02,270 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:02,275 - app - INFO - 🤖 POST /train - Training model for 66 (degree=2, points=4)
+2026-04-07 18:09:02,482 - app - INFO - ✅ POST /train - Model trained for 66
+2026-04-07 18:09:05,810 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:05,813 - app - INFO - 🔮 GET /predict/9.5 - Predicting for 66
+2026-04-07 18:09:05,850 - app - INFO - ✅ GET /predict/9.5 - Prediction successful for 66: 0.00
+2026-04-07 18:09:08,973 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:08,975 - app - INFO - 🔮 GET /predict/8.0 - Predicting for 66
+2026-04-07 18:09:08,990 - app - INFO - ✅ GET /predict/8.0 - Prediction successful for 66: 2.00
+2026-04-07 18:09:11,674 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:11,677 - app - INFO - 🔮 GET /predict/5.0 - Predicting for 66
+2026-04-07 18:09:11,690 - app - INFO - ✅ GET /predict/5.0 - Prediction successful for 66: 5.97
+2026-04-07 18:09:15,002 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:15,003 - app - INFO - 🤖 POST /train - Training model for 66 (degree=3, points=4)
+2026-04-07 18:09:15,012 - app - INFO - ✅ POST /train - Model trained for 66
+2026-04-07 18:09:16,517 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:16,519 - app - INFO - 🔮 GET /predict/5.0 - Predicting for 66
+2026-04-07 18:09:16,532 - app - INFO - ✅ GET /predict/5.0 - Prediction successful for 66: 6.00
+2026-04-07 18:09:19,660 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:19,662 - app - INFO - 🤖 POST /train - Training model for 66 (degree=1, points=4)
+2026-04-07 18:09:19,671 - app - INFO - ✅ POST /train - Model trained for 66
+2026-04-07 18:09:20,942 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:20,943 - app - INFO - 🔮 GET /predict/5.0 - Predicting for 66
+2026-04-07 18:09:20,957 - app - INFO - ✅ GET /predict/5.0 - Prediction successful for 66: 4.00
+2026-04-07 18:09:22,412 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:22,413 - app - INFO - 🔮 GET /predict/5.5 - Predicting for 66
+2026-04-07 18:09:22,425 - app - INFO - ✅ GET /predict/5.5 - Prediction successful for 66: 3.82
+2026-04-07 18:09:25,134 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:25,136 - app - INFO - 🔮 GET /predict/7.0 - Predicting for 66
+2026-04-07 18:09:25,146 - app - INFO - ✅ GET /predict/7.0 - Prediction successful for 66: 3.29
+2026-04-07 18:09:32,364 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:32,368 - app - INFO - 💳 POST /purchase - Purchase request from 66
+2026-04-07 18:09:32,378 - app - INFO - ✅ POST /purchase - 10 predictions added for 66 (total: 13)
+2026-04-07 18:09:35,662 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:35,664 - app - INFO - 🔮 GET /predict/7.0 - Predicting for 66
+2026-04-07 18:09:35,679 - app - INFO - ✅ GET /predict/7.0 - Prediction successful for 66: 3.29
+2026-04-07 18:09:38,707 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:38,708 - app - INFO - 🔮 GET /predict/12.5 - Predicting for 66
+2026-04-07 18:09:38,721 - app - INFO - ✅ GET /predict/12.5 - Prediction successful for 66: 1.32
+2026-04-07 18:09:39,559 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:39,561 - app - INFO - 🔮 GET /predict/13.5 - Predicting for 66
+2026-04-07 18:09:39,574 - app - INFO - ✅ GET /predict/13.5 - Prediction successful for 66: 0.96
+2026-04-07 18:09:41,783 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:41,785 - app - INFO - 🔮 GET /predict/14.0 - Predicting for 66
+2026-04-07 18:09:41,799 - app - INFO - ✅ GET /predict/14.0 - Prediction successful for 66: 0.79
+2026-04-07 18:09:42,663 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:42,666 - app - INFO - 🔮 GET /predict/15.5 - Predicting for 66
+2026-04-07 18:09:42,676 - app - INFO - ✅ GET /predict/15.5 - Prediction successful for 66: 0.25
+2026-04-07 18:09:44,718 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:44,721 - app - INFO - 📊 GET /accuracy - Accuracy check for 66
+2026-04-07 18:09:44,743 - app - INFO - ✅ GET /accuracy - R² Score: -1.4960 for 66
+2026-04-07 18:09:47,697 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:47,698 - app - INFO - 🤖 POST /train - Training model for 66 (degree=2, points=4)
+2026-04-07 18:09:47,733 - app - INFO - ✅ POST /train - Model trained for 66
+2026-04-07 18:09:49,557 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:09:49,558 - app - INFO - 📊 GET /accuracy - Accuracy check for 66
+2026-04-07 18:09:49,564 - app - INFO - ✅ GET /accuracy - R² Score: -1.4998 for 66
+2026-04-07 18:10:15,541 - app - INFO - ✅ Auth Success - User authenticated: 66
+2026-04-07 18:10:15,542 - app - INFO - 🗑️ DELETE /users/5 - Deleting user by 66
+2026-04-07 18:10:15,545 - app - INFO -    ✓ Model file deleted: 66.joblib
+2026-04-07 18:10:15,551 - app - INFO - ✅ DELETE /users/5 - User deleted

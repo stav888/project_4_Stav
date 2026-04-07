@@ -5,13 +5,10 @@ User management endpoints - CRUD operations for users.
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from typing import Optional
-import logging
 
 from auth import get_current_user
 import dal_users
-
-
-logger = logging.getLogger('app')
+from log import logger
 router = APIRouter(prefix="/users", tags=["users"])
 
 
