@@ -39,6 +39,7 @@ project_4/
 ├── app.py              # FastAPI application entry point
 ├── auth.py             # JWT token generation and validation
 ├── dal_users.py        # Database access layer for user operations
+├── log.py              # Centralized logging configuration
 ├── main.py             # ML pipeline (train, predict, accuracy)
 ├── router_auth.py      # Authentication endpoints
 ├── router_ml.py        # ML training, prediction, purchase endpoints
@@ -118,77 +119,6 @@ uvicorn app:app --port 8000 --reload
 | `POST` | `/ml/purchase` | Purchase prediction credits | ✅ |
 | `GET` | `/ml/accuracy` | Get model R² accuracy score | ✅ |
 | `DELETE` | `/ml/model` | Delete trained model | ✅ |
-
----
-
-## 📡 Usage Examples
-
-### Create User
-```bash
-curl -X POST http://127.0.0.1:8000/users \
-  -H "Content-Type: application/json" \
-  -d '{"user_name": "john", "email": "john@example.com", "password": "pass1234"}'
-```
-
-### Login
-```bash
-curl -X POST http://127.0.0.1:8000/auth/login \
-  -H "Content-Type: application/json" \
-  -d '{"username": "john", "password": "pass1234"}'
-```
-Returns:
-```json
-{
-  "access_token": "eyJhbGci...",
-  "token_type": "bearer",
-  "user_name": "john",
-  "id": 1
-}
-```
-
-### Train Model
-```bash
-curl -X POST http://127.0.0.1:8000/ml/train \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "X": [2, 3, 5, 7, 9, 12, 16, 20, 25, 30],
-    "Y": [95, 85, 70, 65, 60, 55, 50, 53, 58, 70],
-    "degree": 3
-  }'
-```
-
-### Predict Running Time
-```bash
-curl -X GET http://127.0.0.1:8000/ml/predict/15 \
-  -H "Authorization: Bearer <token>"
-```
-Returns:
-```json
-{
-  "predicted_running_time": 52.4,
-  "predictions_remaining": 9
-}
-```
-
-### Purchase Credits
-```bash
-curl -X POST http://127.0.0.1:8000/ml/purchase \
-  -H "Authorization: Bearer <token>" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "card_number": "4532111111111111",
-    "expiry": "12/27",
-    "cvv": "123"
-  }'
-```
-Returns:
-```json
-{
-  "message": "Payment successful. 10 predictions added.",
-  "predictions_remaining": 19
-}
-```
 
 ---
 
